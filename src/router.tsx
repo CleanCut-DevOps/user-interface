@@ -1,18 +1,13 @@
 import { FC } from "react";
 import { Route } from "wouter";
+import { Dashboard, Login, Register } from "./routes";
 
 export const Router: FC = () => {
     return (
         <>
-            <Route path={"/"}>
-                <main>Hello World</main>
-            </Route>
-            <Route path={"/login"}>
-                <main>Login to main content</main>
-            </Route>
-            <Route path={"/register"}>
-                <main>Register for main content</main>
-            </Route>
+            <Route path={"/"} component={Dashboard} />
+            <Route path={"/login"} component={Login} />
+            <Route path={"/register"} component={Register} />
         </>
     );
 };

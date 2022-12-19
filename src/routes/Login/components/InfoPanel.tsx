@@ -13,6 +13,7 @@ const useStyles = createStyles(theme => ({
         flexDirection: "column",
         backgroundColor: "#3c37ff",
         justifyContent: "space-between",
+        boxShadow: "0 0 10px 0 rgba(0, 0, 0, 0.4)",
         [`@media (max-width: ${theme.breakpoints.lg}px)`]: {
             display: "none"
         }
@@ -46,14 +47,14 @@ export const InformationPanel: FC = () => {
                 <Text className={classes.informationCTA}>
                     Start your journey with us.
                 </Text>
-                <Text size={24} color={"#999"}>
+                <Text size={24} color={"#afafaf"}>
                     Digitalized cleaning services at your fingertips.
                 </Text>
             </Stack>
             <Blockquote
                 mb={32}
-                className={classes.informationQuote}
-                cite="– Forrest Gump">
+                cite="– Forrest Gump"
+                className={classes.informationQuote}>
                 Simply unbelievable how easy it is to interact with CleanCut. I
                 can't wait to see what the future holds for this company.
             </Blockquote>

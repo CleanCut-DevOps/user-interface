@@ -47,6 +47,7 @@ const useStyles = createStyles(() => ({
         backgroundColor: "#3c37ff",
         color: "white",
         transition: "all 0.2s ease",
+        boxShadow: "0 0 10px 0 rgba(0, 0, 0, 0.2)",
         "&:hover": {
             backgroundColor: "#2520e3"
         }
@@ -112,7 +113,7 @@ export const FormPanel: FC = () => {
                         <TextInput
                             size={"md"}
                             label="Email address"
-                            placeholder="hello@gmail.com"
+                            placeholder="hello@domain.com"
                             {...form.getInputProps("email")}
                         />
                         <PasswordInput

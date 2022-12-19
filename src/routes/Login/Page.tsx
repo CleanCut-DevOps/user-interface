@@ -6,9 +6,9 @@ import { FormPanel } from "./components/FormPanel";
 const useStyles = createStyles(() => ({
     wrapper: {
         height: "100vh",
-        padding: "2rem",
+        padding: "1.5rem",
         display: "flex",
-        gap: "2rem"
+        gap: "1.5rem"
     }
 }));
 

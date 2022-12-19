@@ -1,98 +1,86 @@
 import { FC } from "react";
 import {
-    Anchor,
-    Button,
-    Checkbox,
+    Blockquote,
+    Box,
     createStyles,
-    Group,
     Paper,
-    PasswordInput,
-    Text,
-    TextInput,
-    Title
+    Stack,
+    Text
 } from "@mantine/core";
-import imgURL from "../../../public/images/mesh-gradient.png";
 
 const useStyles = createStyles(theme => ({
     wrapper: {
-        maxWidth: "100vw",
         height: "100vh",
+        padding: "2rem",
         display: "flex",
-        overflow: "hidden"
+        gap: "2rem"
     },
-    imageBg: {
-        flex: 1,
-        objectFit: "cover",
+    informationPanel: {
+        height: "100%",
+        color: "white",
+        display: "flex",
+        padding: "2rem",
+        width: "100%",
+        maxWidth: "450px",
+        borderRadius: "1rem",
+        flexDirection: "column",
+        backgroundColor: "#3c37ff",
+        justifyContent: "space-between",
         [`@media (max-width: ${theme.breakpoints.lg}px)`]: {
             display: "none"
         }
     },
-    sidebar: {
-        minWidth: 480,
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center"
+    informationTitle: {
+        fontSize: 22,
+        fontWeight: 500,
+        marginTop: 24,
+        letterSpacing: 1.5
     },
-    columnGroup: {
-        gap: 4,
-        width: "100%",
-        alignItems: "start",
-        flexDirection: "column"
+    informationCTA: {
+        fontSize: 48,
+        lineHeight: 1,
+        fontWeight: 500
     },
-    inputFields: {
-        gap: 4,
-        display: "flex",
-        flexDirection: "column",
-        width: "100%"
+    informationQuote: {
+        color: "#e0e0e0",
+        padding: "1rem",
+        fontSize: "1rem",
+        borderRadius: "1rem",
+        backgroundColor: "#2520e3"
+    },
+    formPanel: {
+        flex: 1
     }
 }));
 
 export const Login: FC = () => {
     const { classes } = useStyles();
     return (
-        <main className={classes.wrapper}>
-            <Paper className={classes.sidebar} radius={"md"} p={30}>
-                <Group className={classes.columnGroup} mb={40}>
-                    <Title>Welcome back 👋</Title>
-                    <Text color={"#9a9a9a"}>Please enter your details.</Text>
-                </Group>
-                <Group className={classes.columnGroup} mb={40}>
-                    <TextInput
-                        label="Email address"
-                        placeholder="hello@gmail.com"
-                        size={"lg"}
-                        radius={"md"}
-                        mb={20}
-                        className={classes.inputFields}
-                    />
-                    <PasswordInput
-                        label="Password"
-                        placeholder="Your password"
-                        size={"lg"}
-                        radius={"md"}
-                        className={classes.inputFields}
-                    />
-                </Group>
-                <Checkbox label="Keep me logged in" size="md" />
-                <Button fullWidth mt={24} size="md">
-                    Login
-                </Button>
-
-                <Text align="center" mt="md">
-                    Don&apos;t have an account?{" "}
-                    <Anchor<"a">
-                        href="#"
-                        weight={700}
-                        onClick={event => event.preventDefault()}>
-                        Register
-                    </Anchor>
-                </Text>
-            </Paper>
-            <img
-                src={imgURL}
-                className={classes.imageBg}
-                alt={"Mesh gradient background image"}
-            />
-        </main>
+        <Paper className={classes.wrapper}>
+            <Box className={classes.informationPanel}>
+                <Text className={classes.informationTitle}>CleanCut</Text>
+                <Stack align={"start"} justify={"start"} spacing={36}>
+                    <Stack spacing={"xs"}>
+                        <Text className={classes.informationCTA}>
+                            Start your
+                        </Text>
+                        <Text className={classes.informationCTA}>
+                            journey with us.
+                        </Text>
+                    </Stack>
+                    <Text size={24} color={"#bbbbbb"}>
+                        Digitalized cleaning services at your fingertips.
+                    </Text>
+                </Stack>
+                <Blockquote
+                    className={classes.informationQuote}
+                    cite="– Forrest Gump">
+                    Simply unbelievable how easy it is to interact with
+                    CleanCut. I can't wait to see what the future holds for this
+                    company.
+                </Blockquote>
+            </Box>
+            <Box className={classes.formPanel}>form</Box>
+        </Paper>
     );
 };

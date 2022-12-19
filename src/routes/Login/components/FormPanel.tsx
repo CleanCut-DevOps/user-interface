@@ -12,6 +12,8 @@ import {
 } from "@mantine/core";
 import { Link } from "wouter";
 import { useForm } from "@mantine/form";
+import axios from "axios";
+import { useCookies } from "react-cookie";
 
 const useStyles = createStyles(() => ({
     panelLabel: {
@@ -52,11 +54,13 @@ const useStyles = createStyles(() => ({
 }));
 export const FormPanel: FC = () => {
     const { classes } = useStyles();
+    const [cookies, setCookie] = useCookies(["AccessToken"]);
 
     const form = useForm({
         initialValues: {
             email: "",
-            password: ""
+            password: "",
+            stay: false
         },
         validate: {
             email: value =>
@@ -72,8 +76,23 @@ export const FormPanel: FC = () => {
         }
     });
 
-    const handleSubmit = form.onSubmit(({ email, password }) => {
-        console.log({ email, password });
+    const handleSubmit = form.onSubmit(({ email, password, stay }) => {
+        axios
+            .post("http://localhost:8001/api/login", {
+                email,
+                password,
+                stay
+            })
+            .then(({ data }) => {
+                const token = data.token;
+
+                setCookie("AccessToken", token, {
+                    sameSite: "strict"
+                });
+            })
+            .catch(({ response }) => {
+                console.log(response);
+            });
     });
 
     return (
@@ -107,6 +126,7 @@ export const FormPanel: FC = () => {
                                 size="md"
                                 label="Remember me"
                                 color="dark"
+                                {...form.getInputProps("stay")}
                             />
                             <Link
                                 href={"/resetPassword"}

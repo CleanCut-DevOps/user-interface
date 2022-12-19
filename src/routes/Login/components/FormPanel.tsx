@@ -14,6 +14,14 @@ import { Link } from "wouter";
 import { useForm } from "@mantine/form";
 import axios from "axios";
 import { useCookies } from "react-cookie";
+import { showNotification } from "@mantine/notifications";
+
+interface RequestData {
+    email?: string;
+    username?: string;
+    password: string;
+    stay: boolean;
+}
 
 const useStyles = createStyles(() => ({
     panelLabel: {
@@ -53,23 +61,18 @@ const useStyles = createStyles(() => ({
         }
     }
 }));
+
 export const FormPanel: FC = () => {
     const { classes } = useStyles();
     const [cookies, setCookie] = useCookies(["AccessToken"]);
 
     const form = useForm({
         initialValues: {
-            email: "",
+            accessName: "",
             password: "",
             stay: false
         },
         validate: {
-            email: value =>
-                /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)+$/.test(
-                    value
-                )
-                    ? null
-                    : "Invalid email",
             password: value =>
                 value.length >= 8
                     ? null
@@ -77,18 +80,35 @@ export const FormPanel: FC = () => {
         }
     });
 
-    const handleSubmit = form.onSubmit(({ email, password, stay }) => {
+    const handleSubmit = form.onSubmit(({ accessName, password, stay }) => {
+        let fData: RequestData = {
+            password,
+            stay
+        };
+
+        if (
+            RegExp(
+                /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)+$/
+            ).test(accessName)
+        ) {
+            fData.email = accessName;
+        } else {
+            fData.username = accessName;
+        }
+
         axios
-            .post("http://localhost:8001/api/login", {
-                email,
-                password,
-                stay
-            })
+            .post("http://localhost:8001/api/login", fData)
             .then(({ data }) => {
                 const token = data.token;
 
                 setCookie("AccessToken", token, {
                     sameSite: "strict"
+                });
+
+                showNotification({
+                    title: data.type,
+                    message: data.message,
+                    color: "green"
                 });
             })
             .catch(({ response }) => {
@@ -112,9 +132,9 @@ export const FormPanel: FC = () => {
                     <Stack spacing={24}>
                         <TextInput
                             size={"md"}
-                            label="Email address"
-                            placeholder="hello@domain.com"
-                            {...form.getInputProps("email")}
+                            label="Email / username"
+                            placeholder="hello@domain.com / John Doe"
+                            {...form.getInputProps("accessName")}
                         />
                         <PasswordInput
                             size={"md"}

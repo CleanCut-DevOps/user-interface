@@ -35,7 +35,7 @@ export const UserProvider: FC<PropsWithChildren> = ({ children }) => {
     useEffect(() => {
         if (cookies.AccessToken) {
             axios
-                .get("http://localhost:8001/api/account", {
+                .get("https://users.klenze.com.au/api/account", {
                     headers: { Authorization: `Bearer ${cookies.AccessToken}` }
                 })
                 .then(({ data }) => {

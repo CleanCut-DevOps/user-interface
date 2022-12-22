@@ -17,10 +17,11 @@ import { useCookies } from "react-cookie";
 import { showNotification } from "@mantine/notifications";
 
 interface RequestData {
-    email?: string;
-    username?: string;
+    email: string;
+    username: string;
+    contact: string;
     password: string;
-    stay: boolean;
+    
 }
 
 const useStyles = createStyles(() => ({
@@ -69,11 +70,11 @@ export const FormPanel: FC = () => {
     const form = useForm({
         initialValues: {
             
-            accessName: "",
+            username: "",
             email: "",
             contact: "",
             password: "",
-            stay: false
+            
         },
         validate: {
             password: value =>
@@ -84,24 +85,18 @@ export const FormPanel: FC = () => {
 
     });
 
-    const handleSubmit = form.onSubmit(({ accessName, email, contact, password, stay }) => {
+    const handleSubmit = form.onSubmit(({ username, email, contact, password  }) => {
         let fData: RequestData = {
+            username,
+            email,
+            contact,
             password,
-            stay
+           
         };
 
-        if (
-            RegExp(
-                /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)+$/
-            ).test(accessName)
-        ) {
-            fData.email = accessName;
-        } else {
-            fData.username = accessName;
-        }
-
+    
         axios
-            .post("http://localhost:8001/api/register", fData)
+            .post("https://users.klenze.com.au/api/register", fData)
             .then(({ data }) => {
                 const token = data.token;
 
@@ -138,7 +133,7 @@ export const FormPanel: FC = () => {
                             size={"md"}
                             label="Username"
                             placeholder="John Doe "
-                            {...form.getInputProps("accessName")}
+                            {...form.getInputProps("username")}
                         />
                         <TextInput
                             size={"md"}

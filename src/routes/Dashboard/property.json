@@ -1,0 +1,22 @@
+[
+    {
+      "id": 1,
+      "name": "HDB",
+      "imgUrl": "src/assets/images/hdb.jpeg"
+    },
+    {
+        "id": 2,
+        "name": "Condo",
+        "imgUrl": "src/assets/images/condo.jpeg"
+    },
+    {
+        "id": 3,
+        "name": "Landed",
+        "imgUrl": "src/assets/images/landed.jpeg"
+    },
+    {
+        "id": 4,
+        "name": "Office",
+        "imgUrl": "src/assets/images/office.jpeg"
+    }
+  ]

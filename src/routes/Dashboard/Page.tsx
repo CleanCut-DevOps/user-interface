@@ -1,4 +1,5 @@
-import properties from "./property.json"
+import { StoreProperty } from "./components/StoreProperty"
+import storePropertys from "./property.json"
 import {Col, Row} from "react-bootstrap"
 
 export function Dashboard() {
@@ -6,9 +7,9 @@ export function Dashboard() {
         <>
           <h1>Dashboard</h1>
           <Row md={2} xs={1} lg={3} className="g-3">
-            {properties.map(properties => (
-              <Col key={properties.id}>
-                <properties {...properties} />
+            {storePropertys.map(property => (
+              <Col key={property.id}>
+                <StoreProperty{...property} />
               </Col>
             ))}
           </Row>

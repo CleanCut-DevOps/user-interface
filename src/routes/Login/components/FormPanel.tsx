@@ -98,7 +98,7 @@ export const FormPanel: FC = () => {
         }
 
         axios
-            .post("https://users.klenze.com.au/api/login", fData)
+            .post("https://user-api.klenze.com.au/api/login", fData)
             .then(({ data }) => {
                 const token = data.token;
 

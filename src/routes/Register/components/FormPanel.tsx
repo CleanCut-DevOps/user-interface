@@ -17,9 +17,8 @@ import { useCookies } from "react-cookie";
 import { showNotification } from "@mantine/notifications";
 
 interface RequestData {
-    username?: string;
     email?: string;
-    contact?: string;
+    username?: string;
     password: string;
     stay: boolean;
 }
@@ -69,7 +68,10 @@ export const FormPanel: FC = () => {
 
     const form = useForm({
         initialValues: {
+            
             accessName: "",
+            email: "",
+            contact: "",
             password: "",
             stay: false
         },
@@ -79,9 +81,10 @@ export const FormPanel: FC = () => {
                     ? null
                     : "Password must be at least 8 characters"
         }
+
     });
 
-    const handleSubmit = form.onSubmit(({ accessName,  password, stay }) => {
+    const handleSubmit = form.onSubmit(({ accessName, email, contact, password, stay }) => {
         let fData: RequestData = {
             password,
             stay
@@ -121,21 +124,33 @@ export const FormPanel: FC = () => {
         <Box className={classes.formPanel}>
             <Box className={classes.formContainer}>
                 <Stack spacing={12}>
-                    <Text className={classes.panelLabel}>Login</Text>
+                    <Text className={classes.panelLabel}>Register</Text>
                     <Text fw={500} color={"#777"}>
-                        Don't have an account?{" "}
-                        <Link href={"/register"} className={classes.link}>
-                            Register
+                        Already have an account?{" "} 
+                        <Link href={"/login"} className={classes.link}>
+                            Login
                         </Link>
                     </Text>
                 </Stack>
                 <form onSubmit={handleSubmit}>
                     <Stack spacing={24}>
+                    <TextInput
+                            size={"md"}
+                            label="Username"
+                            placeholder="John Doe "
+                            {...form.getInputProps("accessName")}
+                        />
                         <TextInput
                             size={"md"}
-                            label="Email / username"
-                            placeholder="hello@domain.com / John Doe"
-                            {...form.getInputProps("accessName")}
+                            label="Email"
+                            placeholder="hello@domain.com "
+                            {...form.getInputProps("email")}
+                        />
+                        <TextInput
+                            size={"md"}
+                            label="Contact"
+                            placeholder="9999 9999 "
+                            {...form.getInputProps("contact")}
                         />
                         <PasswordInput
                             size={"md"}
@@ -143,26 +158,14 @@ export const FormPanel: FC = () => {
                             placeholder="Your password"
                             {...form.getInputProps("password")}
                         />
-                        <Group position="apart">
-                            <Checkbox
-                                size="md"
-                                label="Remember me"
-                                color="dark"
-                                {...form.getInputProps("stay")}
-                            />
-                            <Link
-                                href={"/resetPassword"}
-                                className={classes.link}>
-                                Forgot password?
-                            </Link>
-                        </Group>
+                       
                         <Button
                             fullWidth
                             size={"md"}
                             type={"submit"}
                             color={"indigo"}
                             className={classes.submit}>
-                            Sign in
+                            Register
                         </Button>
                     </Stack>
                 </form>

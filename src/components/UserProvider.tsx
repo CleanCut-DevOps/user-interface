@@ -7,10 +7,24 @@ import {
     useEffect,
     useState
 } from "react";
-import { User } from "../models";
+import {
+    SuccessfulAccountResponse,
+    UnauthorizedResponse,
+    User
+} from "../models";
 import { useCookies } from "react-cookie";
 import axios from "axios";
 import { showNotification } from "@mantine/notifications";
+
+interface ResponseData {
+    data: SuccessfulAccountResponse;
+}
+
+interface UnauthorizedResponseData {
+    response: {
+        data: UnauthorizedResponse;
+    };
+}
 
 type SchrodingersUser = User | null;
 
@@ -37,22 +51,22 @@ export const UserProvider: FC<PropsWithChildren> = ({ children }) => {
                 .get(`${import.meta.env.VITE_ACCOUNT_API}/api/account`, {
                     headers: { Authorization: `Bearer ${cookies.AccessToken}` }
                 })
-                .then(({ data }) => {
+                .then(({ data: { account } }: ResponseData) => {
                     setUser({
-                        id: data.id as string,
-                        email: data.email as string,
-                        username: data.username as string,
-                        contact: data.contact as string,
-                        avatar: data.avatar as string,
-                        type: data.type as "user" | "cleaner" | "admin",
-                        created_at: new Date(data.created_at),
-                        updated_at: new Date(data.updated_at)
+                        id: account.id as string,
+                        email: account.email as string,
+                        username: account.username as string,
+                        contact: account.contact as string,
+                        avatar: account.avatar as string,
+                        type: account.type as "user" | "cleaner" | "admin",
+                        created_at: new Date(account.created_at),
+                        updated_at: new Date(account.updated_at)
                     });
 
                     setIsLoading(false);
                 })
-                .catch(({ response: { data } }) => {
-                    const { type, message } = data;
+                .catch(({ response }: UnauthorizedResponseData) => {
+                    const { type, message } = response.data;
 
                     showNotification({
                         title: `🚩 ${type}`,

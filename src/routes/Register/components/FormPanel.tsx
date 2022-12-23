@@ -2,9 +2,7 @@ import { FC } from "react";
 import {
     Box,
     Button,
-    Checkbox,
     createStyles,
-    Group,
     PasswordInput,
     Stack,
     Text,
@@ -21,7 +19,6 @@ interface RequestData {
     username: string;
     contact: string;
     password: string;
-    
 }
 
 const useStyles = createStyles(() => ({
@@ -69,12 +66,10 @@ export const FormPanel: FC = () => {
 
     const form = useForm({
         initialValues: {
-            
             username: "",
             email: "",
             contact: "",
-            password: "",
-            
+            password: ""
         },
         validate: {
             password: value =>
@@ -82,38 +77,43 @@ export const FormPanel: FC = () => {
                     ? null
                     : "Password must be at least 8 characters"
         }
-
     });
 
-    const handleSubmit = form.onSubmit(({ username, email, contact, password  }) => {
-        let fData: RequestData = {
-            username,
-            email,
-            contact,
-            password,
-           
-        };
+    const handleSubmit = form.onSubmit(
+        ({ username, email, contact, password }) => {
+            let fData: RequestData = {
+                username,
+                email,
+                contact,
+                password
+            };
 
-    
-        axios
-            .post("https://user-api.klenze.com.au/api/register", fData)
-            .then(({ data }) => {
-                const token = data.token;
+            axios
+                .post(`${import.meta.env.VITE_ACCOUNT_API}/api/register`, fData)
+                .then(({ data }) => {
+                    const token = data.token;
 
-                setCookie("AccessToken", token, {
-                    sameSite: "strict"
+                    setCookie("AccessToken", token, {
+                        sameSite: "strict"
+                    });
+
+                    showNotification({
+                        title: data.type,
+                        message: data.message,
+                        color: "green"
+                    });
+                })
+                .catch(({ response: { data } }) => {
+                    const { type, message } = data;
+
+                    showNotification({
+                        title: `🚩 ${type}`,
+                        message,
+                        color: "red"
+                    });
                 });
-
-                showNotification({
-                    title: data.type,
-                    message: data.message,
-                    color: "green"
-                });
-            })
-            .catch(({ response }) => {
-                console.log(response);
-            });
-    });
+        }
+    );
 
     return (
         <Box className={classes.formPanel}>
@@ -121,7 +121,7 @@ export const FormPanel: FC = () => {
                 <Stack spacing={12}>
                     <Text className={classes.panelLabel}>Register</Text>
                     <Text fw={500} color={"#777"}>
-                        Already have an account?{" "} 
+                        Already have an account?{" "}
                         <Link href={"/login"} className={classes.link}>
                             Login
                         </Link>
@@ -129,37 +129,41 @@ export const FormPanel: FC = () => {
                 </Stack>
                 <form onSubmit={handleSubmit}>
                     <Stack spacing={24}>
-                    <TextInput
+                        <TextInput
                             size={"md"}
-                            label="Username"
-                            placeholder="John Doe "
+                            label={"Username"}
+                            placeholder={"John Doe"}
+                            autoComplete={"new-username"}
                             {...form.getInputProps("username")}
                         />
                         <TextInput
                             size={"md"}
-                            label="Email"
-                            placeholder="hello@domain.com "
+                            label={"Email"}
+                            autoComplete={"new-email"}
+                            placeholder={"hello@domain.com"}
                             {...form.getInputProps("email")}
                         />
                         <TextInput
                             size={"md"}
-                            label="Contact"
-                            placeholder="9999 9999 "
+                            label={"Contact"}
+                            placeholder={"9999 9999"}
                             {...form.getInputProps("contact")}
                         />
                         <PasswordInput
                             size={"md"}
-                            label="Password"
-                            placeholder="Your password"
+                            label={"Password"}
+                            placeholder={"Your password"}
+                            autoComplete={"new-password"}
                             {...form.getInputProps("password")}
                         />
-                       
+
                         <Button
                             fullWidth
                             size={"md"}
                             type={"submit"}
                             color={"indigo"}
-                            className={classes.submit}>
+                            className={classes.submit}
+                        >
                             Register
                         </Button>
                     </Stack>

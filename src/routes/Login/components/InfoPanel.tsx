@@ -35,6 +35,7 @@ const useStyles = createStyles(theme => ({
         fontWeight: 600
     }
 }));
+
 export const InformationPanel: FC = () => {
     const { classes } = useStyles();
 
@@ -54,7 +55,8 @@ export const InformationPanel: FC = () => {
             <Blockquote
                 mb={32}
                 cite="– Forrest Gump"
-                className={classes.informationQuote}>
+                className={classes.informationQuote}
+            >
                 Simply unbelievable how easy it is to interact with CleanCut. I
                 can't wait to see what the future holds for this company.
             </Blockquote>

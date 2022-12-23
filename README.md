@@ -1,6 +1,7 @@
 # Application interface for users
 
-Welcome to the CleanCut Booking System! This application allows users to easily book cleaning services provided by CleanCut.
+Welcome to the CleanCut Booking System! This application allows users to easily book cleaning services provided by
+CleanCut.
 
 ## Getting Started
 
@@ -22,6 +23,15 @@ cd user-interface
 npm install
 ```
 
+Next, you'll need to create a `.env` file in the root directory of the project. This file will contain the environment
+variables that the application needs to run. You can find the list of environment variables in the `env.example` file.
+
+```base
+cp env.example .env
+
+// Edit the .env file to include the correct values for the environment variables
+```
+
 Finally, start the development server:
 
 ```bash
@@ -39,5 +49,6 @@ The application will now be running on http://localhost:3000.
 - View and manage your past and upcoming bookings.
 
 ## Built With
+
 - React - JavaScript library for building user interfaces
 - Mantine - React UI framework

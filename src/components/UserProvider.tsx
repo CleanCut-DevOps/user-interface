@@ -7,9 +7,24 @@ import {
     useEffect,
     useState
 } from "react";
-import { User } from "../models";
+import {
+    SuccessfulAccountResponse,
+    UnauthorizedResponse,
+    User
+} from "../models";
 import { useCookies } from "react-cookie";
 import axios from "axios";
+import { showNotification } from "@mantine/notifications";
+
+interface ResponseData {
+    data: SuccessfulAccountResponse;
+}
+
+interface UnauthorizedResponseData {
+    response: {
+        data: UnauthorizedResponse;
+    };
+}
 
 type SchrodingersUser = User | null;
 
@@ -28,36 +43,36 @@ export const UserContext = createContext<UserContextData>({
 export const UserProvider: FC<PropsWithChildren> = ({ children }) => {
     const [user, setUser] = useState<SchrodingersUser>(null);
     const [isLoading, setIsLoading] = useState<boolean>(true);
-    const [cookies, setCookie] = useCookies(["AccessToken"]);
-
-    console.log(user);
+    const [cookies] = useCookies(["AccessToken"]);
 
     useEffect(() => {
         if (cookies.AccessToken) {
             axios
-                .get("https://user-api.klenze.com.au/api/account", {
+                .get(`${import.meta.env.VITE_ACCOUNT_API}/api/account`, {
                     headers: { Authorization: `Bearer ${cookies.AccessToken}` }
                 })
-                .then(({ data }) => {
-                    console.log(data);
+                .then(({ data: { account } }: ResponseData) => {
                     setUser({
-                        id: data.id as string,
-                        email: data.email as string,
-                        username: data.username as string,
-                        contact: data.contact as string,
-                        avatar: data.avatar as string,
-                        type: data.type as "user" | "cleaner" | "admin",
-                        created_at: new Date(data.created_at),
-                        updated_at: new Date(data.updated_at)
+                        id: account.id as string,
+                        email: account.email as string,
+                        username: account.username as string,
+                        contact: account.contact as string,
+                        avatar: account.avatar as string,
+                        type: account.type as "user" | "cleaner" | "admin",
+                        created_at: new Date(account.created_at),
+                        updated_at: new Date(account.updated_at)
                     });
 
                     setIsLoading(false);
                 })
-                .catch(err => {
-                    const { status } = err.response;
-                    const { type, message } = err.response.data;
+                .catch(({ response }: UnauthorizedResponseData) => {
+                    const { type, message } = response.data;
 
-                    console.log({ status, type, message });
+                    showNotification({
+                        title: `🚩 ${type}`,
+                        message,
+                        color: "red"
+                    });
 
                     setIsLoading(false);
                 });

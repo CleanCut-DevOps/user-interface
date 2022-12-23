@@ -2,21 +2,25 @@
     {
       "id": 1,
       "name": "HDB",
+      "price": "$25 per room",
       "imgUrl": "src/assets/images/hdb.jpeg"
     },
     {
         "id": 2,
         "name": "Condo",
+        "price": "$50 per room",
         "imgUrl": "src/assets/images/condo.jpeg"
     },
     {
         "id": 3,
         "name": "Landed",
-        "imgUrl": "src/assets/images/landed.jpeg"
+        "price": "$100 per room",
+        "imgUrl": "src/assets/images/landed.jpg"
     },
     {
         "id": 4,
         "name": "Office",
-        "imgUrl": "src/assets/images/office.jpeg"
+        "price": "$200 per room",
+        "imgUrl": "src/assets/images/office.jpg"
     }
   ]

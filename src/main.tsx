@@ -4,6 +4,7 @@ import { NotificationsProvider } from "@mantine/notifications";
 import { Router } from "./router";
 import { UserProvider } from "./components";
 
+
 createRoot(document.getElementById("root") as HTMLElement).render(
     <MantineProvider
         withGlobalStyles

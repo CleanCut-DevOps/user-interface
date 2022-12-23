@@ -6,8 +6,10 @@ import {
     createStyles,
     Group,
     PasswordInput,
+    Select,
     Stack,
     Text,
+    Textarea,
     TextInput
 } from "@mantine/core";
 import { Link } from "wouter";
@@ -15,12 +17,14 @@ import { useForm } from "@mantine/form";
 import axios from "axios";
 import { useCookies } from "react-cookie";
 import { showNotification } from "@mantine/notifications";
+import DropdownMenu from "react-bootstrap/esm/DropdownMenu";
 
 interface RequestData {
-    email: string;
-    username: string;
-    contact: string;
-    password: string;
+    House: string;
+    Rooms: string;
+    Address: string;
+    Time:string
+
     
 }
 
@@ -61,106 +65,106 @@ const useStyles = createStyles(() => ({
             backgroundColor: "#2520e3"
         }
     }
+    
 }));
 
-export const FormPanel: FC = () => {
+export const Booking: FC = () => {
     const { classes } = useStyles();
-    const [cookies, setCookie] = useCookies(["AccessToken"]);
+    
 
     const form = useForm({
         initialValues: {
             
-            username: "",
-            email: "",
-            contact: "",
-            password: "",
+            House: "",
+            Rooms: "",
+            Address: "",
+            Time: "",
+            
             
         },
-        validate: {
-            password: value =>
-                value.length >= 8
-                    ? null
-                    : "Password must be at least 8 characters"
-        }
+      
 
     });
 
-    const handleSubmit = form.onSubmit(({ username, email, contact, password  }) => {
+    const handleSubmit = form.onSubmit(({ House, Rooms, Address, Time }) => {
         let fData: RequestData = {
-            username,
-            email,
-            contact,
-            password,
+            House, 
+            Rooms, 
+            Address,
+            Time,
            
         };
-
-    
         axios
-            .post("https://user-api.klenze.com.au/api/register", fData)
-            .then(({ data }) => {
-                const token = data.token;
-
-                setCookie("AccessToken", token, {
-                    sameSite: "strict"
-                });
-
-                showNotification({
-                    title: data.type,
-                    message: data.message,
-                    color: "green"
-                });
-            })
-            .catch(({ response }) => {
-                console.log(response);
+        .post("https://booking-api.klenze.com.au/", fData)
+        .then(({ data }) => {
+            const token = data.token;
+            showNotification({
+                title: data.type,
+                message: data.message,
+                color: "green"
             });
+        })
+        .catch(({ response }) => {
+            console.log(response);
+        });
+    
+        
     });
 
     return (
         <Box className={classes.formPanel}>
             <Box className={classes.formContainer}>
                 <Stack spacing={12}>
-                    <Text className={classes.panelLabel}>Register</Text>
+                    <Text className={classes.panelLabel}>Booking</Text>
                     <Text fw={500} color={"#777"}>
-                        Already have an account?{" "} 
-                        <Link href={"/login"} className={classes.link}>
-                            Login
-                        </Link>
+                        Book our cleaning services{" "}    
                     </Text>
                 </Stack>
+                
                 <form onSubmit={handleSubmit}>
                     <Stack spacing={24}>
-                    <TextInput
+                    <Select
                             size={"md"}
-                            label="Username"
-                            placeholder="John Doe "
-                            {...form.getInputProps("username")}
+                            label="Type of cleaning"
+                            placeholder="HDB "
+                            data={[
+                                { value: 'HDB', label: 'HDB' },
+                                { value: 'Condo', label: 'Condo' },
+                                { value: 'Landed', label: 'Landed' },
+                                { value: 'Office', label: 'Office' },
+                              ]}
+                              />
+                        <TextInput
+                            size={"md"}
+                            label="Rooms"
+                            placeholder="5 rooms"
+                            {...form.getInputProps("rooms")}
                         />
                         <TextInput
                             size={"md"}
-                            label="Email"
-                            placeholder="hello@domain.com "
-                            {...form.getInputProps("email")}
-                        />
+                            label="Address"
+                            placeholder="21 Tampines Ave 1, Singapore 529757"
+                            {...form.getInputProps("address")}
+                              />
                         <TextInput
                             size={"md"}
-                            label="Contact"
-                            placeholder="9999 9999 "
-                            {...form.getInputProps("contact")}
-                        />
-                        <PasswordInput
-                            size={"md"}
-                            label="Password"
-                            placeholder="Your password"
-                            {...form.getInputProps("password")}
-                        />
-                       
+                            label="Date and time"
+                            placeholder="29th August 12pm"
+                            {...form.getInputProps("address")}
+                              />
+                         <Textarea
+                            label="Specifications"
+                            placeholder="Do not clean third floor"
+                            {...form.getInputProps("specification")}
+                              />
+                              
                         <Button
                             fullWidth
                             size={"md"}
                             type={"submit"}
                             color={"indigo"}
                             className={classes.submit}>
-                            Register
+                            Book
                         </Button>
                     </Stack>
                 </form>

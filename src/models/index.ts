@@ -5,3 +5,5 @@ export type {
     UnauthorizedResponse,
     InvalidDataResponse
 } from "./Response";
+
+export type { ServiceTypes } from "./Service";

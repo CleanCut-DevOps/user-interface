@@ -1,43 +1,32 @@
-import { Button, Card } from "react-bootstrap"
+import { Image } from '@mantine/core';
 
-type StorePropertyProps = {
-    id:number,
-    name:string,
-    price:string,
-    imgUrl: string,
+export function Propertylist() {
+  return (
+    <div style={{ width: 240, marginLeft: 'auto', marginRight: 'auto' }}>
+      <Image
+        radius="md"
+        src="src\assets\images\hdb.jpeg"
+        alt="Random unsplash image"
+        caption="HDB $50 per room"
+      />
+      <Image
+        radius="md"
+        src="src\assets\images\condo.jpeg"
+        alt="Random unsplash image"
+        caption="Condo $75 per room"
+      />
+      <Image
+        radius="md"
+        src="src\assets\images\landed.jpg"
+        alt="Random unsplash image"
+        caption="Landed $100 per room"
+      />
+      <Image
+        radius="md"
+        src="src\assets\images\office.jpg"
+        alt="Random unsplash image"
+        caption="Office $150 per room"
+      />
+    </div>
+  );
 }
-
-export function StoreProperty( {id, name, price, imgUrl}: 
-    StorePropertyProps) {
-        const quantity = 0
-    return <Card className="h-100">
-        <Card.Img variant="top" src={imgUrl}  height="200px"  
-
-        />
-        <Card.Body className="d-flex flex-column">
-        <Card.Title  className="d-flex justify-content-between align-items-baseline mb-4">
-          <span className="fs-2">{name}</span>
-          <span className="ms-2">{price}</span>
-        </Card.Title>
-       <div className="mt-auto">
-
-        {quantity === 0  ? ( <Button className="w-100"> + Add to cart</Button>
-
-        ): <div
-        className="d-flex align-items-center flex-column"
-        style={{ gap: ".5rem" }}>
-             <div
-                className="d-flex align-items-center justify-content-center"
-                style={{ gap: ".5rem" }}>
-                    <Button>-</Button>
-                    <div>
-                    <span className="fs-3">{quantity}</span> in cart
-                    </div>
-                    <Button>+</Button>
-                </div>
-                <Button>Remove</Button>
-        </div>}
-        </div>
-        </Card.Body>
-    </Card>
-    }

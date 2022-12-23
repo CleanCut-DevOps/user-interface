@@ -8,8 +8,6 @@ export const Router: FC = () => {
     const { user, isLoading } = useContext(UserContext);
 
     useEffect(() => {
-        console.log(location);
-
         if (!isLoading) {
             switch (location) {
                 case "/":

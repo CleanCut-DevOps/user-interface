@@ -81,7 +81,7 @@ export const FormPanel: FC = () => {
         }
     });
 
-    const handleSubmit = form.onSubmit(({ accessName,  password, stay }) => {
+    const handleSubmit = form.onSubmit(({ accessName, password, stay }) => {
         let fData: RequestData = {
             password,
             stay
@@ -98,7 +98,7 @@ export const FormPanel: FC = () => {
         }
 
         axios
-            .post("https://users.klenze.com.au/api/login", fData)
+            .post(`${import.meta.env.VITE_ACCOUNT_API}/api/login`, fData)
             .then(({ data }) => {
                 const token = data.token;
 
@@ -133,26 +133,29 @@ export const FormPanel: FC = () => {
                     <Stack spacing={24}>
                         <TextInput
                             size={"md"}
-                            label="Email / username"
-                            placeholder="hello@domain.com / John Doe"
+                            autoComplete={"username"}
+                            label={"Email / username"}
+                            placeholder={"hello@domain.com / John Doe"}
                             {...form.getInputProps("accessName")}
                         />
                         <PasswordInput
                             size={"md"}
-                            label="Password"
-                            placeholder="Your password"
+                            label={"Password"}
+                            placeholder={"Your password"}
+                            autoComplete={"current-password"}
                             {...form.getInputProps("password")}
                         />
                         <Group position="apart">
                             <Checkbox
-                                size="md"
-                                label="Remember me"
-                                color="dark"
+                                size={"md"}
+                                color={"dark"}
+                                label={"Remember me"}
                                 {...form.getInputProps("stay")}
                             />
                             <Link
                                 href={"/resetPassword"}
-                                className={classes.link}>
+                                className={classes.link}
+                            >
                                 Forgot password?
                             </Link>
                         </Group>
@@ -160,8 +163,8 @@ export const FormPanel: FC = () => {
                             fullWidth
                             size={"md"}
                             type={"submit"}
-                            color={"indigo"}
-                            className={classes.submit}>
+                            className={classes.submit}
+                        >
                             Sign in
                         </Button>
                     </Stack>

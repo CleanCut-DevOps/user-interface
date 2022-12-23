@@ -10,6 +10,7 @@ import {
 import { User } from "../models";
 import { useCookies } from "react-cookie";
 import axios from "axios";
+import { showNotification } from "@mantine/notifications";
 
 type SchrodingersUser = User | null;
 
@@ -28,18 +29,15 @@ export const UserContext = createContext<UserContextData>({
 export const UserProvider: FC<PropsWithChildren> = ({ children }) => {
     const [user, setUser] = useState<SchrodingersUser>(null);
     const [isLoading, setIsLoading] = useState<boolean>(true);
-    const [cookies, setCookie] = useCookies(["AccessToken"]);
-
-    console.log(user);
+    const [cookies] = useCookies(["AccessToken"]);
 
     useEffect(() => {
         if (cookies.AccessToken) {
             axios
-                .get("https://users.klenze.com.au/api/account", {
+                .get(`${import.meta.env.VITE_ACCOUNT_API}/api/account`, {
                     headers: { Authorization: `Bearer ${cookies.AccessToken}` }
                 })
                 .then(({ data }) => {
-                    console.log(data);
                     setUser({
                         id: data.id as string,
                         email: data.email as string,
@@ -53,11 +51,14 @@ export const UserProvider: FC<PropsWithChildren> = ({ children }) => {
 
                     setIsLoading(false);
                 })
-                .catch(err => {
-                    const { status } = err.response;
-                    const { type, message } = err.response.data;
+                .catch(({ response: { data } }) => {
+                    const { type, message } = data;
 
-                    console.log({ status, type, message });
+                    showNotification({
+                        title: `🚩 ${type}`,
+                        message,
+                        color: "red"
+                    });
 
                     setIsLoading(false);
                 });

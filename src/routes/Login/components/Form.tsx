@@ -1,4 +1,3 @@
-import { FC } from "react";
 import {
     Box,
     Button,
@@ -10,11 +9,12 @@ import {
     Text,
     TextInput
 } from "@mantine/core";
-import { Link } from "wouter";
 import { useForm } from "@mantine/form";
-import axios from "axios";
-import { useCookies } from "react-cookie";
 import { showNotification } from "@mantine/notifications";
+import axios from "axios";
+import { FC } from "react";
+import { useCookies } from "react-cookie";
+import { Link } from "wouter";
 
 interface RequestData {
     username?: string;
@@ -24,11 +24,7 @@ interface RequestData {
     stay: boolean;
 }
 
-const useStyles = createStyles(() => ({
-    label: {
-        fontSize: 28,
-        fontWeight: 600
-    },
+const useStyles = createStyles(theme => ({
     container: {
         display: "flex",
         width: "100%",
@@ -36,23 +32,29 @@ const useStyles = createStyles(() => ({
         flexDirection: "column",
         gap: 36
     },
+    label: {
+        fontSize: 28,
+        fontWeight: 600
+    },
     link: {
-        textDecoration: "none",
-        color: "#3c37ff",
         fontWeight: 600,
+        textDecoration: "none",
         transition: "all 0.2s ease",
+        color: theme.colors.violet[7],
+
         "&:hover": {
-            color: "#2520e3",
-            textDecoration: "underline"
+            textDecoration: "underline",
+            color: theme.colors.violet[9]
         }
     },
     submit: {
-        backgroundColor: "#3c37ff",
         color: "white",
         transition: "all 0.2s ease",
+        backgroundColor: theme.colors.violet[7],
         boxShadow: "0 0 10px 0 rgba(0, 0, 0, 0.2)",
+
         "&:hover": {
-            backgroundColor: "#2520e3"
+            backgroundColor: theme.colors.violet[9]
         }
     }
 }));
@@ -106,8 +108,18 @@ export const Form: FC = () => {
                     color: "green"
                 });
             })
-            .catch(({ response }) => {
-                console.log(response);
+            .catch(({ response: { data } }) => {
+                const { type, message } = data;
+
+                form.setErrors({
+                    accessName: "Your access name or password is incorrect"
+                });
+
+                showNotification({
+                    title: `🚩 ${type}`,
+                    message,
+                    color: "red"
+                });
             });
     });
 

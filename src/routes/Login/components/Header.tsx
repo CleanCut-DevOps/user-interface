@@ -29,6 +29,17 @@ const useStyles = createStyles(theme => ({
     link: {
         textDecoration: "none",
         color: "inherit"
+    },
+    icon: {
+        transition: "0.2s ease",
+        backgroundColor:
+            theme.colorScheme === "dark"
+                ? theme.colors.dark[6]
+                : theme.colors.gray[1],
+        color:
+            theme.colorScheme === "dark"
+                ? theme.colors.yellow[4]
+                : theme.colors.indigo[8]
     }
 }));
 
@@ -50,18 +61,9 @@ export const Header: FC = () => {
                 </Group>
             </a>
             <ActionIcon
-                onClick={() => toggleColorScheme()}
                 size="lg"
-                sx={theme => ({
-                    backgroundColor:
-                        theme.colorScheme === "dark"
-                            ? theme.colors.dark[6]
-                            : theme.colors.gray[0],
-                    color:
-                        theme.colorScheme === "dark"
-                            ? theme.colors.yellow[4]
-                            : theme.colors.blue[6]
-                })}
+                className={classes.icon}
+                onClick={() => toggleColorScheme()}
             >
                 {colorScheme === "dark" ? (
                     <TbSun size={18} />

@@ -1,33 +1,32 @@
 {
-  "name": "user",
-  "private": true,
-  "version": "0.0.0",
-  "type": "module",
-  "scripts": {
-    "dev": "vite",
-    "build": "tsc && vite build",
-    "preview": "vite preview"
-  },
-  "dependencies": {
-    "@emotion/react": "^11.10.5",
-    "@mantine/core": "^5.9.5",
-    "@mantine/form": "^5.9.5",
-    "@mantine/hooks": "^5.9.5",
-    "@mantine/notifications": "^5.9.5",
-    "axios": "^1.2.1",
-    "react": "^18.2.0",
-    "react-bootstrap": "^2.7.0",
-    "react-cookie": "^4.1.1",
-    "react-dom": "^18.2.0",
-    "react-icons": "^4.7.1",
-    "react-router-dom": "^6.6.0",
-    "wouter": "^2.9.0"
-  },
-  "devDependencies": {
-    "@types/react": "^18.0.26",
-    "@types/react-dom": "^18.0.9",
-    "@vitejs/plugin-react": "^3.0.0",
-    "typescript": "^4.9.3",
-    "vite": "^4.0.0"
-  }
+    "name": "user",
+    "private": true,
+    "version": "0.0.0",
+    "type": "module",
+    "scripts": {
+        "dev": "vite",
+        "build": "tsc && vite build",
+        "preview": "vite preview"
+    },
+    "dependencies": {
+        "@emotion/react": "^11.10.5",
+        "@mantine/core": "^5.9.5",
+        "@mantine/form": "^5.9.5",
+        "@mantine/hooks": "^5.9.5",
+        "@mantine/notifications": "^5.9.5",
+        "axios": "^1.2.1",
+        "react": "^18.2.0",
+        "react-cookie": "^4.1.1",
+        "react-dom": "^18.2.0",
+        "react-icons": "^4.7.1",
+        "react-router-dom": "^6.6.0",
+        "wouter": "^2.9.0"
+    },
+    "devDependencies": {
+        "@types/react": "^18.0.26",
+        "@types/react-dom": "^18.0.9",
+        "@vitejs/plugin-react": "^3.0.0",
+        "typescript": "^4.9.3",
+        "vite": "^4.0.0"
+    }
 }

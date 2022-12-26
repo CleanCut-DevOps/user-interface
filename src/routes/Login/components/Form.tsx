@@ -30,7 +30,7 @@ const useStyles = createStyles(theme => ({
         width: "100%",
         maxWidth: "560px",
         flexDirection: "column",
-        gap: 36
+        gap: theme.spacing.xl
     },
     label: {
         fontSize: 28,
@@ -135,7 +135,7 @@ export const Form: FC = () => {
                 </Text>
             </Stack>
             <form onSubmit={handleSubmit}>
-                <Stack spacing={24}>
+                <Stack spacing={12}>
                     <TextInput
                         size={"md"}
                         autoComplete={"username"}
@@ -150,7 +150,14 @@ export const Form: FC = () => {
                         autoComplete={"current-password"}
                         {...form.getInputProps("password")}
                     />
-                    <Group position="apart" align={"start"}>
+                    <Group
+                        mt={"sm"}
+                        sx={{
+                            gap: 8,
+                            justifyContent: "space-between",
+                            alignItems: "flex-start"
+                        }}
+                    >
                         <Checkbox
                             size={"md"}
                             color={"dark"}
@@ -162,6 +169,7 @@ export const Form: FC = () => {
                         </Link>
                     </Group>
                     <Button
+                        mt={"xs"}
                         fullWidth
                         size={"md"}
                         type={"submit"}

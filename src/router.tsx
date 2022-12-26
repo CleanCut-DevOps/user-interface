@@ -1,7 +1,7 @@
 import { FC, useContext, useEffect } from "react";
 import { Route, useLocation } from "wouter";
-import { Dashboard, Login, Register } from "./routes";
 import { UserContext } from "./components/UserProvider";
+import { Dashboard, Login, Register } from "./routes";
 
 export const Router: FC = () => {
     const [location, setLocation] = useLocation();

@@ -1,19 +1,43 @@
-import { createRoot } from "react-dom/client";
-import { MantineProvider } from "@mantine/core";
+import { ColorSchemeProvider, MantineProvider } from "@mantine/core";
 import { NotificationsProvider } from "@mantine/notifications";
-import { Router } from "./router";
+import { FC, useState } from "react";
+import { useCookies } from "react-cookie";
+import { createRoot } from "react-dom/client";
 import { UserProvider } from "./components";
+import { Router } from "./router";
 
+type ColorScheme = "light" | "dark";
 
-createRoot(document.getElementById("root") as HTMLElement).render(
-    <MantineProvider
-        withGlobalStyles
-        withNormalizeCSS
-        theme={{ fontFamily: "Inter, sans-serif" }}>
-        <NotificationsProvider>
-            <UserProvider>
-                <Router />
-            </UserProvider>
-        </NotificationsProvider>
-    </MantineProvider>
-);
+const Main: FC = () => {
+    const [cookie, setCookie] = useCookies(["mantine-color-scheme"]);
+    const [colorScheme, setColorScheme] = useState<ColorScheme>(
+        cookie["mantine-color-scheme"]
+    );
+
+    const toggleColorScheme = (value?: ColorScheme) => {
+        let newScheme = value || (colorScheme === "dark" ? "light" : "dark");
+        setColorScheme(newScheme);
+        setCookie("mantine-color-scheme", { maxAge: 60 * 60 * 24 * 30 });
+    };
+
+    return (
+        <ColorSchemeProvider
+            colorScheme={colorScheme}
+            toggleColorScheme={toggleColorScheme}
+        >
+            <MantineProvider
+                withGlobalStyles
+                withNormalizeCSS
+                theme={{ fontFamily: "Inter, sans-serif", colorScheme }}
+            >
+                <NotificationsProvider>
+                    <UserProvider>
+                        <Router />
+                    </UserProvider>
+                </NotificationsProvider>
+            </MantineProvider>
+        </ColorSchemeProvider>
+    );
+};
+
+createRoot(document.getElementById("root") as HTMLElement).render(<Main />);

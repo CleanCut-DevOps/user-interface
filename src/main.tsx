@@ -17,7 +17,9 @@ const Main: FC = () => {
     const toggleColorScheme = (value?: ColorScheme) => {
         let newScheme = value || (colorScheme === "dark" ? "light" : "dark");
         setColorScheme(newScheme);
-        setCookie("mantine-color-scheme", { maxAge: 60 * 60 * 24 * 30 });
+        setCookie("mantine-color-scheme", newScheme, {
+            maxAge: 60 * 60 * 24 * 30
+        });
     };
 
     return (

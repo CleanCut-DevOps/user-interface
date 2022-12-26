@@ -25,20 +25,14 @@ interface RequestData {
 }
 
 const useStyles = createStyles(() => ({
-    panelLabel: {
+    label: {
         fontSize: 28,
         fontWeight: 600
     },
-    formPanel: {
-        flex: 1,
-        padding: "2rem",
+    container: {
         display: "flex",
-        alignItems: "center",
-        justifyContent: "center"
-    },
-    formContainer: {
-        display: "flex",
-        minWidth: "560px",
+        width: "100%",
+        maxWidth: "560px",
         flexDirection: "column",
         gap: 36
     },
@@ -63,7 +57,7 @@ const useStyles = createStyles(() => ({
     }
 }));
 
-export const FormPanel: FC = () => {
+export const Form: FC = () => {
     const { classes } = useStyles();
     const [cookies, setCookie] = useCookies(["AccessToken"]);
 
@@ -118,58 +112,53 @@ export const FormPanel: FC = () => {
     });
 
     return (
-        <Box className={classes.formPanel}>
-            <Box className={classes.formContainer}>
-                <Stack spacing={12}>
-                    <Text className={classes.panelLabel}>Login</Text>
-                    <Text fw={500} color={"#777"}>
-                        Don't have an account?{" "}
-                        <Link href={"/register"} className={classes.link}>
-                            Register
+        <Box className={classes.container}>
+            <Stack spacing={12} w={"100%"}>
+                <Text className={classes.label}>Login</Text>
+                <Text fw={500} color={"#777"}>
+                    Don't have an account?{" "}
+                    <Link href={"/register"} className={classes.link}>
+                        Register
+                    </Link>
+                </Text>
+            </Stack>
+            <form onSubmit={handleSubmit}>
+                <Stack spacing={24}>
+                    <TextInput
+                        size={"md"}
+                        autoComplete={"username"}
+                        label={"Email / username"}
+                        placeholder={"email@domain.com / John Doe"}
+                        {...form.getInputProps("accessName")}
+                    />
+                    <PasswordInput
+                        size={"md"}
+                        label={"Password"}
+                        placeholder={"Your password"}
+                        autoComplete={"current-password"}
+                        {...form.getInputProps("password")}
+                    />
+                    <Group position="apart" align={"start"}>
+                        <Checkbox
+                            size={"md"}
+                            color={"dark"}
+                            label={"Remember me"}
+                            {...form.getInputProps("stay")}
+                        />
+                        <Link href={"/resetPassword"} className={classes.link}>
+                            Forgot password?
                         </Link>
-                    </Text>
+                    </Group>
+                    <Button
+                        fullWidth
+                        size={"md"}
+                        type={"submit"}
+                        className={classes.submit}
+                    >
+                        Sign in
+                    </Button>
                 </Stack>
-                <form onSubmit={handleSubmit}>
-                    <Stack spacing={24}>
-                        <TextInput
-                            size={"md"}
-                            autoComplete={"username"}
-                            label={"Email / username"}
-                            placeholder={"hello@domain.com / John Doe"}
-                            {...form.getInputProps("accessName")}
-                        />
-                        <PasswordInput
-                            size={"md"}
-                            label={"Password"}
-                            placeholder={"Your password"}
-                            autoComplete={"current-password"}
-                            {...form.getInputProps("password")}
-                        />
-                        <Group position="apart">
-                            <Checkbox
-                                size={"md"}
-                                color={"dark"}
-                                label={"Remember me"}
-                                {...form.getInputProps("stay")}
-                            />
-                            <Link
-                                href={"/resetPassword"}
-                                className={classes.link}
-                            >
-                                Forgot password?
-                            </Link>
-                        </Group>
-                        <Button
-                            fullWidth
-                            size={"md"}
-                            type={"submit"}
-                            className={classes.submit}
-                        >
-                            Sign in
-                        </Button>
-                    </Stack>
-                </form>
-            </Box>
+            </form>
         </Box>
     );
 };

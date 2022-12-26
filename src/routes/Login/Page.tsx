@@ -1,77 +1,37 @@
-import {
-    ActionIcon,
-    Box,
-    createStyles,
-    Group,
-    Header,
-    Stack,
-    ThemeIcon,
-    Title,
-    useMantineColorScheme
-} from "@mantine/core";
+import { Center, createStyles, Stack } from "@mantine/core";
 import { FC } from "react";
-import { MdOutlineCleaningServices } from "react-icons/md";
-import { TbMoonStars, TbSun } from "react-icons/tb";
 import { Form } from "./components/Form";
+import { Header } from "./components/Header";
 
 const useStyles = createStyles(theme => ({
-    header: {
-        display: "flex",
-        alignItems: "center",
-        padding: theme.spacing.md,
-        justifyContent: "space-between"
-    },
-    logo: {
-        display: "flex",
-        alignItems: "center",
-        gap: theme.spacing.md
-    },
     wrapper: {
-        padding: theme.spacing.md,
-        height: "100vh",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center"
+        gap: 0,
+        width: "100%",
+        height: "100%",
+        minWidth: "100vw",
+        minHeight: "100vh",
+        justifyContent: "flex-start",
+        backgroundColor:
+            theme.colorScheme === "dark"
+                ? theme.colors.dark[8]
+                : theme.colors.gray[0]
+    },
+    centered: {
+        flex: 1,
+        position: "relative",
+        padding: "1rem"
     }
 }));
 
 export const Login: FC = () => {
     const { classes } = useStyles();
-    const { colorScheme, toggleColorScheme } = useMantineColorScheme();
 
     return (
-        <Stack>
-            <Header height={""} className={classes.header}>
-                <Group className={classes.logo}>
-                    <ThemeIcon size={"lg"} color={"gray"} variant={"light"}>
-                        <MdOutlineCleaningServices />
-                    </ThemeIcon>
-                    <Title order={4}>CleanCut</Title>
-                </Group>
-                <ActionIcon
-                    onClick={() => toggleColorScheme()}
-                    size="lg"
-                    sx={theme => ({
-                        backgroundColor:
-                            theme.colorScheme === "dark"
-                                ? theme.colors.dark[6]
-                                : theme.colors.gray[0],
-                        color:
-                            theme.colorScheme === "dark"
-                                ? theme.colors.yellow[4]
-                                : theme.colors.blue[6]
-                    })}
-                >
-                    {colorScheme === "dark" ? (
-                        <TbSun size={18} />
-                    ) : (
-                        <TbMoonStars size={18} />
-                    )}
-                </ActionIcon>
-            </Header>
-            <Box className={classes.wrapper}>
+        <Stack className={classes.wrapper}>
+            <Header />
+            <Center className={classes.centered}>
                 <Form />
-            </Box>
+            </Center>
         </Stack>
     );
 };

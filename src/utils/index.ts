@@ -1,0 +1,1 @@
+export { fetchUserProperties } from "./queries";

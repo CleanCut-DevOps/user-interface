@@ -3,6 +3,7 @@ import { NotificationsProvider } from "@mantine/notifications";
 import { FC, useState } from "react";
 import { useCookies } from "react-cookie";
 import { createRoot } from "react-dom/client";
+import { QueryClient, QueryClientProvider } from "react-query";
 import { UserProvider } from "./components";
 import { Router } from "./router";
 
@@ -33,9 +34,11 @@ const Main: FC = () => {
                 theme={{ fontFamily: "Inter, sans-serif", colorScheme }}
             >
                 <NotificationsProvider>
-                    <UserProvider>
-                        <Router />
-                    </UserProvider>
+                    <QueryClientProvider client={new QueryClient()}>
+                        <UserProvider>
+                            <Router />
+                        </UserProvider>
+                    </QueryClientProvider>
                 </NotificationsProvider>
             </MantineProvider>
         </ColorSchemeProvider>

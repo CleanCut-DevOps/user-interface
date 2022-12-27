@@ -30,25 +30,7 @@ const useStyles = createStyles(theme => ({
 
 export const NavPropertyList: FC = () => {
     const { classes } = useStyles();
-    const [cookies] = useCookies(["AccessToken"]);
-    const setLocation = useLocation()[1];
-
-    const fetchUserProperties = async () => {
-        const response = await axios.get(
-            `${import.meta.env.VITE_PROPERTY_API}/api/property`,
-            {
-                headers: {
-                    Authorization: `Bearer ${cookies.AccessToken ?? ""}`
-                }
-            }
-        );
-
-        return response;
-    };
-
-    const query = useQuery("propertyList", fetchUserProperties);
-
-    console.log(query);
+    const [, setLocation] = useLocation();
 
     const handleClick = () => {
         setLocation("/create/property");

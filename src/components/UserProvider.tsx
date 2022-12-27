@@ -1,3 +1,5 @@
+import { showNotification } from "@mantine/notifications";
+import axios from "axios";
 import {
     createContext,
     Dispatch,
@@ -7,14 +9,12 @@ import {
     useEffect,
     useState
 } from "react";
+import { useCookies } from "react-cookie";
 import {
     SuccessfulAccountResponse,
     UnauthorizedResponse,
     User
 } from "../models";
-import { useCookies } from "react-cookie";
-import axios from "axios";
-import { showNotification } from "@mantine/notifications";
 
 interface ResponseData {
     data: SuccessfulAccountResponse;
@@ -43,7 +43,10 @@ export const UserContext = createContext<UserContextData>({
 export const UserProvider: FC<PropsWithChildren> = ({ children }) => {
     const [user, setUser] = useState<SchrodingersUser>(null);
     const [isLoading, setIsLoading] = useState<boolean>(true);
-    const [cookies] = useCookies(["AccessToken"]);
+    const [cookies, , removeCookie] = useCookies([
+        "AccessToken",
+        "mantine-color-scheme"
+    ]);
 
     useEffect(() => {
         if (cookies.AccessToken) {
@@ -68,6 +71,13 @@ export const UserProvider: FC<PropsWithChildren> = ({ children }) => {
                 .catch(({ response }: UnauthorizedResponseData) => {
                     const { type, message } = response.data;
 
+                    setUser(null);
+
+                    removeCookie("AccessToken", {
+                        secure: true,
+                        sameSite: "strict"
+                    });
+
                     showNotification({
                         title: `🚩 ${type}`,
                         message,
@@ -76,7 +86,11 @@ export const UserProvider: FC<PropsWithChildren> = ({ children }) => {
 
                     setIsLoading(false);
                 });
-        } else setIsLoading(false);
+        } else {
+            setUser(null);
+
+            setIsLoading(false);
+        }
     }, [cookies, setIsLoading]);
 
     return (

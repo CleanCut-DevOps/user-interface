@@ -1,22 +1,24 @@
-import { AppShell, MantineTheme } from "@mantine/core";
+import { AppShell, createStyles } from "@mantine/core";
 import { FC, PropsWithChildren } from "react";
 import { LayoutNavbar } from "./Navbar";
 
+const useStyles = createStyles(theme => ({
+    main: {
+        backgroundColor:
+            theme.colorScheme === "dark"
+                ? theme.colors.dark[8]
+                : theme.colors.gray[0]
+    }
+}));
+
 export const DefaultLayout: FC<PropsWithChildren> = ({ children }) => {
-    const styles = (theme: MantineTheme) => ({
-        main: {
-            backgroundColor:
-                theme.colorScheme === "dark"
-                    ? theme.colors.dark[8]
-                    : theme.colors.gray[0]
-        }
-    });
+    const { classes } = useStyles();
 
     return (
         <AppShell
             layout={"alt"}
             padding={"md"}
-            styles={styles}
+            className={classes.main}
             navbar={<LayoutNavbar />}
             navbarOffsetBreakpoint={"lg"}
         >

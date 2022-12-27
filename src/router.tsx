@@ -1,7 +1,7 @@
 import { FC, useContext, useEffect } from "react";
 import { Route, useLocation } from "wouter";
 import { UserContext } from "./components/UserProvider";
-import { Dashboard, Login, Register } from "./routes";
+import { CreateProperty, Dashboard, Login, Register } from "./routes";
 
 export const Router: FC = () => {
     const [location, setLocation] = useLocation();
@@ -31,6 +31,7 @@ export const Router: FC = () => {
                 <Route path={"/"} component={Dashboard} />
                 <Route path={"/login"} component={Login} />
                 <Route path={"/register"} component={Register} />
+                <Route path={"/create/property"} component={CreateProperty} />
             </>
         );
 };

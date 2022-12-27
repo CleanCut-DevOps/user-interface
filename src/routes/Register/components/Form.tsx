@@ -67,7 +67,7 @@ const useStyles = createStyles(theme => ({
 
 export const Form: FC = () => {
     const { classes } = useStyles();
-    const [cookies, setCookie] = useCookies(["AccessToken"]);
+    const setCookie = useCookies(["AccessToken"])[1];
 
     const form = useForm({
         initialValues: {

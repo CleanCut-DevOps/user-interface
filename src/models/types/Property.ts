@@ -1,12 +1,12 @@
-import { Room } from "./Room";
+import { RoomType } from "./Room";
 
-export type Property = {
+export type PropertyType = {
     id: string;
     label: string;
     available: boolean;
     description: string;
     detailed_description: string;
-    rooms: Room[];
+    rooms: RoomType[];
     created_at: Date;
     updated_at: Date;
 };

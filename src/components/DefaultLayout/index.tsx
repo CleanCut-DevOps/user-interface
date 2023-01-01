@@ -20,7 +20,6 @@ export const DefaultLayout: FC<PropsWithChildren> = ({ children }) => {
             padding={"md"}
             className={classes.main}
             navbar={<LayoutNavbar />}
-            navbarOffsetBreakpoint={"lg"}
         >
             {children}
         </AppShell>

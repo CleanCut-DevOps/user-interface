@@ -7,7 +7,7 @@ import {
     ThemeIcon,
     UnstyledButton
 } from "@mantine/core";
-import { useHover, useColorScheme } from "@mantine/hooks";
+import { useHover } from "@mantine/hooks";
 import { FC } from "react";
 import { IconType } from "react-icons/lib";
 import {

@@ -1,5 +1,4 @@
 import {
-    ActionIcon,
     Avatar,
     createStyles,
     Group,
@@ -8,7 +7,6 @@ import {
     UnstyledButton
 } from "@mantine/core";
 import { FC, useContext } from "react";
-import { TbChevronRight } from "react-icons/tb";
 import { UserContext } from "../../UserProvider";
 
 const useStyles = createStyles(theme => ({

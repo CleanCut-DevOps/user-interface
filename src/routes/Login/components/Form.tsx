@@ -10,6 +10,7 @@ import {
     TextInput
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
+import { useToggle } from "@mantine/hooks";
 import { showNotification } from "@mantine/notifications";
 import axios from "axios";
 import { FC } from "react";
@@ -61,6 +62,7 @@ const useStyles = createStyles(theme => ({
 
 export const Form: FC = () => {
     const { classes } = useStyles();
+    const [loading, toggleLoading] = useToggle();
     const [, setCookie] = useCookies(["AccessToken"]);
 
     const form = useForm({
@@ -78,6 +80,7 @@ export const Form: FC = () => {
     });
 
     const handleSubmit = form.onSubmit(({ accessName, password, stay }) => {
+        toggleLoading();
         let fData: RequestData = {
             password,
             stay
@@ -121,6 +124,7 @@ export const Form: FC = () => {
                     message,
                     color: "red"
                 });
+                toggleLoading();
             });
     });
 
@@ -174,6 +178,7 @@ export const Form: FC = () => {
                         fullWidth
                         size={"md"}
                         type={"submit"}
+                        loading={loading}
                         className={classes.submit}
                     >
                         Sign in

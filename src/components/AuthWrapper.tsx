@@ -18,6 +18,7 @@ export const AuthWrapper: FC<ComponentProps> = ({ requireAuth, children }) => {
         }
     }, [requireAuth, user, isLoading, setLocation]);
 
-    if (isLoading) return <Loading />;
-    else return <>{children}</>;
+    if (isLoading || (requireAuth && !user) || (!requireAuth && user)) {
+        return <Loading />;
+    } else return <>{children}</>;
 };

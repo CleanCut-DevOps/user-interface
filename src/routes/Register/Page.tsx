@@ -1,5 +1,6 @@
 import { Center, createStyles, Stack } from "@mantine/core";
 import { FC } from "react";
+import { AuthWrapper } from "../../components";
 import { Form } from "./components/Form";
 import { Header } from "./components/Header";
 
@@ -26,11 +27,13 @@ const useStyles = createStyles(theme => ({
 export const Register: FC = () => {
     const { classes } = useStyles();
     return (
-        <Stack className={classes.wrapper}>
-            <Header />
-            <Center className={classes.centered}>
-                <Form />
-            </Center>
-        </Stack>
+        <AuthWrapper>
+            <Stack className={classes.wrapper}>
+                <Header />
+                <Center className={classes.centered}>
+                    <Form />
+                </Center>
+            </Stack>
+        </AuthWrapper>
     );
 };

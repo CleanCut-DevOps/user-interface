@@ -1,4 +1,4 @@
-import { Accordion, createStyles, Navbar, Stepper, Text } from "@mantine/core";
+import { Accordion, createStyles, Stepper, Text } from "@mantine/core";
 import { FC, useContext, useEffect, useState } from "react";
 import { TbBed, TbBuilding, TbListDetails, TbMapPin } from "react-icons/tb";
 import { Property } from "../../../../../models";
@@ -6,11 +6,9 @@ import { EditPropertyContext } from "./Provider";
 
 const useStyles = createStyles(theme => ({
     wrapper: {
-        display: "flex",
-        alignItems: "center",
+        height: "100%",
+        overflow: "hidden",
         transition: "0.4s ease",
-        flexDirection: "column",
-        justifyContent: "center",
         padding: theme.spacing.xl
     }
 }));
@@ -19,25 +17,8 @@ export const Sidebar: FC = () => {
     const { classes } = useStyles();
     const { property, setStep } = useContext(EditPropertyContext);
 
-    const determineDetailStep = (): number => {
-        if (property?.label && property?.description && property?.images)
-            return 2;
-        else if (property?.label && property?.description) return 1;
-        else if (property?.label) return 0;
-
-        return 0;
-    };
-
-    const determineAddressStep = (): number => {
-        return 0;
-    };
-
-    const determineAdditionalStep = (): number => {
-        return 0;
-    };
-
     return (
-        <Navbar className={classes.wrapper} width={{ base: 360 }}>
+        <div className={classes.wrapper}>
             <Accordion w={"100%"} variant="contained" radius={"md"}>
                 <Accordion.Item
                     value={"Property Details"}
@@ -71,6 +52,7 @@ export const Sidebar: FC = () => {
                             What kind of building it is
                         </Text>
                     </Accordion.Control>
+                    <Accordion.Panel></Accordion.Panel>
                 </Accordion.Item>
                 <Accordion.Item value={"Rooms"} onClick={() => setStep(3)}>
                     <Accordion.Control fz={"sm"} icon={<TbBed />}>
@@ -79,6 +61,7 @@ export const Sidebar: FC = () => {
                             What type of rooms are in it and how many are there
                         </Text>
                     </Accordion.Control>
+                    <Accordion.Panel></Accordion.Panel>
                 </Accordion.Item>
                 <Accordion.Item
                     value={"Additional Details"}
@@ -90,9 +73,10 @@ export const Sidebar: FC = () => {
                             Other additional information
                         </Text>
                     </Accordion.Control>
+                    <Accordion.Panel></Accordion.Panel>
                 </Accordion.Item>
             </Accordion>
-        </Navbar>
+        </div>
     );
 };
 

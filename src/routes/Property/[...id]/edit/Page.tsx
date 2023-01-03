@@ -1,5 +1,10 @@
 import { FC } from "react";
+import { AuthWrapper } from "../../../../components";
 
-export const EditProperty: FC = () => {
-    return <>edit property</>;
+type RouteProps = { params: { id: string } };
+
+export const EditProperty: FC<RouteProps> = ({ params }) => {
+    const { id } = params;
+
+    return <AuthWrapper requireAuth>edit property</AuthWrapper>;
 };

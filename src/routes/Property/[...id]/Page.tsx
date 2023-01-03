@@ -1,5 +1,6 @@
 import { FC } from "react";
+import { AuthWrapper } from "../../../components";
 
 export const Property: FC = () => {
-    return <>display property</>;
+    return <AuthWrapper requireAuth>display property</AuthWrapper>;
 };

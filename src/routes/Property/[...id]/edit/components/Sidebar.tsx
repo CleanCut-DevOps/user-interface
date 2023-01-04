@@ -15,15 +15,27 @@ const useStyles = createStyles(theme => ({
 
 export const Sidebar: FC = () => {
     const { classes } = useStyles();
-    const { property, setStep } = useContext(EditPropertyContext);
+    const [value, setValue] = useState<string>("0");
+    const { step, property, dispatch } = useContext(EditPropertyContext);
+
+    useEffect(() => setValue(step.toString()), [step]);
+
+    const handleChange = (newValue: string | null) => {
+        if (newValue && parseInt(newValue) != step) {
+            dispatch({ type: "setStep", payload: parseInt(newValue) });
+        }
+    };
 
     return (
         <div className={classes.wrapper}>
-            <Accordion w={"100%"} variant="contained" radius={"md"}>
-                <Accordion.Item
-                    value={"Property Details"}
-                    onClick={() => setStep(0)}
-                >
+            <Accordion
+                w={"100%"}
+                value={value}
+                radius={"md"}
+                variant={"contained"}
+                onChange={handleChange}
+            >
+                <Accordion.Item value={"0"}>
                     <Accordion.Control fz={"sm"} icon={<TbListDetails />}>
                         <Text fw={600}>Property Details</Text>
                         <Text fw={400} fz={"xs"} color={"dimmed"}>
@@ -34,7 +46,7 @@ export const Sidebar: FC = () => {
                         <DetailStepper property={property} />
                     </Accordion.Panel>
                 </Accordion.Item>
-                <Accordion.Item value={"Address"} onClick={() => setStep(1)}>
+                <Accordion.Item value={"1"}>
                     <Accordion.Control fz={"sm"} icon={<TbMapPin />}>
                         <Text fw={600}>Address</Text>
                         <Text fw={400} fz={"xs"} color={"dimmed"}>
@@ -45,7 +57,7 @@ export const Sidebar: FC = () => {
                         <AddressStepper property={property} />
                     </Accordion.Panel>
                 </Accordion.Item>
-                <Accordion.Item value={"Type"} onClick={() => setStep(2)}>
+                <Accordion.Item value={"2"}>
                     <Accordion.Control fz={"sm"} icon={<TbBuilding />}>
                         <Text fw={600}>Type</Text>
                         <Text fw={400} fz={"xs"} color={"dimmed"}>
@@ -54,7 +66,7 @@ export const Sidebar: FC = () => {
                     </Accordion.Control>
                     <Accordion.Panel></Accordion.Panel>
                 </Accordion.Item>
-                <Accordion.Item value={"Rooms"} onClick={() => setStep(3)}>
+                <Accordion.Item value={"3"}>
                     <Accordion.Control fz={"sm"} icon={<TbBed />}>
                         <Text fw={600}>Rooms</Text>
                         <Text fw={400} fz={"xs"} color={"dimmed"}>
@@ -63,10 +75,7 @@ export const Sidebar: FC = () => {
                     </Accordion.Control>
                     <Accordion.Panel></Accordion.Panel>
                 </Accordion.Item>
-                <Accordion.Item
-                    value={"Additional Details"}
-                    onClick={() => setStep(4)}
-                >
+                <Accordion.Item value={"4"}>
                     <Accordion.Control fz={"sm"} icon={<TbListDetails />}>
                         <Text fw={600}>Additional Details</Text>
                         <Text fw={400} fz={"xs"} color={"dimmed"}>

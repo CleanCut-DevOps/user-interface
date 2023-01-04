@@ -1,9 +1,17 @@
 import { Box, createStyles, Flex } from "@mantine/core";
 import { FC } from "react";
-import { AuthWrapper } from "../../../../components";
+import { AuthWrapper, Loading } from "../../../../components";
+import { Additional } from "./components/Additional";
+import { Address } from "./components/Address";
+import { Details } from "./components/Details";
 import { Header } from "./components/Header";
-import { EditPropertyProvider } from "./components/Provider";
+import {
+    EditPropertyContext,
+    EditPropertyProvider
+} from "./components/Provider";
+import { Rooms } from "./components/Rooms";
 import { Sidebar } from "./components/Sidebar";
+import { Type } from "./components/Type";
 
 type RouteProps = { params: { id: string } };
 
@@ -24,7 +32,16 @@ export const EditProperty: FC<RouteProps> = ({ params }) => {
                     <Header />
                     <Flex className={classes.grow}>
                         <Box className={`${classes.main} ${classes.grow}`}>
-                            asdasd
+                            <EditPropertyContext.Consumer>
+                                {({ step }) => {
+                                    if (step === 0) return <Details />;
+                                    if (step === 1) return <Address />;
+                                    if (step === 2) return <Type />;
+                                    if (step === 3) return <Rooms />;
+                                    if (step === 4) return <Additional />;
+                                    if (step === 5) return <Loading />;
+                                }}
+                            </EditPropertyContext.Consumer>
                         </Box>
                         <Sidebar />
                     </Flex>

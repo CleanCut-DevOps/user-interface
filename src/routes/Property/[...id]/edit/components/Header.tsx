@@ -8,7 +8,7 @@ import {
     TextInput,
     useMantineColorScheme
 } from "@mantine/core";
-import { useDebouncedState } from "@mantine/hooks";
+import { useDebouncedValue } from "@mantine/hooks";
 import { ChangeEvent, FC, useContext, useEffect, useState } from "react";
 import { EditPropertyContext } from "./Provider";
 
@@ -49,8 +49,12 @@ export const Header: FC = () => {
     const { classes } = useStyles();
     const { colorScheme } = useMantineColorScheme();
     const { property, dispatch } = useContext(EditPropertyContext);
-    const [label, setLabel] = useDebouncedState(property?.label ?? "", 300);
-    const [icon, setIcon] = useState<string>(property?.icon ?? "🏡");
+
+    // Input states
+    const [label, setLabel] = useState(property!.label);
+    const [icon, setIcon] = useState(property!.icon);
+    const [labelDebounced] = useDebouncedValue(label, 1000);
+    const [iconDebounced] = useDebouncedValue(icon, 1000);
 
     const handleLabelChange = (event: ChangeEvent<HTMLInputElement>) =>
         setLabel(event.target.value);
@@ -58,16 +62,26 @@ export const Header: FC = () => {
     const handleIconSelect = ({ native }: any) => setIcon(native);
 
     useEffect(() => {
-        if (label != property?.label || icon != property?.icon) {
+        if (
+            labelDebounced != property?.label ||
+            iconDebounced != property?.icon
+        ) {
             dispatch({
                 type: "brief",
                 payload: {
-                    icon: icon,
-                    label: label
+                    icon: iconDebounced,
+                    label: labelDebounced
                 }
             });
         }
-    }, [icon, label]);
+    }, [iconDebounced, labelDebounced]);
+
+    useEffect(() => {
+        if (property) {
+            if (property.icon != icon) setIcon(property.icon);
+            if (property.label != label) setLabel(property.label);
+        }
+    }, [property]);
 
     return (
         <div className={classes.wrapper}>
@@ -91,7 +105,7 @@ export const Header: FC = () => {
             <TextInput
                 size={"sm"}
                 variant={"filled"}
-                defaultValue={label}
+                value={label}
                 onChange={handleLabelChange}
             />
         </div>

@@ -1,4 +1,4 @@
-import { Box, createStyles, Flex } from "@mantine/core";
+import { Box, createStyles, Flex, ScrollArea } from "@mantine/core";
 import { FC } from "react";
 import { AuthWrapper, Loading } from "../../../../components";
 import { Additional } from "./components/Additional";
@@ -16,9 +16,25 @@ import { Type } from "./components/Type";
 type RouteProps = { params: { id: string } };
 
 const useStyles = createStyles(theme => ({
-    main: { padding: theme.spacing.xl },
-    grow: { flex: 1 },
-    column: { height: "100%", minHeight: "100vh", flexDirection: "column" }
+    grow: {
+        flex: 1,
+        height: "100%",
+        width: "100vw",
+        overflow: "hidden",
+        flexDirection: "row"
+    },
+    column: {
+        height: "100vh",
+        overflow: "hidden",
+        flexDirection: "column"
+    },
+    main: {
+        flex: 1,
+        width: "100%",
+        height: "100%",
+        overflow: "hidden",
+        padding: theme.spacing.xl
+    }
 }));
 
 export const EditProperty: FC<RouteProps> = ({ params }) => {
@@ -31,7 +47,7 @@ export const EditProperty: FC<RouteProps> = ({ params }) => {
                 <Flex className={classes.column}>
                     <Header />
                     <Flex className={classes.grow}>
-                        <Box className={`${classes.main} ${classes.grow}`}>
+                        <Box className={classes.main}>
                             <EditPropertyContext.Consumer>
                                 {({ step }) => {
                                     if (step === 0) return <Details />;

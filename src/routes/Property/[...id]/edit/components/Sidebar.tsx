@@ -1,4 +1,10 @@
-import { Accordion, createStyles, Stepper, Text } from "@mantine/core";
+import {
+    Accordion,
+    createStyles,
+    ScrollArea,
+    Stepper,
+    Text
+} from "@mantine/core";
 import { FC, useContext, useEffect, useState } from "react";
 import { TbBed, TbBuilding, TbListDetails, TbMapPin } from "react-icons/tb";
 import { Property } from "../../../../../models";
@@ -27,7 +33,7 @@ export const Sidebar: FC = () => {
     };
 
     return (
-        <div className={classes.wrapper}>
+        <ScrollArea className={classes.wrapper}>
             <Accordion
                 w={"100%"}
                 value={value}
@@ -85,7 +91,7 @@ export const Sidebar: FC = () => {
                     <Accordion.Panel></Accordion.Panel>
                 </Accordion.Item>
             </Accordion>
-        </div>
+        </ScrollArea>
     );
 };
 

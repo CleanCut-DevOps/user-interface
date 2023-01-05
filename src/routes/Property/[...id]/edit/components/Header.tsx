@@ -15,7 +15,6 @@ import { EditPropertyContext } from "./Provider";
 const useStyles = createStyles(theme => ({
     wrapper: {
         display: "flex",
-        alignItems: "center",
         gap: theme.spacing.xs,
         padding: `${theme.spacing.xs}px ${theme.spacing.xs * 2}px`,
         borderBottom:
@@ -56,23 +55,34 @@ export const Header: FC = () => {
     const [labelDebounced] = useDebouncedValue(label, 1000);
     const [iconDebounced] = useDebouncedValue(icon, 1000);
 
-    const handleLabelChange = (event: ChangeEvent<HTMLInputElement>) =>
+    const handleLabelChange = (event: ChangeEvent<HTMLInputElement>) => {
         setLabel(event.target.value);
+    };
 
     const handleIconSelect = ({ native }: any) => setIcon(native);
 
     useEffect(() => {
-        if (
-            labelDebounced != property?.label ||
-            iconDebounced != property?.icon
-        ) {
-            dispatch({
-                type: "brief",
-                payload: {
-                    icon: iconDebounced,
-                    label: labelDebounced
-                }
-            });
+        if (property) {
+            if (labelDebounced.length > 0 && labelDebounced != property.label) {
+                dispatch({
+                    type: "brief",
+                    payload: {
+                        icon: property.icon,
+                        label: labelDebounced
+                    }
+                });
+            } else if (
+                iconDebounced.length > 0 &&
+                iconDebounced != property.icon
+            ) {
+                dispatch({
+                    type: "brief",
+                    payload: {
+                        icon: iconDebounced,
+                        label: property.label
+                    }
+                });
+            }
         }
     }, [iconDebounced, labelDebounced]);
 
@@ -107,6 +117,7 @@ export const Header: FC = () => {
                 variant={"filled"}
                 value={label}
                 onChange={handleLabelChange}
+                error={label.length == 0 && "Property Label cannot be empty"}
             />
         </div>
     );

@@ -101,20 +101,16 @@ const DetailStepper: FC<{ property: Property | null }> = ({ property }) => {
     useEffect(() => {
         if (property) {
             if (
-                property.label &&
-                property.description &&
-                property.images.length > 0 &&
-                property.icon
-            ) {
-                setStep(4);
-            } else if (
+                property.icon &&
                 property.label &&
                 property.description &&
                 property.images.length > 0
-            )
+            ) {
+                setStep(4);
+            } else if (property.icon && property.label && property.description)
                 setStep(3);
-            else if (property.label && property.description) setStep(2);
-            else if (property.label) setStep(1);
+            else if (property.icon && property.label) setStep(2);
+            else if (property.icon) setStep(1);
             else setStep(0);
         } else setStep(0);
     }, [property]);
@@ -128,6 +124,10 @@ const DetailStepper: FC<{ property: Property | null }> = ({ property }) => {
             orientation={"vertical"}
         >
             <Stepper.Step
+                label="Identifier"
+                description="Give the property a unique identifier"
+            />
+            <Stepper.Step
                 label="Label"
                 description="Name the property for yourself"
             />
@@ -138,10 +138,6 @@ const DetailStepper: FC<{ property: Property | null }> = ({ property }) => {
             <Stepper.Step
                 label="Images"
                 description="Provide some pictures of the property"
-            />
-            <Stepper.Step
-                label="Identifier"
-                description="Give the property a unique identifier"
             />
         </Stepper>
     );

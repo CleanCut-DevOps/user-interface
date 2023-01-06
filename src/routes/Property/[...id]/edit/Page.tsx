@@ -1,9 +1,9 @@
-import { Box, createStyles, Flex, ScrollArea } from "@mantine/core";
+import { Box, createStyles, Flex } from "@mantine/core";
 import { FC } from "react";
 import { AuthWrapper, Loading } from "../../../../components";
 import { Additional } from "./components/Additional";
 import { Address } from "./components/Address";
-import { Details } from "./components/Details";
+import { Details } from "./Details";
 import { Header } from "./components/Header";
 import {
     EditPropertyContext,

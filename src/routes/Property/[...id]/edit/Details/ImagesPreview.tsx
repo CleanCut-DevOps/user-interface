@@ -7,8 +7,10 @@ import {
     Text,
     Tooltip
 } from "@mantine/core";
+import { showNotification } from "@mantine/notifications";
+import axios from "axios";
 import { FC, useContext, useEffect, useState } from "react";
-import { TbCheck, TbTrash, TbUpload, TbX } from "react-icons/tb";
+import { TbCheck, TbCloudUpload, TbTrash, TbUpload, TbX } from "react-icons/tb";
 import { EditPropertyContext } from "../components/Provider";
 import { FullScreenDropzone } from "./Dropzone";
 
@@ -33,6 +35,7 @@ const useStyles = createStyles(theme => ({
     },
     sliderWrapper: {
         width: "100%",
+        minWidth: 200,
         maxWidth: 506,
         aspectRatio: "7 / 2",
         padding: theme.spacing.md
@@ -46,17 +49,17 @@ const useStyles = createStyles(theme => ({
         gap: theme.spacing.md,
 
         "&::-webkit-scrollbar": {
-            height: 8,
+            height: 4,
             backgroundColor: "transparent"
         },
 
         "&::-webkit-scrollbar-thumb": {
-            backgroundColor: theme.colors.gray[5],
+            backgroundColor: theme.colors.dark[3],
             borderRadius: 8
         },
 
         "&::-webkit-scrollbar-thumb:hover": {
-            backgroundColor: theme.colors.gray[6]
+            backgroundColor: theme.colors.dark[2]
         }
     },
     imageWrapper: {
@@ -129,8 +132,9 @@ export const ImagePreview: FC = () => {
     const { classes } = useStyles();
     const { property, dispatch } = useContext(EditPropertyContext);
 
-    const [selected, setSelected] = useState<File | string | null>(null);
     const [images, setImages] = useState<File[]>([]);
+    const [uploading, setUploading] = useState(false);
+    const [selected, setSelected] = useState<File | string | null>(null);
     const [savedImages, setSImages] = useState<string[]>(property!.images);
 
     useEffect(() => {
@@ -173,13 +177,42 @@ export const ImagePreview: FC = () => {
 
     const handleSave = () => {
         if (selected && typeof selected == "object") {
-            // TODO: Upload image to server
-            const url = URL.createObjectURL(selected);
+            setUploading(true);
 
-            // Set hosted image url to the array
-            setSImages([...savedImages, url]);
-            setImages(images.filter(image => image != selected));
-            setSelected(null);
+            let formData = {
+                file: null as string | ArrayBuffer | null,
+                upload_preset: "uvkbvgoo"
+            };
+
+            let reader = new FileReader();
+            reader.readAsDataURL(selected);
+
+            reader.onload = () => {
+                formData["file"] = reader.result;
+
+                axios
+                    .post(
+                        "https://api.cloudinary.com/v1_1/dodf3fmwt/image/upload",
+                        formData
+                    )
+                    .then(({ data }) => {
+                        const url = data.secure_url;
+
+                        // Set hosted image url to the array
+                        setSImages([...savedImages, url]);
+                        setImages(images.filter(image => image != selected));
+                        setSelected(null);
+                        setUploading(false);
+                    })
+                    .catch(() => {
+                        setUploading(false);
+                        showNotification({
+                            title: "error",
+                            message: "Error uploading image",
+                            color: "red"
+                        });
+                    });
+            };
         }
     };
 
@@ -266,9 +299,14 @@ export const ImagePreview: FC = () => {
                                     disabled={
                                         !selected || typeof selected == "string"
                                     }
+                                    loading={uploading}
                                     onClick={handleSave}
                                 >
-                                    <TbCheck />
+                                    {selected && typeof selected == "object" ? (
+                                        <TbCloudUpload />
+                                    ) : (
+                                        <TbCheck />
+                                    )}
                                 </ActionIcon>
                             </div>
                         </Tooltip>
@@ -305,31 +343,33 @@ export const ImagePreview: FC = () => {
                             return (
                                 <img
                                     key={i}
-                                    draggable={false}
                                     src={image}
+                                    draggable={false}
                                     alt={"Preview image"}
+                                    onClick={handleSelect(image)}
                                     className={
                                         selected == image
                                             ? `${classes.activeImage} ${classes.sliderImage}`
                                             : classes.sliderImage
                                     }
-                                    onClick={handleSelect(image)}
                                 />
                             );
                         })}
                         {images.map((image, i) => {
+                            const url = URL.createObjectURL(image);
                             return (
                                 <img
                                     key={i}
+                                    src={url}
                                     draggable={false}
                                     alt={"Preview image"}
+                                    onClick={handleSelect(image)}
+                                    onLoad={() => URL.revokeObjectURL(url)}
                                     className={
                                         selected == image
                                             ? `${classes.activeImage} ${classes.sliderImage}`
                                             : classes.sliderImage
                                     }
-                                    src={URL.createObjectURL(image)}
-                                    onClick={handleSelect(image)}
                                 />
                             );
                         })}

@@ -1,17 +1,17 @@
 import { Box, createStyles, Flex } from "@mantine/core";
 import { FC } from "react";
 import { AuthWrapper, Loading } from "../../../../components";
-import { Additional } from "./components/Additional";
-import { Address } from "./components/Address";
-import { Details } from "./Details";
-import { Header } from "./components/Header";
+import { Additional } from "./Additional";
+import { Address } from "./Address";
 import {
     EditPropertyContext,
-    EditPropertyProvider
-} from "./components/Provider";
-import { Rooms } from "./components/Rooms";
-import { Sidebar } from "./components/Sidebar";
-import { Type } from "./components/Type";
+    EditPropertyProvider,
+    Header,
+    Sidebar
+} from "./components";
+import { Details } from "./Details";
+import { Rooms } from "./Rooms";
+import { Type } from "./Type";
 
 type RouteProps = { params: { id: string } };
 

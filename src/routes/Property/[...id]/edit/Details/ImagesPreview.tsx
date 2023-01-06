@@ -96,9 +96,11 @@ const useStyles = createStyles(theme => ({
     },
     previewImage: {
         width: "100%",
-        aspectRatio: "16 / 10",
         objectFit: "cover",
-        objectPosition: "center"
+        aspectRatio: "16 / 10",
+        objectPosition: "center",
+        borderRadius: theme.radius.sm,
+        boxShadow: `0 0 20px -2px ${theme.colors.dark[7]}`
     },
     scrollArea: {
         height: "100%"
@@ -112,8 +114,14 @@ const useStyles = createStyles(theme => ({
         objectFit: "cover",
         userSelect: "none",
         aspectRatio: "16 / 10",
+        transition: "0.5s ease",
         objectPosition: "center",
+        boxShadow: `0 0 20px -4px ${theme.colors.dark[7]}`,
         borderRadius: theme.radius.sm
+    },
+    activeImage: {
+        padding: "1px",
+        outline: `3px solid ${theme.colors.blue[6]}`
     }
 }));
 
@@ -300,7 +308,11 @@ export const ImagePreview: FC = () => {
                                     draggable={false}
                                     src={image}
                                     alt={"Preview image"}
-                                    className={classes.sliderImage}
+                                    className={
+                                        selected == image
+                                            ? `${classes.activeImage} ${classes.sliderImage}`
+                                            : classes.sliderImage
+                                    }
                                     onClick={handleSelect(image)}
                                 />
                             );
@@ -311,7 +323,11 @@ export const ImagePreview: FC = () => {
                                     key={i}
                                     draggable={false}
                                     alt={"Preview image"}
-                                    className={classes.sliderImage}
+                                    className={
+                                        selected == image
+                                            ? `${classes.activeImage} ${classes.sliderImage}`
+                                            : classes.sliderImage
+                                    }
                                     src={URL.createObjectURL(image)}
                                     onClick={handleSelect(image)}
                                 />

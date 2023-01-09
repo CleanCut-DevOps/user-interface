@@ -1,21 +1,8 @@
-import {
-    createStyles,
-    Group,
-    Navbar,
-    Stack,
-    Text,
-    ThemeIcon,
-    UnstyledButton
-} from "@mantine/core";
-import { useHover, useColorScheme } from "@mantine/hooks";
+import { createStyles, Group, Navbar, Stack, Text, ThemeIcon, UnstyledButton } from "@mantine/core";
+import { useHover } from "@mantine/hooks";
 import { FC } from "react";
 import { IconType } from "react-icons/lib";
-import {
-    TbCalendarEvent,
-    TbHome2,
-    TbLayoutDashboard,
-    TbSettings
-} from "react-icons/tb";
+import { TbCalendarEvent, TbHome2, TbLayoutDashboard, TbSettings } from "react-icons/tb";
 import { useLocation } from "wouter";
 
 type Link = {
@@ -27,39 +14,18 @@ type Link = {
 const useStyles = createStyles(theme => ({
     section: {
         display: "flex",
-        flexDirection: "column",
         gap: theme.spacing.sm,
+        flexDirection: "column",
         padding: theme.spacing.sm,
-
-        borderBottom: `1px solid ${
-            theme.colorScheme === "dark"
-                ? theme.colors.dark[4]
-                : theme.colors.gray[3]
-        }`
+        borderBottom: `1px solid ${theme.colorScheme === "dark" ? theme.colors.dark[4] : theme.colors.gray[3]}`
     }
 }));
 
 const links: Link[] = [
-    {
-        icon: TbLayoutDashboard,
-        label: "Dashboard",
-        href: "/"
-    },
-    {
-        icon: TbHome2,
-        label: "Properties",
-        href: "/properties"
-    },
-    {
-        icon: TbCalendarEvent,
-        label: "Bookings",
-        href: "/bookings"
-    },
-    {
-        icon: TbSettings,
-        label: "Settings",
-        href: "/settings"
-    }
+    { icon: TbLayoutDashboard, label: "Dashboard", href: "/" },
+    { icon: TbHome2, label: "Properties", href: "/properties" },
+    { icon: TbCalendarEvent, label: "Bookings", href: "/bookings" },
+    { icon: TbSettings, label: "Settings", href: "/settings" }
 ];
 
 export const NavLinks: FC = () => {
@@ -90,18 +56,12 @@ const buttonStyles = createStyles(theme => ({
 
         "&:hover": {
             color: theme.colorScheme === "dark" ? "white" : "black",
-            backgroundColor:
-                theme.colorScheme === "dark"
-                    ? theme.colors.dark[8]
-                    : theme.colors.gray[0]
+            backgroundColor: theme.colorScheme === "dark" ? theme.colors.dark[8] : theme.colors.gray[0]
         },
 
         "&:active": {
             color: theme.colorScheme === "dark" ? "white" : "black",
-            backgroundColor:
-                theme.colorScheme === "dark"
-                    ? theme.colors.dark[9]
-                    : theme.colors.gray[1]
+            backgroundColor: theme.colorScheme === "dark" ? theme.colors.dark[9] : theme.colors.gray[1]
         }
     },
     linkInner: {
@@ -128,25 +88,12 @@ export const LinkButton: FC<ButtonProps> = ({ link }) => {
     const handleClick = () => setLocation(link.href);
 
     return (
-        <UnstyledButton
-            ref={ref}
-            onClick={handleClick}
-            className={classes.link}
-        >
+        <UnstyledButton ref={ref} onClick={handleClick} className={classes.link}>
             <Group>
-                <ThemeIcon
-                    size={"md"}
-                    radius={"md"}
-                    color={"gray"}
-                    variant={"light"}
-                >
+                <ThemeIcon size={"md"} radius={"md"} color={"gray"} variant={"light"}>
                     <link.icon
                         size={16}
-                        className={
-                            location == link.href || hovered
-                                ? classes.hovered
-                                : classes.unhover
-                        }
+                        className={location == link.href || hovered ? classes.hovered : classes.unhover}
                     />
                 </ThemeIcon>
 

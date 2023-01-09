@@ -1,5 +1,6 @@
 import { Center, createStyles, Stack } from "@mantine/core";
 import { FC } from "react";
+import { AuthWrapper } from "../../components";
 import { Form } from "./components/Form";
 import { Header } from "./components/Header";
 
@@ -11,10 +12,7 @@ const useStyles = createStyles(theme => ({
         minWidth: "100vw",
         minHeight: "100vh",
         justifyContent: "flex-start",
-        backgroundColor:
-            theme.colorScheme === "dark"
-                ? theme.colors.dark[8]
-                : theme.colors.gray[0]
+        backgroundColor: theme.colorScheme === "dark" ? theme.colors.dark[8] : theme.colors.gray[0]
     },
     centered: {
         flex: 1,
@@ -27,11 +25,13 @@ export const Login: FC = () => {
     const { classes } = useStyles();
 
     return (
-        <Stack className={classes.wrapper}>
-            <Header />
-            <Center className={classes.centered}>
-                <Form />
-            </Center>
-        </Stack>
+        <AuthWrapper>
+            <Stack className={classes.wrapper}>
+                <Header />
+                <Center className={classes.centered}>
+                    <Form />
+                </Center>
+            </Stack>
+        </AuthWrapper>
     );
 };

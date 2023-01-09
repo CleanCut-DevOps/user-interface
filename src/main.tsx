@@ -11,9 +11,7 @@ type ColorScheme = "light" | "dark";
 
 const Main: FC = () => {
     const [cookie, setCookie] = useCookies(["mantine-color-scheme"]);
-    const [colorScheme, setColorScheme] = useState<ColorScheme>(
-        cookie["mantine-color-scheme"]
-    );
+    const [colorScheme, setColorScheme] = useState<ColorScheme>(cookie["mantine-color-scheme"]);
 
     const toggleColorScheme = (value?: ColorScheme) => {
         let newScheme = value || (colorScheme === "dark" ? "light" : "dark");
@@ -24,15 +22,8 @@ const Main: FC = () => {
     };
 
     return (
-        <ColorSchemeProvider
-            colorScheme={colorScheme}
-            toggleColorScheme={toggleColorScheme}
-        >
-            <MantineProvider
-                withGlobalStyles
-                withNormalizeCSS
-                theme={{ fontFamily: "Inter, sans-serif", colorScheme }}
-            >
+        <ColorSchemeProvider colorScheme={colorScheme} toggleColorScheme={toggleColorScheme}>
+            <MantineProvider withGlobalStyles withNormalizeCSS theme={{ fontFamily: "Inter, sans-serif", colorScheme }}>
                 <NotificationsProvider>
                     <QueryClientProvider client={new QueryClient()}>
                         <UserProvider>

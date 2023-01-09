@@ -1,15 +1,6 @@
-import {
-    Box,
-    Button,
-    Checkbox,
-    createStyles,
-    Group,
-    PasswordInput,
-    Stack,
-    Text,
-    TextInput
-} from "@mantine/core";
+import { Box, Button, Checkbox, createStyles, Group, PasswordInput, Stack, Text, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
+import { useToggle } from "@mantine/hooks";
 import { showNotification } from "@mantine/notifications";
 import axios from "axios";
 import { FC } from "react";
@@ -26,11 +17,11 @@ interface RequestData {
 
 const useStyles = createStyles(theme => ({
     container: {
-        display: "flex",
         width: "100%",
+        display: "flex",
         maxWidth: "560px",
-        flexDirection: "column",
-        gap: theme.spacing.xl
+        gap: theme.spacing.xl,
+        flexDirection: "column"
     },
     label: {
         fontSize: 28,
@@ -42,10 +33,7 @@ const useStyles = createStyles(theme => ({
         transition: "all 0.2s ease",
         color: theme.colors.violet[7],
 
-        "&:hover": {
-            textDecoration: "underline",
-            color: theme.colors.violet[9]
-        }
+        "&:hover": { textDecoration: "underline", color: theme.colors.violet[9] }
     },
     submit: {
         color: "white",
@@ -53,14 +41,13 @@ const useStyles = createStyles(theme => ({
         backgroundColor: theme.colors.violet[7],
         boxShadow: "0 0 10px 0 rgba(0, 0, 0, 0.2)",
 
-        "&:hover": {
-            backgroundColor: theme.colors.violet[9]
-        }
+        "&:hover": { backgroundColor: theme.colors.violet[9] }
     }
 }));
 
 export const Form: FC = () => {
     const { classes } = useStyles();
+    const [loading, toggleLoading] = useToggle();
     const [, setCookie] = useCookies(["AccessToken"]);
 
     const form = useForm({
@@ -70,24 +57,15 @@ export const Form: FC = () => {
             stay: false
         },
         validate: {
-            password: value =>
-                value.length >= 8
-                    ? null
-                    : "Password must be at least 8 characters"
+            password: value => (value.length >= 8 ? null : "Password must be at least 8 characters")
         }
     });
 
     const handleSubmit = form.onSubmit(({ accessName, password, stay }) => {
-        let fData: RequestData = {
-            password,
-            stay
-        };
+        toggleLoading();
+        let fData: RequestData = { password, stay };
 
-        if (
-            RegExp(
-                /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)+$/
-            ).test(accessName)
-        ) {
+        if (RegExp(/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)+$/).test(accessName)) {
             fData.email = accessName;
         } else {
             fData.username = accessName;
@@ -112,15 +90,14 @@ export const Form: FC = () => {
             .catch(({ response: { data } }) => {
                 const { type, message } = data;
 
-                form.setErrors({
-                    accessName: "Your access name or password is incorrect"
-                });
+                form.setErrors({ accessName: "Your access name or password is incorrect" });
 
                 showNotification({
                     title: `🚩 ${type}`,
                     message,
                     color: "red"
                 });
+                toggleLoading();
             });
     });
 
@@ -159,12 +136,7 @@ export const Form: FC = () => {
                             alignItems: "flex-start"
                         }}
                     >
-                        <Checkbox
-                            size={"md"}
-                            color={"dark"}
-                            label={"Remember me"}
-                            {...form.getInputProps("stay")}
-                        />
+                        <Checkbox size={"md"} color={"dark"} label={"Remember me"} {...form.getInputProps("stay")} />
                         <Link href={"/resetPassword"} className={classes.link}>
                             Forgot password?
                         </Link>
@@ -174,6 +146,7 @@ export const Form: FC = () => {
                         fullWidth
                         size={"md"}
                         type={"submit"}
+                        loading={loading}
                         className={classes.submit}
                     >
                         Sign in

@@ -1,12 +1,4 @@
-import {
-    ActionIcon,
-    Center,
-    createStyles,
-    FileButton,
-    Stack,
-    Text,
-    Tooltip
-} from "@mantine/core";
+import { ActionIcon, Center, createStyles, FileButton, Stack, Text, Tooltip } from "@mantine/core";
 import { showNotification } from "@mantine/notifications";
 import axios from "axios";
 import { FC, useContext, useEffect, useState } from "react";
@@ -17,16 +9,14 @@ import { FullScreenDropzone } from "./Dropzone";
 const useStyles = createStyles(theme => ({
     wrapper: {
         width: "100%",
+        minWidth: 354,
         overflow: "hidden",
         display: "flex",
         flexDirection: "column",
         borderRadius: theme.radius.sm,
         border:
-            theme.colorScheme === "dark"
-                ? `1px solid ${theme.colors.dark[4]}`
-                : `1px solid ${theme.colors.gray[4]}`,
-        backgroundColor:
-            theme.colorScheme === "dark" ? theme.colors.dark[6] : "white"
+            theme.colorScheme === "dark" ? `1px solid ${theme.colors.dark[4]}` : `1px solid ${theme.colors.gray[4]}`,
+        backgroundColor: theme.colorScheme === "dark" ? theme.colors.dark[6] : "white"
     },
     previewWrapper: {
         display: "flex",
@@ -35,7 +25,6 @@ const useStyles = createStyles(theme => ({
     },
     sliderWrapper: {
         width: "100%",
-        minWidth: 200,
         maxWidth: 506,
         aspectRatio: "7 / 2",
         padding: theme.spacing.md
@@ -76,18 +65,12 @@ const useStyles = createStyles(theme => ({
         flexDirection: "column",
         padding: theme.spacing.md,
         borderRadius: theme.radius.sm,
-        backgroundColor:
-            theme.colorScheme === "dark" ? theme.colors.dark[5] : "white",
+        backgroundColor: theme.colorScheme === "dark" ? theme.colors.dark[5] : "white",
         border:
-            theme.colorScheme === "dark"
-                ? `2px dashed ${theme.colors.dark[3]}`
-                : `2px dashed ${theme.colors.gray[3]}`,
+            theme.colorScheme === "dark" ? `2px dashed ${theme.colors.dark[3]}` : `2px dashed ${theme.colors.gray[3]}`,
 
         "&:hover": {
-            backgroundColor:
-                theme.colorScheme === "dark"
-                    ? theme.colors.dark[4]
-                    : theme.colors.gray[0]
+            backgroundColor: theme.colorScheme === "dark" ? theme.colors.dark[4] : theme.colors.gray[0]
         },
 
         "&:active": {
@@ -134,6 +117,7 @@ export const ImagePreview: FC = () => {
 
     const [images, setImages] = useState<File[]>([]);
     const [uploading, setUploading] = useState(false);
+    const [trashing, setTrashing] = useState(false);
     const [selected, setSelected] = useState<File | string | null>(null);
     const [savedImages, setSImages] = useState<string[]>(property!.images);
 
@@ -179,40 +163,28 @@ export const ImagePreview: FC = () => {
         if (selected && typeof selected == "object") {
             setUploading(true);
 
-            let formData = {
-                file: null as string | ArrayBuffer | null,
-                upload_preset: "uvkbvgoo"
-            };
+            let formData = new FormData();
 
-            let reader = new FileReader();
-            reader.readAsDataURL(selected);
+            formData.append("id", property?.id ?? "");
 
-            reader.onload = () => {
-                formData["file"] = reader.result;
+            formData.append("file", selected);
 
-                axios
-                    .post(
-                        "https://api.cloudinary.com/v1_1/dodf3fmwt/image/upload",
-                        formData
-                    )
-                    .then(({ data }) => {
-                        const url = data.secure_url;
+            axios
+                .post(`${import.meta.env.VITE_PROPERTY_API}/image/add`, formData)
+                .then(({ data }) => {
+                    dispatch({ type: "load", payload: data.property });
+                    setImages(images.filter(image => image != selected));
 
-                        // Set hosted image url to the array
-                        setSImages([...savedImages, url]);
-                        setImages(images.filter(image => image != selected));
-                        setSelected(null);
-                        setUploading(false);
-                    })
-                    .catch(() => {
-                        setUploading(false);
-                        showNotification({
-                            title: "error",
-                            message: "Error uploading image",
-                            color: "red"
-                        });
+                    setUploading(false);
+                })
+                .catch(({ response }) => {
+                    showNotification({
+                        title: response.data.type,
+                        message: response.data.message
                     });
-            };
+
+                    setUploading(false);
+                });
         }
     };
 
@@ -221,8 +193,28 @@ export const ImagePreview: FC = () => {
             setImages(images.filter(image => image != selected));
             setSelected(null);
         } else if (selected && typeof selected == "string") {
-            setSImages(savedImages.filter(image => image != selected));
-            setSelected(null);
+            setTrashing(true);
+
+            axios
+                .post(`${import.meta.env.VITE_PROPERTY_API}/image/remove`, {
+                    id: property?.id ?? "",
+                    url: selected
+                })
+                .then(({ data }) => {
+                    dispatch({ type: "load", payload: data.property });
+
+                    setTrashing(false);
+                    setSelected(null);
+                })
+                .catch(({ response }) => {
+                    showNotification({
+                        title: response.data.type,
+                        message: response.data.message
+                    });
+
+                    setTrashing(false);
+                    setSelected(null);
+                });
         }
     };
 
@@ -234,46 +226,19 @@ export const ImagePreview: FC = () => {
                         {selected ? (
                             <img
                                 className={classes.previewImage}
-                                src={
-                                    typeof selected == "string"
-                                        ? selected
-                                        : URL.createObjectURL(selected)
-                                }
+                                src={typeof selected == "string" ? selected : URL.createObjectURL(selected)}
                             />
                         ) : (
-                            <FileButton
-                                multiple
-                                onChange={handleFileChange}
-                                accept="image/png,image/jpeg"
-                            >
+                            <FileButton multiple onChange={handleFileChange} accept="image/png,image/jpeg">
                                 {props => (
-                                    <Center
-                                        className={classes.dropzoneHolder}
-                                        {...props}
-                                    >
-                                        <TbUpload
-                                            size={50}
-                                            className={classes.dropIcon}
-                                        />
+                                    <Center className={classes.dropzoneHolder} {...props}>
+                                        <TbUpload size={50} className={classes.dropIcon} />
 
-                                        <Text
-                                            mt={20}
-                                            size="lg"
-                                            inline
-                                            sx={{ textAlign: "center" }}
-                                        >
-                                            Drag images here or click to select
-                                            images
+                                        <Text mt={20} size="lg" inline sx={{ textAlign: "center" }}>
+                                            Drag images here or click to select images
                                         </Text>
-                                        <Text
-                                            size="xs"
-                                            color="dimmed"
-                                            inline
-                                            mt={8}
-                                            sx={{ textAlign: "center" }}
-                                        >
-                                            Attach as many images as you like,
-                                            each file should not exceed 5mb
+                                        <Text size="xs" color="dimmed" inline mt={8} sx={{ textAlign: "center" }}>
+                                            Attach as many images as you like, each file should not exceed 5mb
                                         </Text>
                                     </Center>
                                 )}
@@ -296,38 +261,28 @@ export const ImagePreview: FC = () => {
                                 <ActionIcon
                                     variant={"outline"}
                                     color={"green"}
-                                    disabled={
-                                        !selected || typeof selected == "string"
-                                    }
+                                    disabled={!selected || typeof selected == "string"}
                                     loading={uploading}
                                     onClick={handleSave}
                                 >
-                                    {selected && typeof selected == "object" ? (
-                                        <TbCloudUpload />
-                                    ) : (
-                                        <TbCheck />
-                                    )}
+                                    {selected && typeof selected == "object" ? <TbCloudUpload /> : <TbCheck />}
                                 </ActionIcon>
                             </div>
                         </Tooltip>
                         <Tooltip
                             withArrow
                             position={"right"}
-                            label={
-                                typeof selected == "string"
-                                    ? "Remove image"
-                                    : "Cancel"
-                            }
+                            label={typeof selected == "string" ? "Remove image" : "Cancel"}
                         >
                             <div>
                                 <ActionIcon
                                     variant={"outline"}
                                     color={"red"}
                                     onClick={handleTrash}
-                                    disabled={!selected}
+                                    disabled={!selected || uploading}
+                                    loading={trashing}
                                 >
-                                    {typeof selected == "string" &&
-                                    savedImages.includes(selected) ? (
+                                    {typeof selected == "string" && savedImages.includes(selected) ? (
                                         <TbTrash />
                                     ) : (
                                         <TbX />

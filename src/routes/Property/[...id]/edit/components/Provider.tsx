@@ -35,7 +35,7 @@ type ReducerAction =
               line_2: string | null;
               city: string;
               state: string | null;
-              postal_code: string;
+              zip: string;
           };
       }
     | { type: "type"; payload: { id: string } }

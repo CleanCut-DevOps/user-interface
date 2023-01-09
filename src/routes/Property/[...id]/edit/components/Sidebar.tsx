@@ -143,7 +143,7 @@ const AddressStepper: FC<{ property: Property | null }> = ({ property }) => {
             <Stepper.Step style={{ alignItems: "center" }} label="Line 2" />
             <Stepper.Step style={{ alignItems: "center" }} label="City" />
             <Stepper.Step style={{ alignItems: "center" }} label="State" />
-            <Stepper.Step style={{ alignItems: "center" }} label="Postal Code" />
+            <Stepper.Step style={{ alignItems: "center" }} label="Zip Code" />
         </Stepper>
     );
 };

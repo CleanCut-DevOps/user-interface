@@ -1,13 +1,6 @@
 import { FC } from "react";
 import { Route } from "wouter";
-import {
-    Dashboard,
-    EditProperty,
-    Login,
-    Property,
-    PropertyListing,
-    Register
-} from "./routes";
+import { Dashboard, EditProperty, Login, Property, PropertyListing, Register } from "./routes";
 
 export const Router: FC = () => {
     return (

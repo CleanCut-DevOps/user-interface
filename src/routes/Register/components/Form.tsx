@@ -1,13 +1,4 @@
-import {
-    Box,
-    Button,
-    createStyles,
-    Group,
-    PasswordInput,
-    Stack,
-    Text,
-    TextInput
-} from "@mantine/core";
+import { Box, Button, createStyles, Group, PasswordInput, Stack, Text, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useToggle } from "@mantine/hooks";
 import { showNotification } from "@mantine/notifications";
@@ -25,11 +16,11 @@ interface RequestData {
 
 const useStyles = createStyles(theme => ({
     container: {
-        display: "flex",
         width: "100%",
+        display: "flex",
         maxWidth: "560px",
-        flexDirection: "column",
-        gap: theme.spacing.xl
+        gap: theme.spacing.xl,
+        flexDirection: "column"
     },
     label: {
         fontSize: 28,
@@ -41,10 +32,7 @@ const useStyles = createStyles(theme => ({
         transition: "all 0.2s ease",
         color: theme.colors.violet[7],
 
-        "&:hover": {
-            textDecoration: "underline",
-            color: theme.colors.violet[9]
-        }
+        "&:hover": { textDecoration: "underline", color: theme.colors.violet[9] }
     },
     submit: {
         color: "white",
@@ -52,17 +40,13 @@ const useStyles = createStyles(theme => ({
         backgroundColor: theme.colors.violet[7],
         boxShadow: "0 0 10px 0 rgba(0, 0, 0, 0.2)",
 
-        "&:hover": {
-            backgroundColor: theme.colors.violet[9]
-        }
+        "&:hover": { backgroundColor: theme.colors.violet[9] }
     },
     group: {
         width: "100%",
         alignItems: "stretch",
 
-        [`@media (max-width: ${theme.breakpoints.sm}px)`]: {
-            flexDirection: "column"
-        }
+        [`@media (max-width: ${theme.breakpoints.sm}px)`]: { flexDirection: "column" }
     }
 }));
 
@@ -85,57 +69,52 @@ export const Form: FC = () => {
 
                 return emailRegex.test(value) ? null : "Invalid email";
             },
-            password: value =>
-                value.length >= 8
-                    ? null
-                    : "Password must be at least 8 characters",
-            confirmPassword: (value, { password }) =>
-                value === password ? null : "Passwords do not match"
+            password: value => (value.length >= 8 ? null : "Password must be at least 8 characters"),
+            confirmPassword: (value, { password }) => (value === password ? null : "Passwords do not match")
         }
     });
 
-    const handleSubmit = form.onSubmit(
-        ({ username, email, contact, password }) => {
-            toggleLoading();
-            let fData: RequestData = {
-                username,
-                email,
-                contact,
-                password
-            };
+    const handleSubmit = form.onSubmit(({ username, email, contact, password }) => {
+        toggleLoading();
+        let fData: RequestData = {
+            username,
+            email,
+            contact,
+            password
+        };
 
-            axios
-                .post(`${import.meta.env.VITE_ACCOUNT_API}/api/register`, fData)
-                .then(({ data }) => {
-                    const token = data.token;
+        axios
+            .post(`${import.meta.env.VITE_ACCOUNT_API}/api/register`, fData)
+            .then(({ data }) => {
+                const token = data.token;
 
-                    setCookie("AccessToken", token, {
-                        secure: true,
-                        sameSite: "strict"
-                    });
-
-                    showNotification({
-                        title: data.type,
-                        message: data.message,
-                        color: "green"
-                    });
-                })
-                .catch(({ response: { data } }) => {
-                    const { type, message, errors } = data;
-
-                    Object.entries(errors).forEach(([key, value]) => {
-                        form.setFieldError(key, value as string);
-                    });
-
-                    showNotification({
-                        title: `🚩 ${type}`,
-                        message,
-                        color: "red"
-                    });
-                    toggleLoading();
+                setCookie("AccessToken", token, {
+                    secure: true,
+                    sameSite: "strict"
                 });
-        }
-    );
+
+                showNotification({
+                    title: data.type,
+                    message: data.message,
+                    color: "green"
+                });
+            })
+            .catch(({ response: { data } }) => {
+                const { type, message, errors } = data;
+
+                Object.entries(errors).forEach(([key, value]) => {
+                    form.setFieldError(key, value as string);
+                });
+
+                showNotification({
+                    title: `🚩 ${type}`,
+                    message,
+                    color: "red"
+                });
+
+                toggleLoading();
+            });
+    });
 
     return (
         <Box className={classes.container}>

@@ -32,19 +32,14 @@ const useStyles = createStyles(theme => ({
         width: "100%"
     },
     dropIcon: {
-        color: theme.colors[theme.primaryColor][
-            theme.colorScheme === "dark" ? 4 : 6
-        ]
+        color: theme.colors[theme.primaryColor][theme.colorScheme === "dark" ? 4 : 6]
     },
     dropRejectIcon: {
         color: theme.colors.red[theme.colorScheme === "dark" ? 4 : 6]
     }
 }));
 
-export const FullScreenDropzone: FC<ComponentProps> = ({
-    images,
-    setImages
-}) => {
+export const FullScreenDropzone: FC<ComponentProps> = ({ images, setImages }) => {
     const { classes } = useStyles();
 
     const handleFilesDropped = (files: FileWithPath[]) => {
@@ -54,8 +49,7 @@ export const FullScreenDropzone: FC<ComponentProps> = ({
     const handleFilesRejected = (files: FileRejection[]) => {
         showNotification({
             title: files[0].errors[0].message,
-            message:
-                "Please try again. If the issue persists, contact us @ tech@klenze.com.au",
+            message: "Please try again. If the issue persists, contact us @ tech@klenze.com.au",
             color: "red"
         });
     };
@@ -88,8 +82,7 @@ export const FullScreenDropzone: FC<ComponentProps> = ({
                         Drag images here
                     </Text>
                     <Text size="sm" color="dimmed" inline mt={8}>
-                        Attach as many images as you like, each file should not
-                        exceed 5mb
+                        Attach as many images as you like, each file should not exceed 5mb
                     </Text>
                 </Stack>
             </Center>

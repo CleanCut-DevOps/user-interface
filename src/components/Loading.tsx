@@ -3,10 +3,7 @@ import { FC } from "react";
 
 const useStyles = createStyles(theme => ({
     wrapper: {
-        backgroundColor:
-            theme.colorScheme === "dark"
-                ? theme.colors.dark[8]
-                : theme.colors.gray[0]
+        backgroundColor: theme.colorScheme === "dark" ? theme.colors.dark[8] : theme.colors.gray[0]
     },
     centered: {
         width: "100%",

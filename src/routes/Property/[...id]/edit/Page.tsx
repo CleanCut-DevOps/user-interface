@@ -3,12 +3,7 @@ import { FC } from "react";
 import { AuthWrapper, Loading } from "../../../../components";
 import { Additional } from "./Additional";
 import { Address } from "./Address";
-import {
-    EditPropertyContext,
-    EditPropertyProvider,
-    Header,
-    Sidebar
-} from "./components";
+import { EditPropertyContext, EditPropertyProvider, Header, Sidebar } from "./components";
 import { Details } from "./Details";
 import { Rooms } from "./Rooms";
 import { Type } from "./Type";

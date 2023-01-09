@@ -12,15 +12,12 @@ const useStyles = createStyles(theme => ({
         minWidth: "100vw",
         minHeight: "100vh",
         justifyContent: "flex-start",
-        backgroundColor:
-            theme.colorScheme === "dark"
-                ? theme.colors.dark[8]
-                : theme.colors.gray[0]
+        backgroundColor: theme.colorScheme === "dark" ? theme.colors.dark[8] : theme.colors.gray[0]
     },
     centered: {
         flex: 1,
-        position: "relative",
-        padding: "1rem"
+        padding: "1rem",
+        position: "relative"
     }
 }));
 

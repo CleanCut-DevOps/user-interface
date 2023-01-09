@@ -24,12 +24,10 @@ export const Description: FC = () => {
     }, [descriptionDebounced]);
 
     useEffect(() => {
-        if (property && descriptionDebounced != property.description)
-            setDescription(property.description);
+        if (property && descriptionDebounced != property.description) setDescription(property.description);
     }, [property]);
 
-    const handleDescriptionChange = (event: ChangeEvent<HTMLTextAreaElement>) =>
-        setDescription(event.target.value);
+    const handleDescriptionChange = (event: ChangeEvent<HTMLTextAreaElement>) => setDescription(event.target.value);
 
     return (
         <Textarea

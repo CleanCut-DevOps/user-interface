@@ -1,12 +1,6 @@
 import data from "@emoji-mart/data";
 import Picker from "@emoji-mart/react";
-import {
-    createStyles,
-    HoverCard,
-    Paper,
-    Text,
-    useMantineColorScheme
-} from "@mantine/core";
+import { createStyles, HoverCard, Paper, Text, useMantineColorScheme } from "@mantine/core";
 import { useDebouncedValue } from "@mantine/hooks";
 import { FC, useContext, useEffect, useState } from "react";
 import { EditPropertyContext } from "../components/Provider";
@@ -21,18 +15,14 @@ const useStyles = createStyles(theme => ({
         alignItems: "center",
         justifyContent: "center",
         borderRadius: theme.radius.sm,
-        border:
-            theme.colorScheme === "dark"
-                ? `1px solid ${theme.colors.dark[4]}`
-                : `1px solid ${theme.colors.gray[4]}`,
-        backgroundColor:
-            theme.colorScheme === "dark" ? theme.colors.dark[6] : "white"
+        backgroundColor: theme.colorScheme === "dark" ? theme.colors.dark[6] : "white",
+        border: theme.colorScheme === "dark" ? `1px solid ${theme.colors.dark[4]}` : `1px solid ${theme.colors.gray[4]}`
     },
     dropdown: {
         padding: 0,
-        borderRadius: 10,
+        marginTop: 12,
         marginLeft: 12,
-        marginTop: 12
+        borderRadius: 10
     }
 }));
 
@@ -67,8 +57,7 @@ export const Identifier: FC = () => {
         }
     }, [property]);
 
-    const handleIconChange = ({ native }: { native: string }) =>
-        setIcon(native);
+    const handleIconChange = ({ native }: { native: string }) => setIcon(native);
 
     return (
         <HoverCard>

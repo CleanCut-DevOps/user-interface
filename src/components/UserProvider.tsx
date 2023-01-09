@@ -1,14 +1,6 @@
 import { showNotification } from "@mantine/notifications";
 import axios from "axios";
-import {
-    createContext,
-    Dispatch,
-    FC,
-    PropsWithChildren,
-    SetStateAction,
-    useEffect,
-    useState
-} from "react";
+import { createContext, Dispatch, FC, PropsWithChildren, SetStateAction, useEffect, useState } from "react";
 import { useCookies } from "react-cookie";
 import { User } from "../models";
 
@@ -43,10 +35,7 @@ export const UserContext = createContext<UserContextData>({
 export const UserProvider: FC<PropsWithChildren> = ({ children }) => {
     const [user, setUser] = useState<SchrodingersUser>(null);
     const [isLoading, setIsLoading] = useState<boolean>(true);
-    const [cookies, , removeCookie] = useCookies([
-        "AccessToken",
-        "mantine-color-scheme"
-    ]);
+    const [cookies, , removeCookie] = useCookies(["AccessToken", "mantine-color-scheme"]);
 
     useEffect(() => {
         if (cookies.AccessToken) {
@@ -94,9 +83,5 @@ export const UserProvider: FC<PropsWithChildren> = ({ children }) => {
         }
     }, [cookies, setIsLoading]);
 
-    return (
-        <UserContext.Provider value={{ isLoading, user, setUser }}>
-            {children}
-        </UserContext.Provider>
-    );
+    return <UserContext.Provider value={{ isLoading, user, setUser }}>{children}</UserContext.Provider>;
 };

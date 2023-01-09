@@ -16,23 +16,19 @@ const useStyles = createStyles(theme => ({
         padding: theme.spacing.sm
     },
     grow: {
-        flex: "1 !important",
         height: "100%",
-        overflow: "hidden"
+        overflow: "hidden",
+        flex: "1 !important"
     },
     link: {
         cursor: "pointer",
         userSelect: "none",
+        transition: "0.2s ease",
         borderRadius: theme.radius.md,
         padding: `${theme.spacing.xs - 4}px ${theme.spacing.sm}px`,
-        transition: "0.2s ease",
 
-        "&:hover": {
-            backgroundColor: theme.colorScheme === "dark" ? theme.colors.dark[8] : theme.colors.gray[0]
-        },
-        "&:active": {
-            backgroundColor: theme.colorScheme === "dark" ? theme.colors.dark[9] : theme.colors.gray[1]
-        }
+        "&:hover": { backgroundColor: theme.colorScheme === "dark" ? theme.colors.dark[8] : theme.colors.gray[0] },
+        "&:active": { backgroundColor: theme.colorScheme === "dark" ? theme.colors.dark[9] : theme.colors.gray[1] }
     },
     header: {
         padding: `0 ${theme.spacing.sm}px}`
@@ -45,13 +41,9 @@ const fetchPropertyList = (accessToken: string | undefined) => async () => {
     } else {
         const propertyList: Property[] = await axios
             .get(`${import.meta.env.VITE_PROPERTY_API}/property`, {
-                headers: {
-                    authorization: `Bearer ${accessToken}`
-                }
+                headers: { authorization: `Bearer ${accessToken}` }
             })
-            .then(({ data }) => {
-                return data.properties;
-            });
+            .then(({ data }) => data.properties);
 
         return propertyList;
     }
@@ -71,18 +63,16 @@ export const NavPropertyList: FC = () => {
             .post(
                 `${import.meta.env.VITE_PROPERTY_API}/property`,
                 {},
-                {
-                    headers: {
-                        Authorization: `Bearer ${cookie.AccessToken}`
-                    }
-                }
+                { headers: { Authorization: `Bearer ${cookie.AccessToken}` } }
             )
             .then(({ data }) => {
                 toggle();
+
                 setLocation(`/property/${data.property.id}/edit`);
             })
             .catch(() => {
                 toggle();
+                
                 showNotification({
                     title: "🚩 Unsuccessful Request",
                     message: "Could not create property, please try again later.",

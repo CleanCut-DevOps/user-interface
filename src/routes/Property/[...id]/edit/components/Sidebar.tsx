@@ -1,10 +1,4 @@
-import {
-    Accordion,
-    createStyles,
-    ScrollArea,
-    Stepper,
-    Text
-} from "@mantine/core";
+import { Accordion, createStyles, ScrollArea, Stepper, Text } from "@mantine/core";
 import { FC, useContext, useEffect, useState } from "react";
 import { TbBed, TbBuilding, TbListDetails, TbMapPin } from "react-icons/tb";
 import { Property } from "../../../../../models";
@@ -34,13 +28,7 @@ export const Sidebar: FC = () => {
 
     return (
         <ScrollArea className={classes.wrapper}>
-            <Accordion
-                w={"100%"}
-                value={value}
-                radius={"md"}
-                variant={"contained"}
-                onChange={handleChange}
-            >
+            <Accordion w={"100%"} value={value} radius={"md"} variant={"contained"} onChange={handleChange}>
                 <Accordion.Item value={"0"}>
                     <Accordion.Control fz={"sm"} icon={<TbListDetails />}>
                         <Text fw={600}>Property Details</Text>
@@ -100,15 +88,9 @@ const DetailStepper: FC<{ property: Property | null }> = ({ property }) => {
 
     useEffect(() => {
         if (property) {
-            if (
-                property.icon &&
-                property.label &&
-                property.description &&
-                property.images.length > 0
-            ) {
+            if (property.icon && property.label && property.description && property.images.length > 0) {
                 setStep(4);
-            } else if (property.icon && property.label && property.description)
-                setStep(3);
+            } else if (property.icon && property.label && property.description) setStep(3);
             else if (property.icon && property.label) setStep(2);
             else if (property.icon) setStep(1);
             else setStep(0);
@@ -116,29 +98,11 @@ const DetailStepper: FC<{ property: Property | null }> = ({ property }) => {
     }, [property]);
 
     return (
-        <Stepper
-            size={"xs"}
-            radius={"md"}
-            active={step}
-            color={"indigo"}
-            orientation={"vertical"}
-        >
-            <Stepper.Step
-                label="Identifier"
-                description="Give the property a unique identifier"
-            />
-            <Stepper.Step
-                label="Label"
-                description="Name the property for yourself"
-            />
-            <Stepper.Step
-                label="Description"
-                description="Give a short description of the property"
-            />
-            <Stepper.Step
-                label="Images"
-                description="Provide some pictures of the property"
-            />
+        <Stepper size={"xs"} radius={"md"} active={step} color={"indigo"} orientation={"vertical"}>
+            <Stepper.Step label="Identifier" description="Give the property a unique identifier" />
+            <Stepper.Step label="Label" description="Name the property for yourself" />
+            <Stepper.Step label="Description" description="Give a short description of the property" />
+            <Stepper.Step label="Images" description="Provide some pictures of the property" />
         </Stepper>
     );
 };
@@ -153,7 +117,7 @@ const AddressStepper: FC<{ property: Property | null }> = ({ property }) => {
                 property.address.line_2 &&
                 property.address.city &&
                 property.address.state &&
-                property.address.postal_code
+                property.address.zip
             ) {
                 setStep(5);
             } else if (
@@ -163,11 +127,7 @@ const AddressStepper: FC<{ property: Property | null }> = ({ property }) => {
                 property.address.state
             ) {
                 setStep(4);
-            } else if (
-                property.address.line_1 &&
-                property.address.line_2 &&
-                property.address.city
-            ) {
+            } else if (property.address.line_1 && property.address.line_2 && property.address.city) {
                 setStep(3);
             } else if (property.address.line_1 && property.address.line_2) {
                 setStep(2);
@@ -178,21 +138,12 @@ const AddressStepper: FC<{ property: Property | null }> = ({ property }) => {
     }, [property]);
 
     return (
-        <Stepper
-            size={"xs"}
-            radius={"md"}
-            active={step}
-            color={"indigo"}
-            orientation={"vertical"}
-        >
+        <Stepper size={"xs"} radius={"md"} active={step} color={"indigo"} orientation={"vertical"}>
             <Stepper.Step style={{ alignItems: "center" }} label="Line 1" />
             <Stepper.Step style={{ alignItems: "center" }} label="Line 2" />
             <Stepper.Step style={{ alignItems: "center" }} label="City" />
             <Stepper.Step style={{ alignItems: "center" }} label="State" />
-            <Stepper.Step
-                style={{ alignItems: "center" }}
-                label="Postal Code"
-            />
+            <Stepper.Step style={{ alignItems: "center" }} label="Postal Code" />
         </Stepper>
     );
 };

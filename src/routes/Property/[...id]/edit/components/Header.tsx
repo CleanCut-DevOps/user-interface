@@ -1,13 +1,6 @@
 import data from "@emoji-mart/data";
 import Picker from "@emoji-mart/react";
-import {
-    createStyles,
-    HoverCard,
-    Paper,
-    Text,
-    TextInput,
-    useMantineColorScheme
-} from "@mantine/core";
+import { createStyles, HoverCard, Paper, Text, TextInput, useMantineColorScheme } from "@mantine/core";
 import { useDebouncedValue } from "@mantine/hooks";
 import { ChangeEvent, FC, useContext, useEffect, useState } from "react";
 import { EditPropertyContext } from "./Provider";
@@ -18,9 +11,7 @@ const useStyles = createStyles(theme => ({
         gap: theme.spacing.xs,
         padding: `${theme.spacing.xs}px ${theme.spacing.xs * 2}px`,
         borderBottom:
-            theme.colorScheme === "dark"
-                ? `1px solid ${theme.colors.dark[5]}`
-                : `1px solid ${theme.colors.gray[2]}`
+            theme.colorScheme === "dark" ? `1px solid ${theme.colors.dark[5]}` : `1px solid ${theme.colors.gray[2]}`
     },
     icon: {
         width: 36,
@@ -31,10 +22,7 @@ const useStyles = createStyles(theme => ({
         alignItems: "center",
         justifyContent: "center",
         borderRadius: theme.radius.sm,
-        backgroundColor:
-            theme.colorScheme === "dark"
-                ? theme.colors.dark[5]
-                : theme.colors.gray[1]
+        backgroundColor: theme.colorScheme === "dark" ? theme.colors.dark[5] : theme.colors.gray[1]
     },
     dropdown: {
         padding: 0,
@@ -71,10 +59,7 @@ export const Header: FC = () => {
                         label: labelDebounced
                     }
                 });
-            } else if (
-                iconDebounced.length > 0 &&
-                iconDebounced != property.icon
-            ) {
+            } else if (iconDebounced.length > 0 && iconDebounced != property.icon) {
                 dispatch({
                     type: "brief",
                     payload: {

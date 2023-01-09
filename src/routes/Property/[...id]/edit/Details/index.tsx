@@ -5,7 +5,7 @@ import { Identifier } from "./Identifier";
 import { ImagePreview } from "./ImagesPreview";
 import { Label } from "./Label";
 
-const useStyles = createStyles((theme, _params, getRef) => ({
+const useStyles = createStyles(theme => ({
     wrapper: {
         flex: 1,
         width: "100%",
@@ -25,10 +25,7 @@ const useStyles = createStyles((theme, _params, getRef) => ({
         overflow: "hidden",
         padding: theme.spacing.xl,
         borderRadius: theme.radius.md,
-        backgroundColor:
-            theme.colorScheme === "dark"
-                ? theme.colors.dark[8]
-                : theme.colors.gray[0]
+        backgroundColor: theme.colorScheme === "dark" ? theme.colors.dark[8] : theme.colors.gray[0]
     },
     scrollArea: {
         height: "100%",
@@ -40,12 +37,11 @@ const useStyles = createStyles((theme, _params, getRef) => ({
 
 export const Details: FC = () => {
     const { classes } = useStyles();
+
     return (
         <div className={classes.wrapper}>
             <Title>Your property details</Title>
-            <Text color={"dimmed"}>
-                This information will be used for our cleaners and yourself.
-            </Text>
+            <Text color={"dimmed"}>This information will be used for our cleaners and yourself.</Text>
             <div className={classes.container}>
                 <ScrollArea h={"100%"} scrollbarSize={8}>
                     <Grid w={"100%"} columns={11}>

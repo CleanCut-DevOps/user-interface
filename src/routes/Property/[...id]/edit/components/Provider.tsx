@@ -14,11 +14,11 @@ interface ComponentProps extends PropsWithChildren {
 type SchrodingersProperty = Property | null;
 
 type ReducerAction =
-    | { type: "next"; payload?: null }
-    | { type: "previous"; payload?: null }
-    | { type: "setStep"; payload: number }
-    | { type: "setSaving"; payload: { newState: boolean; cancel?: () => void } }
+    | { type: "next" }
+    | { type: "previous" }
+    | { type: "toggleSave" }
     | { type: "load"; payload: Property }
+    | { type: "setStep"; payload: number }
     | { type: "brief"; payload: { label: string; icon: string } }
     | {
           type: "details";
@@ -69,55 +69,73 @@ const reducer = (state: ReducerState, action: ReducerAction): ReducerState => {
     switch (type) {
         case "next":
             return { ...state, step: state.step + 1 };
+
         case "previous":
             return { ...state, step: state.step - 1 };
+
         case "setStep":
             const newStep = action.payload;
+
             return { ...state, step: newStep };
-        case "setSaving":
-            const newSaveState = action.payload.newState;
 
-            action.payload.cancel?.();
+        case "toggleSave":
+            return { ...state, saving: !state.saving };
 
-            return { ...state, saving: newSaveState };
         case "load":
             const loadPayload = action.payload;
+
             return {
                 ...state,
                 loading: false,
                 saving: false,
                 property: loadPayload
             };
+
         case "brief":
             const briefPayload = action.payload;
+
             return {
                 ...state,
+                saving: true,
                 property: state.property ? { ...state.property, ...briefPayload } : null
             };
+
         case "details":
             const detailsPayload = action.payload;
+
             return {
                 ...state,
+                saving: true,
                 property: state.property ? { ...state.property, ...detailsPayload } : null
             };
+
         case "address":
             const addressPayload = action.payload;
+
             return {
                 ...state,
+                saving: true,
                 property: state.property ? { ...state.property, ...addressPayload } : null
             };
+
         case "type":
             const typePayload = action.payload;
+
             return {
                 ...state,
+                saving: true,
                 property: state.property ? { ...state.property, ...typePayload } : null
             };
+
         case "rooms":
             const roomsPayload = action.payload;
+
             return {
                 ...state,
+                saving: true,
                 property: state.property ? { ...state.property, ...roomsPayload } : null
             };
+
         default:
             return state;
     }
@@ -127,7 +145,6 @@ type EditPropertyContextData = {
     step: number;
     saving: boolean;
     forceSave: () => void;
-    localMismatch: boolean;
     property: SchrodingersProperty;
     dispatch: Dispatch<ReducerAction>;
 };
@@ -136,7 +153,6 @@ export const EditPropertyContext = createContext<EditPropertyContextData>({
     step: 0,
     saving: false,
     property: null,
-    localMismatch: false,
     dispatch: () => {},
     forceSave: () => {}
 });
@@ -145,7 +161,6 @@ export const EditPropertyProvider: FC<ComponentProps> = ({ id, children }) => {
     const [cookies] = useCookies(["AccessToken"]);
     const [, setLocation] = useLocation();
     const [state, dispatch] = useReducer(reducer, initState);
-    const [propertyDebounced, cancel] = useDebouncedValue(state.property, 30000);
 
     useEffect(() => {
         if (cookies.AccessToken) {
@@ -181,39 +196,33 @@ export const EditPropertyProvider: FC<ComponentProps> = ({ id, children }) => {
     }, []);
 
     useEffect(() => {
-        if (!state.loading) updateProperty();
-    }, [propertyDebounced]);
+        if (state.property && state.saving && !state.loading) {
+            updateProperty();
+        }
+    }, [state.property]);
 
     const updateProperty = () => {
         if (cookies.AccessToken) {
-            if (!state.saving) {
-                if (propertyDebounced !== state.property) {
-                    dispatch({ type: "setSaving", payload: { newState: true, cancel } });
-                } else {
-                    dispatch({ type: "setSaving", payload: { newState: false } });
-                }
+            axios
+                .put(`${import.meta.env.VITE_PROPERTY_API}/property/${id}`, state.property, {
+                    headers: {
+                        Authorization: `Bearer ${cookies.AccessToken}`
+                    }
+                })
+                .then(({ data }) => {
+                    const property = convertResponseToProperty(data.property);
 
-                axios
-                    .put(`${import.meta.env.VITE_PROPERTY_API}/property/${id}`, state.property, {
-                        headers: {
-                            Authorization: `Bearer ${cookies.AccessToken}`
-                        }
-                    })
-                    .then(({ data }) => {
-                        const property = convertResponseToProperty(data.property);
+                    dispatch({ type: "load", payload: property });
+                })
+                .catch(({ response: { data } }) => {
+                    dispatch({ type: "toggleSave" });
 
-                        dispatch({ type: "load", payload: property });
-                    })
-                    .catch(({ response: { data } }) => {
-                        dispatch({ type: "setSaving", payload: { newState: false } });
-
-                        showNotification({
-                            title: data.type,
-                            message: `${data.message}. Please try again after fixing the issue.`,
-                            color: "red"
-                        });
+                    showNotification({
+                        title: data.type,
+                        message: `${data.message}. Please try again after fixing the issue.`,
+                        color: "red"
                     });
-            }
+                });
         } else {
             showNotification({
                 title: "No Access Token",
@@ -232,8 +241,7 @@ export const EditPropertyProvider: FC<ComponentProps> = ({ id, children }) => {
                 step: state.step,
                 saving: state.saving,
                 property: state.property,
-                forceSave: updateProperty,
-                localMismatch: propertyDebounced !== state.property
+                forceSave: updateProperty
             }}
         >
             {state.loading ? <Loading /> : children}

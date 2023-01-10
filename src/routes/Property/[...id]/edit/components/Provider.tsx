@@ -1,3 +1,4 @@
+import { useDebouncedValue } from "@mantine/hooks";
 import { showNotification } from "@mantine/notifications";
 import axios from "axios";
 import { createContext, Dispatch, FC, PropsWithChildren, useEffect, useReducer } from "react";
@@ -18,35 +19,20 @@ type ReducerAction =
     | { type: "toggleSave" }
     | { type: "load"; payload: Property }
     | { type: "setStep"; payload: number }
-    | { type: "brief"; payload: { label: string; icon: string } }
-    | {
-          type: "details";
-          payload: {
-              icon: string;
-              label: string;
-              images: string[];
-              description: string | null;
-          };
-      }
+    | { type: "brief"; payload: { label?: string; icon?: string } }
+    | { type: "details"; payload: { icon?: string; label?: string; images?: string[]; description?: string | null } }
     | {
           type: "address";
           payload: {
-              line_1: string | null;
-              line_2: string | null;
-              city: string | null;
-              state: string | null;
-              zip: string | null;
+              line_1?: string | null;
+              line_2?: string | null;
+              city?: string | null;
+              state?: string | null;
+              zip?: string | null;
           };
       }
     | { type: "type"; payload: string }
-    | {
-          type: "rooms";
-          payload: {
-              id: string;
-              quantity: number;
-              updated_at: Date;
-          };
-      };
+    | { type: "rooms"; payload: { id?: string; quantity?: number }[] };
 
 type ReducerState = {
     step: number;
@@ -86,7 +72,6 @@ const reducer = (state: ReducerState, action: ReducerAction): ReducerState => {
             return {
                 ...state,
                 loading: false,
-                saving: false,
                 property: loadPayload
             };
 
@@ -142,7 +127,6 @@ const reducer = (state: ReducerState, action: ReducerAction): ReducerState => {
 
 type EditPropertyContextData = {
     step: number;
-    saving: boolean;
     forceSave: () => void;
     property: SchrodingersProperty;
     dispatch: Dispatch<ReducerAction>;
@@ -150,7 +134,6 @@ type EditPropertyContextData = {
 
 export const EditPropertyContext = createContext<EditPropertyContextData>({
     step: 0,
-    saving: false,
     property: null,
     dispatch: () => {},
     forceSave: () => {}
@@ -160,6 +143,8 @@ export const EditPropertyProvider: FC<ComponentProps> = ({ id, children }) => {
     const [cookies] = useCookies(["AccessToken"]);
     const [, setLocation] = useLocation();
     const [state, dispatch] = useReducer(reducer, initState);
+
+    const [propertyDebounced] = useDebouncedValue(state.property, 1000);
 
     useEffect(() => {
         if (cookies.AccessToken) {
@@ -195,23 +180,23 @@ export const EditPropertyProvider: FC<ComponentProps> = ({ id, children }) => {
     }, []);
 
     useEffect(() => {
-        if (state.property && state.saving && !state.loading) {
-            updateProperty();
-        }
-    }, [state.property]);
+        if (state.saving) updateProperty();
+    }, [propertyDebounced]);
 
     const updateProperty = () => {
         if (cookies.AccessToken) {
             axios
-                .put(`${import.meta.env.VITE_PROPERTY_API}/property/${id}`, state.property, {
-                    headers: {
-                        Authorization: `Bearer ${cookies.AccessToken}`
-                    }
+                .put(`${import.meta.env.VITE_PROPERTY_API}/property/${id}`, propertyDebounced, {
+                    headers: { Authorization: `Bearer ${cookies.AccessToken}` }
                 })
                 .then(({ data }) => {
-                    const property = convertResponseToProperty(data.property);
+                    dispatch({ type: "toggleSave" });
 
-                    dispatch({ type: "load", payload: property });
+                    showNotification({
+                        title: data.type,
+                        message: data.message,
+                        color: "green"
+                    });
                 })
                 .catch(({ response: { data } }) => {
                     dispatch({ type: "toggleSave" });
@@ -238,7 +223,6 @@ export const EditPropertyProvider: FC<ComponentProps> = ({ id, children }) => {
             value={{
                 dispatch,
                 step: state.step,
-                saving: state.saving,
                 property: state.property,
                 forceSave: updateProperty
             }}

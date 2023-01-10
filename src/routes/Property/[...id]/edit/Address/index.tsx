@@ -1,23 +1,6 @@
-import { createStyles, Grid, ScrollArea, Text, TextInput, Title } from "@mantine/core";
-import { useDebouncedValue } from "@mantine/hooks";
-import { FC, ReactNode, useContext, useEffect, useReducer } from "react";
+import { createStyles, Grid, Text, TextInput, Title } from "@mantine/core";
+import { FC, ReactNode, useContext } from "react";
 import { EditPropertyContext } from "../components";
-
-type ReducerAction = {
-    line_1?: string;
-    line_2?: string;
-    city?: string;
-    state?: string;
-    zip?: string;
-};
-
-type ReducerState = {
-    line_1: string | null;
-    line_2: string | null;
-    city: string | null;
-    state: string | null;
-    zip: string | null;
-};
 
 const useStyles = createStyles(theme => ({
     wrapper: {
@@ -45,26 +28,9 @@ const useStyles = createStyles(theme => ({
     }
 }));
 
-const reducer = (state: ReducerState, action: ReducerAction) => {
-    return { ...state, ...action };
-};
-
 export const Address: FC = () => {
     const { classes } = useStyles();
     const { property, dispatch } = useContext(EditPropertyContext);
-    const [state, localDispatch] = useReducer(reducer, {
-        ...{ line_1: null, line_2: null, city: null, state: null, zip: null },
-        ...property?.address
-    });
-
-    const [addressDebounced] = useDebouncedValue(state, 2000);
-
-    useEffect(() => {
-        dispatch({
-            type: "address",
-            payload: state
-        });
-    }, [addressDebounced]);
 
     return (
         <div className={classes.wrapper}>
@@ -74,24 +40,33 @@ export const Address: FC = () => {
                 <Grid w={"100%"} columns={11}>
                     <Row req label={"Line 1"}>
                         <TextInput
-                            value={state.line_1 ?? ""}
-                            onChange={e => localDispatch({ line_1: e.target.value })}
+                            value={property?.address.line_1 ?? ""}
+                            onChange={e => dispatch({ type: "address", payload: { line_1: e.target.value } })}
                         />
                     </Row>
                     <Row req label={"Line 2"}>
                         <TextInput
-                            value={state.line_2 ?? ""}
-                            onChange={e => localDispatch({ line_2: e.target.value })}
+                            value={property?.address.line_2 ?? ""}
+                            onChange={e => dispatch({ type: "address", payload: { line_2: e.target.value } })}
                         />
                     </Row>
                     <Row label={"City"}>
-                        <TextInput value={state.city ?? ""} onChange={e => localDispatch({ city: e.target.value })} />
+                        <TextInput
+                            value={property?.address.city ?? ""}
+                            onChange={e => dispatch({ type: "address", payload: { city: e.target.value } })}
+                        />
                     </Row>
                     <Row label={"State"}>
-                        <TextInput value={state.state ?? ""} onChange={e => localDispatch({ state: e.target.value })} />
+                        <TextInput
+                            value={property?.address.state ?? ""}
+                            onChange={e => dispatch({ type: "address", payload: { state: e.target.value } })}
+                        />
                     </Row>
                     <Row label={"Zip"}>
-                        <TextInput value={state.zip ?? ""} onChange={e => localDispatch({ zip: e.target.value })} />
+                        <TextInput
+                            value={property?.address.zip ?? ""}
+                            onChange={e => dispatch({ type: "address", payload: { zip: e.target.value } })}
+                        />
                     </Row>
                 </Grid>
             </div>

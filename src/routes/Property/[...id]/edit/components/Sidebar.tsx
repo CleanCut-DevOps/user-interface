@@ -88,9 +88,8 @@ const DetailStepper: FC<{ property: Property | null }> = ({ property }) => {
 
     useEffect(() => {
         if (property) {
-            if (property.icon && property.label && property.description && property.images.length > 0) {
-                setStep(4);
-            } else if (property.icon && property.label && property.description) setStep(3);
+            if (property.icon && property.label && property.description && property.images.length > 0) setStep(4);
+            else if (property.icon && property.label && property.description) setStep(3);
             else if (property.icon && property.label) setStep(2);
             else if (property.icon) setStep(1);
             else setStep(0);

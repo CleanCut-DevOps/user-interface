@@ -31,14 +31,14 @@ type ReducerAction =
     | {
           type: "address";
           payload: {
-              line_1: string;
+              line_1: string | null;
               line_2: string | null;
-              city: string;
+              city: string | null;
               state: string | null;
-              zip: string;
+              zip: string | null;
           };
       }
-    | { type: "type"; payload: { id: string } }
+    | { type: "type"; payload: string }
     | {
           type: "rooms";
           payload: {
@@ -114,16 +114,16 @@ const reducer = (state: ReducerState, action: ReducerAction): ReducerState => {
             return {
                 ...state,
                 saving: true,
-                property: state.property ? { ...state.property, ...addressPayload } : null
+                property: state.property
+                    ? { ...state.property, address: { ...state.property.address, ...addressPayload } }
+                    : null
             };
 
         case "type":
-            const typePayload = action.payload;
-
             return {
                 ...state,
                 saving: true,
-                property: state.property ? { ...state.property, ...typePayload } : null
+                property: state.property ? { ...state.property, type_id: action.payload } : null
             };
 
         case "rooms":

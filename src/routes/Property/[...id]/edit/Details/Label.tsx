@@ -26,7 +26,7 @@ export const Label: FC = () => {
     }, [labelDebounced]);
 
     useEffect(() => {
-        if (property && labelDebounced != property.label) setLabel(property.label);
+        if (property && property.label != label) setLabel(property.label);
     }, [property]);
 
     const handleLabelChange = (event: ChangeEvent<HTMLInputElement>) => {

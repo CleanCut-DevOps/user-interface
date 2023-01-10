@@ -52,7 +52,7 @@ export const Identifier: FC = () => {
     }, [iconDebounced]);
 
     useEffect(() => {
-        if (property && iconDebounced != property.icon) {
+        if (property && property.icon != icon) {
             setIcon(property.icon);
         }
     }, [property]);

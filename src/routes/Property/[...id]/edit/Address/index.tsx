@@ -27,11 +27,12 @@ const useStyles = createStyles(theme => ({
         gap: 4,
         display: "flex",
         alignItems: "center",
-        flexDirection: "column"
-    },
-    resLabel: {
-        width: "100%",
-        alignItems: "flex-start"
+        flexDirection: "column",
+
+        [`@media (max-width: 815px)`]: {
+            width: "100%",
+            alignItems: "flex-start"
+        }
     }
 }));
 
@@ -42,7 +43,7 @@ export const Address: FC = () => {
 
     return (
         <div className={classes.wrapper}>
-            <div className={`${classes.labels} ${width < 816 && classes.resLabel}`}>
+            <div className={classes.labels}>
                 <Title order={width > 815 ? 1 : 3}>Where your property is located</Title>
                 <Text size={width > 815 ? "md" : "sm"} color={"dimmed"}>
                     This information will be used for our cleaners and yourself.

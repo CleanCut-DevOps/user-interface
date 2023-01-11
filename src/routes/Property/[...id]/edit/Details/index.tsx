@@ -12,7 +12,6 @@ import {
     Title,
     useMantineColorScheme
 } from "@mantine/core";
-import { useViewportSize } from "@mantine/hooks";
 import { ChangeEvent, FC, ReactNode, useContext } from "react";
 import { EditPropertyContext } from "../components";
 import { ImagesPreview } from "./ImagesPreview";
@@ -64,13 +63,24 @@ const useStyles = createStyles(theme => ({
         marginTop: 12,
         marginLeft: 12,
         borderRadius: 10
+    },
+    title: {
+        fontSize: 32,
+        fontWeight: 700,
+
+        [`@media (max-width: 815px)`]: { fontSize: 24 }
+    },
+    subtitle: {
+        fontSize: 16,
+        fontWeight: 400,
+
+        [`@media (max-width: 815px)`]: { fontSize: 14 }
     }
 }));
 
 export const Details: FC = () => {
     const { classes } = useStyles();
     const { colorScheme } = useMantineColorScheme();
-    const { width } = useViewportSize();
     const { property, dispatch } = useContext(EditPropertyContext);
 
     const handleIconChange = ({ native }: { native: string }) => {
@@ -88,13 +98,13 @@ export const Details: FC = () => {
     return (
         <div className={classes.wrapper}>
             <div className={classes.labels}>
-                <Title order={width > 815 ? 1 : 3}>Your property details</Title>
-                <Text size={width > 815 ? "md" : "sm"} color={"dimmed"}>
+                <Title className={classes.title}>Your property details</Title>
+                <Text className={classes.subtitle} color={"dimmed"}>
                     This information will be used for our cleaners and yourself.
                 </Text>
             </div>
-            <Grid mt={"md"} maw={768} columns={11}>
-                <Row w={width} req label={"Identifier"}>
+            <Grid mt={"md"} maw={768} columns={11} grow>
+                <Row req label={"Identifier"}>
                     <Stack spacing={4}>
                         <HoverCard>
                             <HoverCard.Target>
@@ -115,7 +125,7 @@ export const Details: FC = () => {
                         </HoverCard>
                     </Stack>
                 </Row>
-                <Row w={width} req label={"Label"}>
+                <Row req label={"Label"}>
                     <Stack spacing={4}>
                         <TextInput
                             size={"sm"}
@@ -126,7 +136,7 @@ export const Details: FC = () => {
                         />
                     </Stack>
                 </Row>
-                <Row w={width} label={"Description"}>
+                <Row label={"Description"}>
                     <Stack spacing={4}>
                         <Textarea
                             autosize
@@ -138,7 +148,7 @@ export const Details: FC = () => {
                         />
                     </Stack>
                 </Row>
-                <Row w={width} label={"Images"}>
+                <Row label={"Images"}>
                     <Stack spacing={4}>
                         <ImagesPreview />
                         <Text size={"sm"} color={"dimmed"}>
@@ -152,23 +162,22 @@ export const Details: FC = () => {
 };
 
 type RowProps = {
-    w: number;
     label: string;
     req?: boolean;
     children: ReactNode | undefined;
 };
 
-const Row: FC<RowProps> = ({ w, label, req, children }) => {
+const Row: FC<RowProps> = ({ label, req, children }) => {
     return (
         <>
-            <Grid.Col span={3} style={{ display: w > 815 ? "block" : "none" }}>
+            <Grid.Col span={3} sx={{ [`@media (max-width: 815px)`]: { display: "none" } }}>
                 <Title order={6}>
                     {label} {req && <span style={{ color: "red" }}>*</span>}
                 </Title>
             </Grid.Col>
-            <Grid.Col span={w > 815 ? 8 : 11}>
+            <Grid.Col span={8}>
                 <Stack spacing={4}>
-                    <Title order={6} style={{ display: w > 815 ? "none" : "block" }}>
+                    <Title order={6} sx={{ [`@media (min-width: 815px)`]: { display: "none" } }}>
                         {label} {req && <span style={{ color: "red" }}>*</span>}
                     </Title>
                     {children}

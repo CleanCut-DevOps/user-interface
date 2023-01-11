@@ -111,9 +111,8 @@ const useStyles = createStyles(theme => ({
 
 export const ImagesPreview: FC = () => {
     const { classes } = useStyles();
-    const { classes: carouselClasses } = useCarouselStyles();
     const [cookies] = useCookies(["AccessToken"]);
-    const { width } = useViewportSize();
+    const { classes: carouselClasses } = useCarouselStyles();
     const { property, dispatch } = useContext(EditPropertyContext);
 
     const [embla, setEmbla] = useState<Embla | null>(null);
@@ -212,12 +211,12 @@ export const ImagesPreview: FC = () => {
                     ) : (
                         <div className={classes.placeholderWrapper}>
                             <div className={classes.placeholderContent}>
-                                <TbPhoto size={width > 420 ? 64 : 48} />
+                                <TbPhoto size={48} />
                                 <Text
                                     inline
                                     size={"sm"}
                                     color={"dimmed"}
-                                    style={{ display: width > 420 ? "block" : "none" }}
+                                    sx={{ [`@media (min-width: 815px)`]: { display: "none" } }}
                                 >
                                     Attach as many files as you like, each file should not exceed 5mb
                                 </Text>

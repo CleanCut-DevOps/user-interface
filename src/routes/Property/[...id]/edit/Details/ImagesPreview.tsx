@@ -1,6 +1,7 @@
 import { Carousel, Embla } from "@mantine/carousel";
 import { ActionIcon, Center, createStyles, FileButton, Stack, Text, Tooltip } from "@mantine/core";
 import { Dropzone, IMAGE_MIME_TYPE } from "@mantine/dropzone";
+import { useViewportSize } from "@mantine/hooks";
 import { showNotification } from "@mantine/notifications";
 import axios from "axios";
 import { FC, useContext, useEffect, useState } from "react";
@@ -47,15 +48,31 @@ const useStyles = createStyles(theme => ({
         height: "100%",
         display: "flex",
         gap: theme.spacing.sm,
-        borderRadius: theme.radius.sm,
         padding: theme.spacing.sm,
+        borderRadius: theme.radius.sm,
         backgroundColor: theme.colorScheme == "dark" ? theme.colors.dark[6] : theme.colors.gray[0],
-        border: `1px solid ${theme.colorScheme == "dark" ? theme.colors.dark[4] : theme.colors.gray[4]}`
+        border: `1px solid ${theme.colorScheme == "dark" ? theme.colors.dark[4] : theme.colors.gray[4]}`,
+
+        [`@media (max-width: 815px)`]: {
+            flexDirection: "column",
+            alignItems: "center"
+        }
+    },
+    buttonContainer: {
+        gap: theme.spacing.sm,
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+
+        [`@media (max-width: 815px)`]: {
+            flexDirection: "row"
+        }
     },
     carouselWrapper: {
         flex: 1,
         width: "100%",
-        aspectRatio: "16 / 9"
+        aspectRatio: "16 / 9",
+        overflow: "hidden"
     },
     placeholderWrapper: {
         width: "100%",
@@ -96,6 +113,7 @@ export const ImagesPreview: FC = () => {
     const { classes } = useStyles();
     const { classes: carouselClasses } = useCarouselStyles();
     const [cookies] = useCookies(["AccessToken"]);
+    const { width } = useViewportSize();
     const { property, dispatch } = useContext(EditPropertyContext);
 
     const [embla, setEmbla] = useState<Embla | null>(null);
@@ -179,7 +197,12 @@ export const ImagesPreview: FC = () => {
             <div className={classes.wrapper}>
                 <div className={classes.carouselWrapper}>
                     {images.length > 0 ? (
-                        <Carousel getEmblaApi={setEmbla} withIndicators classNames={carouselClasses}>
+                        <Carousel
+                            getEmblaApi={setEmbla}
+                            loop={images.length > 5}
+                            withIndicators
+                            classNames={carouselClasses}
+                        >
                             {images.map((url, i) => (
                                 <Carousel.Slide key={i}>
                                     <img src={url} className={classes.image} />
@@ -189,20 +212,25 @@ export const ImagesPreview: FC = () => {
                     ) : (
                         <div className={classes.placeholderWrapper}>
                             <div className={classes.placeholderContent}>
-                                <TbPhoto size={"25%"} />
-                                <Text inline size={"sm"} color={"dimmed"}>
+                                <TbPhoto size={width > 420 ? 64 : 48} />
+                                <Text
+                                    inline
+                                    size={"sm"}
+                                    color={"dimmed"}
+                                    style={{ display: width > 420 ? "block" : "none" }}
+                                >
                                     Attach as many files as you like, each file should not exceed 5mb
                                 </Text>
                             </div>
                         </div>
                     )}
                 </div>
-                <Stack h={"100%"} spacing={"sm"} sx={{ justifyContent: "center" }}>
+                <div className={classes.buttonContainer}>
                     <Tooltip label={"Upload image"} position={"right"} color={"gray"} withArrow>
                         <div>
                             <FileButton multiple onChange={handleSaveFiles} accept="image/png,image/jpeg">
                                 {props => (
-                                    <ActionIcon variant={"outline"} color={"green"} loading={uploading}>
+                                    <ActionIcon size={"lg"} variant={"outline"} color={"green"} loading={uploading}>
                                         <TbUpload {...props} />
                                     </ActionIcon>
                                 )}
@@ -212,9 +240,10 @@ export const ImagesPreview: FC = () => {
                     <Tooltip label={"Remove image"} position={"right"} color={"gray"} withArrow>
                         <div>
                             <ActionIcon
-                                variant={"outline"}
+                                size={"lg"}
                                 color={"red"}
                                 loading={deleting}
+                                variant={"outline"}
                                 onClick={handleDeleteFile}
                                 disabled={images.length < 1}
                             >
@@ -222,7 +251,7 @@ export const ImagesPreview: FC = () => {
                             </ActionIcon>
                         </div>
                     </Tooltip>
-                </Stack>
+                </div>
             </div>
             <Dropzone.FullScreen
                 multiple

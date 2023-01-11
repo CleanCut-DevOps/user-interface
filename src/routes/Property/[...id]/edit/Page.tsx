@@ -1,7 +1,6 @@
-import { Box, createStyles, Flex } from "@mantine/core";
+import { Box, createStyles, Flex, ScrollArea } from "@mantine/core";
 import { FC } from "react";
 import { AuthWrapper, Loading } from "../../../../components";
-import { Additional } from "./Additional";
 import { Address } from "./Address";
 import { EditPropertyContext, EditPropertyProvider, Header, Sidebar } from "./components";
 import { Details } from "./Details";
@@ -27,8 +26,10 @@ const useStyles = createStyles(theme => ({
         flex: 1,
         width: "100%",
         height: "100%",
-        overflow: "hidden",
-        padding: theme.spacing.xl
+        paddingInline: theme.spacing.xs
+    },
+    scrollarea: {
+        height: "100%"
     }
 }));
 
@@ -43,16 +44,17 @@ export const EditProperty: FC<RouteProps> = ({ params }) => {
                     <Header />
                     <Flex className={classes.grow}>
                         <Box className={classes.main}>
-                            <EditPropertyContext.Consumer>
-                                {({ step }) => {
-                                    if (step === 0) return <Details />;
-                                    if (step === 1) return <Address />;
-                                    if (step === 2) return <Type />;
-                                    if (step === 3) return <Rooms />;
-                                    if (step === 4) return <Additional />;
-                                    if (step === 5) return <Loading />;
-                                }}
-                            </EditPropertyContext.Consumer>
+                            <ScrollArea className={classes.scrollarea} scrollbarSize={6}>
+                                <EditPropertyContext.Consumer>
+                                    {({ step }) => {
+                                        if (step === 0) return <Details />;
+                                        if (step === 1) return <Address />;
+                                        if (step === 2) return <Type />;
+                                        if (step === 3) return <Rooms />;
+                                        return <Loading />;
+                                    }}
+                                </EditPropertyContext.Consumer>
+                            </ScrollArea>
                         </Box>
                         <Sidebar />
                     </Flex>

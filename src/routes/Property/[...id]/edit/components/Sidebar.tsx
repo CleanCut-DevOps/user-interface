@@ -9,7 +9,11 @@ const useStyles = createStyles(theme => ({
         height: "100%",
         overflow: "hidden",
         transition: "0.4s ease",
-        padding: theme.spacing.xl
+        paddingInline: theme.spacing.xl,
+
+        [`@media (max-width: ${theme.breakpoints.lg}px)`]: {
+            display: "none"
+        }
     }
 }));
 
@@ -28,7 +32,7 @@ export const Sidebar: FC = () => {
 
     return (
         <ScrollArea className={classes.wrapper}>
-            <Accordion w={"100%"} value={value} radius={"md"} variant={"contained"} onChange={handleChange}>
+            <Accordion my={24} value={value} radius={"md"} variant={"contained"} onChange={handleChange}>
                 <Accordion.Item value={"0"}>
                     <Accordion.Control fz={"sm"} icon={<TbListDetails />}>
                         <Text fw={600}>Property Details</Text>
@@ -65,15 +69,6 @@ export const Sidebar: FC = () => {
                         <Text fw={600}>Rooms</Text>
                         <Text fw={400} fz={"xs"} color={"dimmed"}>
                             What type of rooms are in it and how many are there
-                        </Text>
-                    </Accordion.Control>
-                    <Accordion.Panel></Accordion.Panel>
-                </Accordion.Item>
-                <Accordion.Item value={"4"}>
-                    <Accordion.Control fz={"sm"} icon={<TbListDetails />}>
-                        <Text fw={600}>Additional Details</Text>
-                        <Text fw={400} fz={"xs"} color={"dimmed"}>
-                            Other additional information
                         </Text>
                     </Accordion.Control>
                     <Accordion.Panel></Accordion.Panel>

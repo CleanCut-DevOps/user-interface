@@ -5,13 +5,14 @@ import {
     Grid,
     HoverCard,
     Paper,
-    ScrollArea,
+    Stack,
     Text,
     Textarea,
     TextInput,
     Title,
     useMantineColorScheme
 } from "@mantine/core";
+import { useViewportSize } from "@mantine/hooks";
 import { ChangeEvent, FC, ReactNode, useContext } from "react";
 import { EditPropertyContext } from "../components";
 import { ImagesPreview } from "./ImagesPreview";
@@ -22,10 +23,22 @@ const useStyles = createStyles(theme => ({
         width: "100%",
         height: "100%",
         display: "flex",
-        overflow: "hidden",
         alignItems: "center",
         gap: theme.spacing.md,
+        flexDirection: "column",
+        padding: theme.spacing.lg,
+
+        [`@media (max-width: ${theme.breakpoints.xs}px)`]: { paddingInline: 4 }
+    },
+    labels: {
+        gap: 4,
+        display: "flex",
+        alignItems: "center",
         flexDirection: "column"
+    },
+    resLabel: {
+        width: "100%",
+        alignItems: "flex-start"
     },
     container: {
         padding: theme.spacing.xl,
@@ -56,6 +69,7 @@ const useStyles = createStyles(theme => ({
 export const Details: FC = () => {
     const { classes } = useStyles();
     const { colorScheme } = useMantineColorScheme();
+    const { width } = useViewportSize();
     const { property, dispatch } = useContext(EditPropertyContext);
 
     const handleIconChange = ({ native }: { native: string }) => {
@@ -72,11 +86,15 @@ export const Details: FC = () => {
 
     return (
         <div className={classes.wrapper}>
-            <Title>Your property details</Title>
-            <Text color={"dimmed"}>This information will be used for our cleaners and yourself.</Text>
-            <div className={classes.container}>
-                <Grid w={"100%"} columns={11}>
-                    <Row req label={"Identifier"}>
+            <div className={`${classes.labels} ${width < 816 && classes.resLabel}`}>
+                <Title order={width > 815 ? 1 : 3}>Your property details</Title>
+                <Text size={width > 815 ? "md" : "sm"} color={"dimmed"}>
+                    This information will be used for our cleaners and yourself.
+                </Text>
+            </div>
+            <Grid mt={"md"} maw={768} columns={11}>
+                <Row w={width} req label={"Identifier"}>
+                    <Stack spacing={4}>
                         <HoverCard>
                             <HoverCard.Target>
                                 <Paper className={classes.icon}>
@@ -94,8 +112,10 @@ export const Details: FC = () => {
                                 />
                             </HoverCard.Dropdown>
                         </HoverCard>
-                    </Row>
-                    <Row req label={"Label"}>
+                    </Stack>
+                </Row>
+                <Row w={width} req label={"Label"}>
+                    <Stack spacing={4}>
                         <TextInput
                             size={"sm"}
                             variant={"default"}
@@ -103,8 +123,10 @@ export const Details: FC = () => {
                             onChange={handleLabelChange}
                             error={property?.label.length == 0 && "Property Label cannot be empty"}
                         />
-                    </Row>
-                    <Row label={"Description"}>
+                    </Stack>
+                </Row>
+                <Row w={width} label={"Description"}>
+                    <Stack spacing={4}>
                         <Textarea
                             autosize
                             minRows={2}
@@ -113,31 +135,44 @@ export const Details: FC = () => {
                             onChange={handleDescriptionChange}
                             value={property?.description ?? ""}
                         />
-                    </Row>
-                    <Row label={"Images"}>
+                    </Stack>
+                </Row>
+                <Row w={width} label={"Images"}>
+                    <Stack spacing={4}>
                         <ImagesPreview />
-                    </Row>
-                </Grid>
-            </div>
+                        <Text size={"sm"} color={"dimmed"}>
+                            This will help our cleaners easily identify your property.
+                        </Text>
+                    </Stack>
+                </Row>
+            </Grid>
         </div>
     );
 };
 
 type RowProps = {
+    w: number;
     label: string;
     req?: boolean;
     children: ReactNode | undefined;
 };
 
-const Row: FC<RowProps> = ({ label, req, children }) => {
+const Row: FC<RowProps> = ({ w, label, req, children }) => {
     return (
         <>
-            <Grid.Col span={3}>
+            <Grid.Col span={3} style={{ display: w > 815 ? "block" : "none" }}>
                 <Title order={6}>
                     {label} {req && <span style={{ color: "red" }}>*</span>}
                 </Title>
             </Grid.Col>
-            <Grid.Col span={8}>{children}</Grid.Col>
+            <Grid.Col span={w > 815 ? 8 : 11}>
+                <Stack spacing={4}>
+                    <Title order={6} style={{ display: w > 815 ? "none" : "block" }}>
+                        {label} {req && <span style={{ color: "red" }}>*</span>}
+                    </Title>
+                    {children}
+                </Stack>
+            </Grid.Col>
         </>
     );
 };

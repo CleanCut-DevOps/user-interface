@@ -14,7 +14,7 @@ import {
 } from "@mantine/core";
 import { ChangeEvent, FC, ReactNode, useContext } from "react";
 import { EditPropertyContext } from "../components";
-import { ImagePreview } from "./ImagesPreview";
+import { ImagesPreview } from "./ImagesPreview";
 
 const useStyles = createStyles(theme => ({
     wrapper: {
@@ -115,7 +115,7 @@ export const Details: FC = () => {
                         />
                     </Row>
                     <Row label={"Images"}>
-                        <ImagePreview />
+                        <ImagesPreview />
                     </Row>
                 </Grid>
             </div>

@@ -19,6 +19,8 @@ type ReducerAction =
     | { type: "toggleSave" }
     | { type: "load"; payload: Property }
     | { type: "setStep"; payload: number }
+    | { type: "addImage"; payload: string }
+    | { type: "removeImage"; payload: string }
     | { type: "brief"; payload: { label?: string; icon?: string } }
     | { type: "details"; payload: { icon?: string; label?: string; images?: string[]; description?: string | null } }
     | {
@@ -73,6 +75,26 @@ const reducer = (state: ReducerState, action: ReducerAction): ReducerState => {
                 ...state,
                 loading: false,
                 property: loadPayload
+            };
+
+        case "addImage":
+            const imagesPayload = action.payload;
+
+            return {
+                ...state,
+                property: state.property
+                    ? { ...state.property, images: [...state.property.images, imagesPayload] }
+                    : null
+            };
+
+        case "removeImage":
+            const imageURL = action.payload;
+
+            return {
+                ...state,
+                property: state.property
+                    ? { ...state.property, images: state.property.images.filter(url => url != imageURL) }
+                    : null
             };
 
         case "brief":

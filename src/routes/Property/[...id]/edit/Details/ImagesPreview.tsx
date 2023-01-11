@@ -216,7 +216,7 @@ export const ImagesPreview: FC = () => {
                                     inline
                                     size={"sm"}
                                     color={"dimmed"}
-                                    sx={{ [`@media (min-width: 815px)`]: { display: "none" } }}
+                                    sx={{ [`@media (max-width: 480px)`]: { display: "none" } }}
                                 >
                                     Attach as many files as you like, each file should not exceed 5mb
                                 </Text>

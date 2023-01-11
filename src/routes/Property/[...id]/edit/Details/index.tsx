@@ -29,17 +29,6 @@ const useStyles = createStyles(theme => ({
 
         [`@media (max-width: ${theme.breakpoints.xs}px)`]: { paddingInline: 4 }
     },
-    labels: {
-        gap: 4,
-        display: "flex",
-        alignItems: "center",
-        flexDirection: "column",
-
-        [`@media (max-width: 815px)`]: {
-            width: "100%",
-            alignItems: "flex-start"
-        }
-    },
     container: {
         padding: theme.spacing.xl,
         borderRadius: theme.radius.md,
@@ -63,6 +52,16 @@ const useStyles = createStyles(theme => ({
         marginTop: 12,
         marginLeft: 12,
         borderRadius: 10
+    },
+    labels: {
+        display: "flex",
+        gap: theme.spacing.xs,
+        flexDirection: "column",
+        marginBottom: 2 * theme.spacing.xs
+    },
+    step: {
+        fontSize: 16,
+        fontWeight: 500
     },
     title: {
         fontSize: 32,
@@ -97,13 +96,15 @@ export const Details: FC = () => {
 
     return (
         <div className={classes.wrapper}>
-            <div className={classes.labels}>
-                <Title className={classes.title}>Your property details</Title>
-                <Text className={classes.subtitle} color={"dimmed"}>
-                    This information will be used for our cleaners and yourself.
-                </Text>
-            </div>
             <Grid mt={"md"} maw={768} columns={11} grow>
+                <Grid.Col span={11} className={classes.labels}>
+                    <Title className={classes.step}>Step 1</Title>
+                    <Title className={classes.title}>Tell us about your place</Title>
+                    <Text maw={560} className={classes.subtitle} color={"dimmed"}>
+                        In this step, you'll select an identifier, create a label and description and add some photos of
+                        your property.
+                    </Text>
+                </Grid.Col>
                 <Row req label={"Identifier"}>
                     <Stack spacing={4}>
                         <HoverCard>

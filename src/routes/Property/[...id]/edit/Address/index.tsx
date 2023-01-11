@@ -23,15 +23,14 @@ const useStyles = createStyles(theme => ({
         padding: theme.spacing.xs
     },
     labels: {
-        gap: 4,
         display: "flex",
-        alignItems: "center",
+        gap: theme.spacing.xs,
         flexDirection: "column",
-
-        [`@media (max-width: 815px)`]: {
-            width: "100%",
-            alignItems: "flex-start"
-        }
+        marginBottom: 2 * theme.spacing.xs
+    },
+    step: {
+        fontSize: 16,
+        fontWeight: 500
     },
     title: {
         fontSize: 32,
@@ -53,13 +52,14 @@ export const Address: FC = () => {
 
     return (
         <div className={classes.wrapper}>
-            <div className={classes.labels}>
-                <Text className={classes.title}>Where your property is located</Text>
-                <Text className={classes.subtitle} color={"dimmed"}>
-                    This information will be used for our cleaners and yourself.
-                </Text>
-            </div>
             <Grid mt={"md"} maw={768} columns={11} grow>
+                <Grid.Col span={11} className={classes.labels}>
+                    <Title className={classes.step}>Step 2</Title>
+                    <Title className={classes.title}>Let us know the location</Title>
+                    <Text maw={560} className={classes.subtitle} color={"dimmed"}>
+                        In this step, you'll update the address of your property.
+                    </Text>
+                </Grid.Col>
                 <Row req label={"Line 1"}>
                     <TextInput
                         value={property?.address.line_1 ?? ""}

@@ -6,7 +6,6 @@ export type Property = {
     description: string | null;
     images: string[];
     address: Address;
-    type_id?: string | null;
     type: PropertyType | null;
     rooms: Room[];
     created_at: Date;

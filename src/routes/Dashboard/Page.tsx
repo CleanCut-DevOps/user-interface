@@ -1,27 +1,15 @@
-import { Propertylist } from "./components/StoreProperty"
-import storePropertys from "./property.json"
-import {Col, Row} from "react-bootstrap"
-import { createStyles, Paper } from "@mantine/core";
-import { Booking } from "./components/Form";
+import { Container } from "@mantine/core";
 import { FC } from "react";
-
-const useStyles = createStyles(() => ({
-  wrapper: {
-      height: "100vh",
-      padding: "1.5rem",
-      display: "flex",
-      gap: "1.5rem"
-  }
-}));
+import { AuthWrapper, DefaultLayout } from "../../components";
 
 export const Dashboard: FC = () => {
-  const { classes } = useStyles();
-  return (
-      <Paper className={classes.wrapper}>
-        <Propertylist />
-          <Booking />
-          
-          
-      </Paper>
-  );
+    return (
+        <AuthWrapper requireAuth>
+            <DefaultLayout>
+                <Container size={"xl"} mt={"xl"}>
+                    <div>Dashboard</div>
+                </Container>
+            </DefaultLayout>
+        </AuthWrapper>
+    );
 };

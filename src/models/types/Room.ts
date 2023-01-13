@@ -4,5 +4,6 @@ export type RoomType = {
     label: string;
     price: number;
     available: boolean;
+    created_at: Date;
     updated_at: Date;
 };

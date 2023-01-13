@@ -1,15 +1,20 @@
 import { Accordion, createStyles, ScrollArea, Stepper, Text } from "@mantine/core";
 import { FC, useContext, useEffect, useState } from "react";
-import { TbBed, TbBuilding, TbListDetails, TbMapPin } from "react-icons/tb";
+import { TbBuilding, TbListDetails, TbMapPin } from "react-icons/tb";
 import { Property } from "../../../../../models";
 import { EditPropertyContext } from "./Provider";
 
 const useStyles = createStyles(theme => ({
     wrapper: {
+        maxWidth: 400,
         height: "100%",
         overflow: "hidden",
         transition: "0.4s ease",
-        padding: theme.spacing.xl
+        paddingInline: theme.spacing.xl,
+
+        [`@media (max-width: ${theme.breakpoints.lg}px)`]: {
+            display: "none"
+        }
     }
 }));
 
@@ -28,7 +33,7 @@ export const Sidebar: FC = () => {
 
     return (
         <ScrollArea className={classes.wrapper}>
-            <Accordion w={"100%"} value={value} radius={"md"} variant={"contained"} onChange={handleChange}>
+            <Accordion my={24} value={value} radius={"md"} variant={"contained"} onChange={handleChange}>
                 <Accordion.Item value={"0"}>
                     <Accordion.Control fz={"sm"} icon={<TbListDetails />}>
                         <Text fw={600}>Property Details</Text>
@@ -55,28 +60,20 @@ export const Sidebar: FC = () => {
                     <Accordion.Control fz={"sm"} icon={<TbBuilding />}>
                         <Text fw={600}>Type</Text>
                         <Text fw={400} fz={"xs"} color={"dimmed"}>
-                            What kind of building it is
+                            What kind of building it is and what type of rooms are in it and how many are there
                         </Text>
                     </Accordion.Control>
-                    <Accordion.Panel></Accordion.Panel>
-                </Accordion.Item>
-                <Accordion.Item value={"3"}>
-                    <Accordion.Control fz={"sm"} icon={<TbBed />}>
-                        <Text fw={600}>Rooms</Text>
-                        <Text fw={400} fz={"xs"} color={"dimmed"}>
-                            What type of rooms are in it and how many are there
-                        </Text>
-                    </Accordion.Control>
-                    <Accordion.Panel></Accordion.Panel>
-                </Accordion.Item>
-                <Accordion.Item value={"4"}>
-                    <Accordion.Control fz={"sm"} icon={<TbListDetails />}>
-                        <Text fw={600}>Additional Details</Text>
-                        <Text fw={400} fz={"xs"} color={"dimmed"}>
-                            Other additional information
-                        </Text>
-                    </Accordion.Control>
-                    <Accordion.Panel></Accordion.Panel>
+                    <Accordion.Panel>
+                        {property?.type ? (
+                            <Text fw={600}>{property?.type.label}</Text>
+                        ) : (
+                            <Text size={"xs"} color={"dimmed"}>
+                                No type selected
+                            </Text>
+                        )}
+
+                        {property?.type && property?.type.description}
+                    </Accordion.Panel>
                 </Accordion.Item>
             </Accordion>
         </ScrollArea>
@@ -88,9 +85,8 @@ const DetailStepper: FC<{ property: Property | null }> = ({ property }) => {
 
     useEffect(() => {
         if (property) {
-            if (property.icon && property.label && property.description && property.images.length > 0) {
-                setStep(4);
-            } else if (property.icon && property.label && property.description) setStep(3);
+            if (property.icon && property.label && property.description && property.images.length > 0) setStep(4);
+            else if (property.icon && property.label && property.description) setStep(3);
             else if (property.icon && property.label) setStep(2);
             else if (property.icon) setStep(1);
             else setStep(0);

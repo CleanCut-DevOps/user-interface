@@ -10,7 +10,9 @@ const useStyles = createStyles(theme => ({
         height: "100%",
         minWidth: "100vw",
         minHeight: "100vh",
-        gap: theme.spacing.md
+        gap: theme.spacing.md,
+
+        [`@media (max-width: ${theme.breakpoints.xs})`]: { paddingLeft: theme.spacing.xl }
     }
 }));
 
@@ -21,7 +23,9 @@ export const Loading: FC = () => {
         <Box className={classes.wrapper}>
             <Center className={classes.centered}>
                 <Loader color={"indigo"} variant={"bars"} />
-                <Text fw={200}>Hold on — getting this page ready for you</Text>
+                <Text inline fw={400} size={"sm"} color={"dimmed"}>
+                    Hold on — getting this page ready for you
+                </Text>
             </Center>
         </Box>
     );

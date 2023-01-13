@@ -6,7 +6,7 @@ export type PropertyType = {
     available: boolean;
     description: string;
     detailed_description: string;
-    rooms: RoomType[];
+    rooms?: RoomType[];
     created_at: Date;
     updated_at: Date;
 };

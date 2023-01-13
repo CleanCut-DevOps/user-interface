@@ -1,21 +1,23 @@
 import data from "@emoji-mart/data";
 import Picker from "@emoji-mart/react";
-import { createStyles, HoverCard, Paper, Text, TextInput, useMantineColorScheme } from "@mantine/core";
+import { ActionIcon, createStyles, HoverCard, Paper, Text, TextInput, useMantineColorScheme } from "@mantine/core";
 import { useDebouncedValue } from "@mantine/hooks";
 import { ChangeEvent, FC, useContext, useEffect, useState } from "react";
+import { TbChevronLeft, TbChevronRight } from "react-icons/tb";
 import { EditPropertyContext } from "./Provider";
 
 const useStyles = createStyles(theme => ({
     wrapper: {
         display: "flex",
-        gap: theme.spacing.xs,
+        gap: theme.spacing.md,
+        justifyContent: "space-between",
         padding: `${theme.spacing.xs}px ${theme.spacing.xs * 2}px`,
         borderBottom:
             theme.colorScheme === "dark" ? `1px solid ${theme.colors.dark[5]}` : `1px solid ${theme.colors.gray[2]}`
     },
     icon: {
-        width: 36,
-        height: 36,
+        minWidth: 36,
+        minHeight: 36,
         display: "flex",
         cursor: "pointer",
         userSelect: "none",
@@ -29,13 +31,18 @@ const useStyles = createStyles(theme => ({
         borderRadius: 10,
         marginLeft: 12,
         marginTop: 12
+    },
+    group: {
+        gap: theme.spacing.md,
+        display: "flex",
+        alignItems: "center"
     }
 }));
 
 export const Header: FC = () => {
     const { classes } = useStyles();
     const { colorScheme } = useMantineColorScheme();
-    const { property, dispatch } = useContext(EditPropertyContext);
+    const { property, step, dispatch } = useContext(EditPropertyContext);
 
     // Input states
     const [label, setLabel] = useState(property!.label);
@@ -78,32 +85,56 @@ export const Header: FC = () => {
         }
     }, [property]);
 
+    const handleClick = (type: "next" | "previous") => () => dispatch({ type });
+
     return (
         <div className={classes.wrapper}>
-            <HoverCard>
-                <HoverCard.Target>
-                    <Paper className={classes.icon}>
-                        <Text>{icon}</Text>
-                    </Paper>
-                </HoverCard.Target>
-                <HoverCard.Dropdown className={classes.dropdown}>
-                    <Picker
-                        data={data}
-                        emojiSize={20}
-                        theme={colorScheme}
-                        emojiButtonSize={32}
-                        previewPosition={"none"}
-                        onEmojiSelect={handleIconSelect}
-                    />
-                </HoverCard.Dropdown>
-            </HoverCard>
-            <TextInput
-                size={"sm"}
-                variant={"filled"}
-                value={label}
-                onChange={handleLabelChange}
-                error={label.length == 0 && "Property Label cannot be empty"}
-            />
+            <div className={classes.group}>
+                <HoverCard>
+                    <HoverCard.Target>
+                        <Paper className={classes.icon}>
+                            <Text>{icon}</Text>
+                        </Paper>
+                    </HoverCard.Target>
+                    <HoverCard.Dropdown className={classes.dropdown}>
+                        <Picker
+                            data={data}
+                            emojiSize={20}
+                            theme={colorScheme}
+                            emojiButtonSize={32}
+                            previewPosition={"none"}
+                            onEmojiSelect={handleIconSelect}
+                        />
+                    </HoverCard.Dropdown>
+                </HoverCard>
+                <TextInput
+                    size={"sm"}
+                    variant={"filled"}
+                    value={label}
+                    onChange={handleLabelChange}
+                    error={label.length == 0 && "Property Label cannot be empty"}
+                />
+            </div>
+            <div className={classes.group}>
+                <ActionIcon
+                    size={"lg"}
+                    color={"gray"}
+                    variant={"filled"}
+                    disabled={step < 1}
+                    onClick={handleClick("previous")}
+                >
+                    <TbChevronLeft />
+                </ActionIcon>
+                <ActionIcon
+                    size={"lg"}
+                    color={"gray"}
+                    variant={"filled"}
+                    disabled={step > 1}
+                    onClick={handleClick("next")}
+                >
+                    <TbChevronRight />
+                </ActionIcon>
+            </div>
         </div>
     );
 };

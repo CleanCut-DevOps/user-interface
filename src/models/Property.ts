@@ -57,7 +57,7 @@ export const convertResponseToProperty = (response: any): Property => ({
         city: response.address.city as string | null,
         state: response.address.state as string | null,
         zip: response.address.zip as string | null,
-        updated_at: new Date(response.address.updated_at)
+        updated_at: new Date(response.address.updated_at * 1000)
     },
     type: response.type
         ? {
@@ -66,8 +66,8 @@ export const convertResponseToProperty = (response: any): Property => ({
               available: response.type.available,
               description: response.type.description,
               detailed_description: response.type.detailed_description,
-              created_at: new Date(response.type.created_at),
-              updated_at: new Date(response.type.updated_at)
+              created_at: new Date(response.type.created_at * 1000),
+              updated_at: new Date(response.type.updated_at * 1000)
           }
         : null,
     rooms: response.rooms.map(
@@ -79,9 +79,9 @@ export const convertResponseToProperty = (response: any): Property => ({
                 available: r.type.available
             },
             quantity: r.quantity,
-            updated_at: new Date(r.updated_at)
+            updated_at: new Date(r.updated_at * 1000)
         })
     ),
-    created_at: new Date(response.created_at),
-    updated_at: new Date(response.updated_at)
+    created_at: new Date(response.created_at * 1000),
+    updated_at: new Date(response.updated_at * 1000)
 });

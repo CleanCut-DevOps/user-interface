@@ -181,12 +181,12 @@ const RoomQuantityEditor: FC<{
                         <UnstyledButton
                             key={i}
                             className={`${classes.numRooms} ${
-                                userRoomData?.quantity === i ? classes.chosen : undefined
+                                userRoomData?.quantity === i + 1 ? classes.chosen : undefined
                             }`}
-                            onClick={handleRoomChange(roomData.id, i)}
+                            onClick={handleRoomChange(roomData.id, i + 1)}
                         >
-                            {i} {roomData.label.toLocaleLowerCase()}
-                            {i > 1 ? "s" : ""}
+                            {i + 1} {roomData.label.toLocaleLowerCase()}
+                            {i + 1 > 1 ? "s" : ""}
                         </UnstyledButton>
                     ))}
                     <div className={classes.wrapper}>

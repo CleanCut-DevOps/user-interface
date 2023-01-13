@@ -225,31 +225,23 @@ export const ImagesPreview: FC = () => {
                     )}
                 </div>
                 <div className={classes.buttonContainer}>
-                    <Tooltip label={"Upload image"} position={"right"} color={"gray"} withArrow>
-                        <div>
-                            <FileButton multiple onChange={handleSaveFiles} accept="image/png,image/jpeg">
-                                {props => (
-                                    <ActionIcon size={"lg"} variant={"outline"} color={"green"} loading={uploading}>
-                                        <TbUpload {...props} />
-                                    </ActionIcon>
-                                )}
-                            </FileButton>
-                        </div>
-                    </Tooltip>
-                    <Tooltip label={"Remove image"} position={"right"} color={"gray"} withArrow>
-                        <div>
-                            <ActionIcon
-                                size={"lg"}
-                                color={"red"}
-                                loading={deleting}
-                                variant={"outline"}
-                                onClick={handleDeleteFile}
-                                disabled={images.length < 1}
-                            >
-                                <TbTrash />
+                    <FileButton multiple onChange={handleSaveFiles} accept="image/png,image/jpeg">
+                        {props => (
+                            <ActionIcon size={"lg"} variant={"outline"} color={"green"} loading={uploading}>
+                                <TbUpload {...props} />
                             </ActionIcon>
-                        </div>
-                    </Tooltip>
+                        )}
+                    </FileButton>
+                    <ActionIcon
+                        size={"lg"}
+                        color={"red"}
+                        loading={deleting}
+                        variant={"outline"}
+                        onClick={handleDeleteFile}
+                        disabled={images.length < 1}
+                    >
+                        <TbTrash />
+                    </ActionIcon>
                 </div>
             </div>
             <Dropzone.FullScreen

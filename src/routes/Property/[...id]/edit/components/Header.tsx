@@ -129,7 +129,7 @@ export const Header: FC = () => {
                     size={"lg"}
                     color={"gray"}
                     variant={"filled"}
-                    disabled={step > 2}
+                    disabled={step > 1}
                     onClick={handleClick("next")}
                 >
                     <TbChevronRight />

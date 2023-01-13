@@ -50,7 +50,7 @@ const useStyles = createStyles(theme => ({
         gap: theme.spacing.sm,
         padding: theme.spacing.sm,
         borderRadius: theme.radius.sm,
-        backgroundColor: theme.colorScheme == "dark" ? theme.colors.dark[6] : theme.colors.gray[0],
+        backgroundColor: theme.colorScheme == "dark" ? theme.colors.dark[6] : "white",
         border: `1px solid ${theme.colorScheme == "dark" ? theme.colors.dark[4] : theme.colors.gray[4]}`,
 
         [`@media (max-width: 815px)`]: {

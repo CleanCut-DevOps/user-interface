@@ -52,8 +52,8 @@ export const UserProvider: FC<PropsWithChildren> = ({ children }) => {
                         contact: account.contact,
                         avatar: account.avatar,
                         type: account.type,
-                        created_at: new Date(account.created_at),
-                        updated_at: new Date(account.updated_at)
+                        created_at: new Date(account.created_at * 1000),
+                        updated_at: new Date(account.updated_at * 1000)
                     });
 
                     setIsLoading(false);

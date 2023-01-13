@@ -33,8 +33,33 @@ type ReducerAction =
               zip?: string | null;
           };
       }
-    | { type: "type"; payload: string }
-    | { type: "rooms"; payload: { id?: string; quantity?: number }[] };
+    | {
+          type: "type";
+          payload: {
+              type: {
+                  id: string;
+                  label: string;
+                  description: string;
+                  detailed_description: string;
+                  available: boolean;
+                  created_at: Date;
+                  updated_at: Date;
+              };
+              rooms: {
+                  quantity: number;
+                  updated_at: Date;
+                  type: {
+                      id: string;
+                      type_id: string;
+                      label: string;
+                      price: number;
+                      available: boolean;
+                      created_at: Date;
+                      updated_at: Date;
+                  };
+              }[];
+          };
+      };
 
 type ReducerState = {
     step: number;
@@ -55,9 +80,11 @@ const reducer = (state: ReducerState, action: ReducerAction): ReducerState => {
 
     switch (type) {
         case "next":
+            if (state.step > 1) return state;
             return { ...state, step: state.step + 1 };
 
         case "previous":
+            if (state.step < 1) return state;
             return { ...state, step: state.step - 1 };
 
         case "setStep":
@@ -129,17 +156,13 @@ const reducer = (state: ReducerState, action: ReducerAction): ReducerState => {
         case "type":
             return {
                 ...state,
-                saving: true,
-                property: state.property ? { ...state.property, type_id: action.payload } : null
-            };
-
-        case "rooms":
-            const roomsPayload = action.payload;
-
-            return {
-                ...state,
-                saving: true,
-                property: state.property ? { ...state.property, ...roomsPayload } : null
+                property: state.property
+                    ? {
+                          ...state.property,
+                          type: { ...state.property.type, ...action.payload.type },
+                          rooms: { ...state.property.rooms, ...action.payload.rooms }
+                      }
+                    : null
             };
 
         default:
@@ -166,7 +189,7 @@ export const EditPropertyProvider: FC<ComponentProps> = ({ id, children }) => {
     const [, setLocation] = useLocation();
     const [state, dispatch] = useReducer(reducer, initState);
 
-    const [propertyDebounced] = useDebouncedValue(state.property, 1000);
+    const [propertyDebounced] = useDebouncedValue(state.property, 5000);
 
     useEffect(() => {
         if (cookies.AccessToken) {
@@ -183,18 +206,18 @@ export const EditPropertyProvider: FC<ComponentProps> = ({ id, children }) => {
                 })
                 .catch(({ response: { data } }) => {
                     showNotification({
+                        color: "red",
                         title: data.type,
-                        message: data.message,
-                        color: "red"
+                        message: data.message
                     });
 
                     setLocation("/");
                 });
         } else {
             showNotification({
+                color: "red",
                 title: "No Access Token",
-                message: "Please refresh the site and login to continue 🙂",
-                color: "red"
+                message: "Please refresh the site and login to continue 🙂"
             });
 
             setLocation("/");

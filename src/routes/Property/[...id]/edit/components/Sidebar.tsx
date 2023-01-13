@@ -1,11 +1,12 @@
 import { Accordion, createStyles, ScrollArea, Stepper, Text } from "@mantine/core";
 import { FC, useContext, useEffect, useState } from "react";
-import { TbBed, TbBuilding, TbListDetails, TbMapPin } from "react-icons/tb";
+import { TbBuilding, TbListDetails, TbMapPin } from "react-icons/tb";
 import { Property } from "../../../../../models";
 import { EditPropertyContext } from "./Provider";
 
 const useStyles = createStyles(theme => ({
     wrapper: {
+        maxWidth: 400,
         height: "100%",
         overflow: "hidden",
         transition: "0.4s ease",
@@ -59,19 +60,20 @@ export const Sidebar: FC = () => {
                     <Accordion.Control fz={"sm"} icon={<TbBuilding />}>
                         <Text fw={600}>Type</Text>
                         <Text fw={400} fz={"xs"} color={"dimmed"}>
-                            What kind of building it is
+                            What kind of building it is and what type of rooms are in it and how many are there
                         </Text>
                     </Accordion.Control>
-                    <Accordion.Panel></Accordion.Panel>
-                </Accordion.Item>
-                <Accordion.Item value={"3"}>
-                    <Accordion.Control fz={"sm"} icon={<TbBed />}>
-                        <Text fw={600}>Rooms</Text>
-                        <Text fw={400} fz={"xs"} color={"dimmed"}>
-                            What type of rooms are in it and how many are there
-                        </Text>
-                    </Accordion.Control>
-                    <Accordion.Panel></Accordion.Panel>
+                    <Accordion.Panel>
+                        {property?.type ? (
+                            <Text fw={600}>{property?.type.label}</Text>
+                        ) : (
+                            <Text size={"xs"} color={"dimmed"}>
+                                No type selected
+                            </Text>
+                        )}
+
+                        {property?.type && property?.type.description}
+                    </Accordion.Panel>
                 </Accordion.Item>
             </Accordion>
         </ScrollArea>

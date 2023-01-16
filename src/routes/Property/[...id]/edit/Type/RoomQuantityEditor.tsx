@@ -165,7 +165,8 @@ const RoomQuantityEditor: FC<{
                 <Group position={"apart"}>
                     <Title order={5}>{roomData.label}</Title>
                     <Text size={12} color={"dimmed"}>
-                        {userRoomData?.quantity ?? 0} rooms @ ${roomData.price.toFixed(2)}
+                        {userRoomData?.quantity ?? 0} room{(userRoomData?.quantity ?? 0) == 1 ? "" : "s"} @ $
+                        {roomData.price.toFixed(2)}
                         /room
                     </Text>
                 </Group>
@@ -186,7 +187,7 @@ const RoomQuantityEditor: FC<{
                             onClick={handleRoomChange(roomData.id, i + 1)}
                         >
                             {i + 1} {roomData.label.toLocaleLowerCase()}
-                            {i + 1 > 1 ? "s" : ""}
+                            {i + 1 != 1 ? "s" : ""}
                         </UnstyledButton>
                     ))}
                     <div className={classes.wrapper}>

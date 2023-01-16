@@ -2,7 +2,7 @@ import { createStyles, Group, Navbar, Stack, Text, ThemeIcon, UnstyledButton } f
 import { useHover } from "@mantine/hooks";
 import { FC } from "react";
 import { IconType } from "react-icons/lib";
-import { TbCalendarEvent, TbHome2, TbLayoutDashboard, TbSettings } from "react-icons/tb";
+import { TbCalendarEvent, TbCurrencyDollar, TbHome2, TbSettings } from "react-icons/tb";
 import { useLocation } from "wouter";
 
 type Link = {
@@ -22,9 +22,9 @@ const useStyles = createStyles(theme => ({
 }));
 
 const links: Link[] = [
-    { icon: TbLayoutDashboard, label: "Dashboard", href: "/" },
-    { icon: TbHome2, label: "Properties", href: "/properties" },
+    { icon: TbHome2, label: "Properties", href: "/" },
     { icon: TbCalendarEvent, label: "Bookings", href: "/bookings" },
+    { icon: TbCurrencyDollar, label: "Billing", href: "/billing" },
     { icon: TbSettings, label: "Settings", href: "/settings" }
 ];
 

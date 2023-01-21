@@ -1,6 +1,10 @@
 import { Button, ButtonProps } from "@mantine/core";
 import { FC, ComponentPropsWithoutRef } from "react";
 
+interface ComponentProps extends ButtonProps {
+    onClick: () => void;
+}
+
 export const GoogleIcon: FC<ComponentPropsWithoutRef<"svg">> = props => {
     return (
         <svg
@@ -31,6 +35,14 @@ export const GoogleIcon: FC<ComponentPropsWithoutRef<"svg">> = props => {
     );
 };
 
-export const GoogleButton: FC<ButtonProps> = props => {
-    return <Button leftIcon={<GoogleIcon />} variant="default" color="gray" {...props} />;
+export const GoogleButton: FC<ComponentProps> = props => {
+    return (
+        <Button
+            {...props}
+            color="gray"
+            variant="default"
+            leftIcon={<GoogleIcon />}
+            sx={theme => ({ color: theme.colorScheme == "dark" ? theme.colors.dark[0] : "black" })}
+        />
+    );
 };

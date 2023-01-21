@@ -5,7 +5,8 @@ import { FC, useState } from "react";
 import { useCookies } from "react-cookie";
 import { createRoot } from "react-dom/client";
 import { Route } from "wouter";
-import { Login, ProperyListing, Register } from "./routes";
+import { UserProvider } from "./components";
+import { Auth, ProperyListing } from "./routes";
 
 const Main: FC = () => {
     const [cookie, setCookie] = useCookies(["mantine-color-scheme"]);
@@ -22,9 +23,15 @@ const Main: FC = () => {
             <MantineProvider withGlobalStyles withNormalizeCSS theme={{ fontFamily: "Inter, sans-serif", colorScheme }}>
                 <NotificationsProvider>
                     <ModalsProvider>
-                        <Route path={"/"} component={ProperyListing} />
-                        <Route path={"/login"} component={Login} />
-                        <Route path={"/register"} component={Register} />
+                        <UserProvider>
+                            <Route path={"/"} component={ProperyListing} />
+                            <Route path={"/login"}>
+                                <Auth type={"login"} />
+                            </Route>
+                            <Route path={"/register"}>
+                                <Auth type={"register"} />
+                            </Route>
+                        </UserProvider>
                     </ModalsProvider>
                 </NotificationsProvider>
             </MantineProvider>

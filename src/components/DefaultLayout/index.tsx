@@ -17,7 +17,7 @@ export const DefaultLayout: FC<PropsWithChildren> = ({ children }) => {
 
     return (
         <AppShell layout={"alt"} padding={"md"} classNames={classes} navbar={<LayoutNavbar />}>
-            <Container size={"xl"} style={{ height: "100%" }}>
+            <Container mt={"xl"} size={"xl"} style={{ height: "100%" }}>
                 {children}
             </Container>
         </AppShell>

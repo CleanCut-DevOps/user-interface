@@ -189,7 +189,7 @@ export const EditPropertyProvider: FC<ComponentProps> = ({ id, children }) => {
     const [, setLocation] = useLocation();
     const [state, dispatch] = useReducer(reducer, initState);
 
-    const [propertyDebounced] = useDebouncedValue(state.property, 5000);
+    const [propertyDebounced] = useDebouncedValue(state.property, 3000);
 
     useEffect(() => {
         if (cookies.AccessToken) {

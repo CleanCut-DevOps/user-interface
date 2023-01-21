@@ -2,10 +2,8 @@ import { Carousel } from "@mantine/carousel";
 import { ActionIcon, Button, Card, Center, createStyles, Flex, SimpleGrid, Text } from "@mantine/core";
 import { FC, useContext } from "react";
 import { TbCalendarEvent, TbEye, TbPhoto } from "react-icons/tb";
-import { useLocation } from "wouter";
-import { Property } from "../../../../models";
+import { PropMenu } from "../Menu";
 import { PropertyCollectionContext } from "../Provider";
-import { CardMenu } from "./components/CardMenu";
 
 const useCarouselStyles = createStyles((theme, _, getRef) => ({
     container: {
@@ -27,7 +25,6 @@ const useCarouselStyles = createStyles((theme, _, getRef) => ({
         height: "100%",
         overflow: "hidden",
         borderRadius: theme.radius.sm,
-        outline: `1px solid ${theme.colors.gray[7]}`,
 
         "&:hover": { [`& .${getRef("controls")}`]: { opacity: 1 } }
     },
@@ -51,10 +48,6 @@ const useStyles = createStyles(theme => ({
         fontWeight: 600,
         fontSize: theme.fontSizes.md
     },
-    cardActionIcon: {
-        color: "white",
-        border: `1px solid ${theme.colors.gray[7]}`
-    },
     cardRoot: {
         transition: "transform 400ms ease",
 
@@ -65,7 +58,8 @@ const useStyles = createStyles(theme => ({
         height: "100%",
         overflow: "hidden",
         borderRadius: theme.radius.sm,
-        outline: `1px solid ${theme.colors.gray[7]}`
+        outline:
+            theme.colorScheme === "dark" ? `1px solid ${theme.colors.gray[7]}` : `1px solid ${theme.colors.gray[2]}`
     },
     image: {
         zIndex: 1,
@@ -82,6 +76,8 @@ export const GridProperties: FC = () => {
     const { classes: carouselClasses } = useCarouselStyles();
 
     if (isLoading) return <>Loading Grid view</>;
+
+    if (properties.length < 1) return <>No properties found</>;
 
     return (
         <SimpleGrid cols={4} px={"sm"}>
@@ -100,7 +96,7 @@ export const GridProperties: FC = () => {
                                             : "Address not given"}
                                     </Text>
                                 </div>
-                                <CardMenu prop={property} />
+                                <PropMenu prop={property} />
                             </Flex>
                         </Card.Section>
                         <Card.Section style={{ aspectRatio: "16/9" }}>

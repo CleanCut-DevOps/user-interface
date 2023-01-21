@@ -9,7 +9,6 @@ import {
     Stack,
     Title
 } from "@mantine/core";
-import axios from "axios";
 import { FC, useContext } from "react";
 import { TbCheck, TbFilter } from "react-icons/tb";
 import { AuthWrapper, DefaultLayout } from "../../components";
@@ -22,7 +21,7 @@ type Control = { label: string; value: "grid" | "list" };
 const useStyles = createStyles(theme => ({
     controlRoot: {
         borderRadius: theme.radius.sm,
-        backgroundColor: theme.colorScheme === "dark" ? theme.colors.dark[9] : theme.colors.gray[1]
+        backgroundColor: theme.colorScheme === "dark" ? theme.colors.dark[9] : theme.colors.gray[2]
     },
     controlControls: {
         backgroundColor: theme.colorScheme === "dark" ? theme.colors.dark[6] : "white"
@@ -32,6 +31,7 @@ const useStyles = createStyles(theme => ({
         color: theme.colorScheme === "dark" ? "white" : "black",
         borderRadius: theme.radius.sm,
         backgroundColor: theme.colorScheme === "dark" ? theme.colors.dark[6] : "white",
+        boxShadow: theme.shadows.xs,
 
         "&:hover": {
             backgroundColor: theme.colorScheme === "dark" ? theme.colors.dark[7] : theme.colors.gray[2]
@@ -79,7 +79,7 @@ export const PropertyListing: FC = () => {
 };
 
 const CollectionViewport: FC = () => {
-    const { view, properties, isLoading } = useContext(PropertyCollectionContext);
+    const { view } = useContext(PropertyCollectionContext);
 
     return (
         <ScrollArea style={{ flex: 1 }} scrollbarSize={6}>
@@ -131,6 +131,7 @@ const CollectionFilter: FC = () => {
                 </Menu.Dropdown>
             </Menu>
             <SegmentedControl
+                size={"sm"}
                 data={controls}
                 value={view}
                 onChange={value => dispatch({ type: "view", payload: value })}

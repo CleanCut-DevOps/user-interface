@@ -1,29 +1,31 @@
 import { ActionIcon, Alert, Button, createStyles, Input, Menu, Modal, Text } from "@mantine/core";
 import { useDebouncedValue, useDisclosure } from "@mantine/hooks";
 import axios from "axios";
-import { ChangeEvent, FC, useState, useContext } from "react";
+import { ChangeEvent, FC, useContext, useState } from "react";
 import { useCookies } from "react-cookie";
 import { TbAlertCircle, TbDots, TbEdit, TbEye, TbTrash } from "react-icons/tb";
 import { useLocation } from "wouter";
-import { Property } from "../../../../../models";
-import { PropertyCollectionContext } from "../../Provider";
+import { Property } from "../../../models";
+import { PropertyCollectionContext } from "./Provider";
 
 type ComponentProps = {
     prop: Property;
 };
 
 const useStyles = createStyles(theme => ({
-    cardActionIcon: {}
+    cardActionIcon: {
+        border: theme.colorScheme === "dark" ? `1px solid ${theme.colors.dark[4]}` : `1px solid ${theme.colors.gray[4]}`
+    }
 }));
 
-export const CardMenu: FC<ComponentProps> = ({ prop }) => {
+export const PropMenu: FC<ComponentProps> = ({ prop }) => {
     const { classes } = useStyles();
     const [, setLocation] = useLocation();
     const [cookies] = useCookies(["AccessToken"]);
     const [confirm, setConfirm] = useState("");
     const [deleting, setDeleting] = useState(false);
     const [confirmDebounced] = useDebouncedValue(confirm, 500);
-    const [opened, { open, close, toggle }] = useDisclosure(false);
+    const [opened, { open, close }] = useDisclosure(false);
     const { refetch } = useContext(PropertyCollectionContext);
 
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => setConfirm(e.target.value);
@@ -51,7 +53,7 @@ export const CardMenu: FC<ComponentProps> = ({ prop }) => {
 
     return (
         <>
-            <Menu position={"bottom-end"} width={200}>
+            <Menu shadow="sm" position={"bottom-end"} width={200}>
                 <Menu.Target>
                     <ActionIcon variant={"outline"} className={classes.cardActionIcon}>
                         <TbDots style={{ transform: "rotate(90deg)" }} />

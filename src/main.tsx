@@ -4,6 +4,8 @@ import { NotificationsProvider } from "@mantine/notifications";
 import { FC, useState } from "react";
 import { useCookies } from "react-cookie";
 import { createRoot } from "react-dom/client";
+import { Route } from "wouter";
+import { Login, ProperyListing, Register } from "./routes";
 
 const Main: FC = () => {
     const [cookie, setCookie] = useCookies(["mantine-color-scheme"]);
@@ -20,7 +22,9 @@ const Main: FC = () => {
             <MantineProvider withGlobalStyles withNormalizeCSS theme={{ fontFamily: "Inter, sans-serif", colorScheme }}>
                 <NotificationsProvider>
                     <ModalsProvider>
-                        <>App</>
+                        <Route path={"/"} component={ProperyListing} />
+                        <Route path={"/login"} component={Login} />
+                        <Route path={"/register"} component={Register} />
                     </ModalsProvider>
                 </NotificationsProvider>
             </MantineProvider>

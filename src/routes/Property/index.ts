@@ -1,0 +1,1 @@
+export { ProperyListing } from "./Page";

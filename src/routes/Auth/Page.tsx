@@ -114,7 +114,7 @@ export const Auth: FC<ComponentProps> = ({ type }) => {
         let fData = { email, password, stay };
 
         await axios
-            .post(`${import.meta.env.VITE_ACCOUNT_API}/api/login`, fData)
+            .post(`${import.meta.env.VITE_ACCOUNT_API}/login`, fData)
             .then(({ data }) => {
                 setCookie("AccessToken", data.token, { secure: true, sameSite: "strict" });
 

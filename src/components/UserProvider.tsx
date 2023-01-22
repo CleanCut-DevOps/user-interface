@@ -29,11 +29,12 @@ export const UserProvider: FC<PropsWithChildren> = ({ children }) => {
     useEffect(() => {
         if (cookies.AccessToken) {
             axios
-                .get(`${import.meta.env.VITE_ACCOUNT_API}/api/account`, {
+                .get(`${import.meta.env.VITE_ACCOUNT_API}/account`, {
                     headers: { Authorization: `Bearer ${cookies.AccessToken}` }
                 })
                 .then(({ data }) => {
                     const account = convertResponseToUser(data);
+
                     setUser(account);
 
                     setIsLoading(false);

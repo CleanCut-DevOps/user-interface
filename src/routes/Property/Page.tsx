@@ -1,10 +1,10 @@
 import { FC } from "react";
-import { AuthWrapper, Loading } from "~/components";
+import { AuthWrapper, DashboardLayout } from "~/components";
 
 export const ProperyListing: FC = () => {
     return (
         <AuthWrapper requireAuth>
-            <>App</>
+            <DashboardLayout>App</DashboardLayout>
         </AuthWrapper>
     );
 };

@@ -1,4 +1,4 @@
-import { ActionIcon, createStyles, Group, Navbar, Skeleton, Stack, Text, Tooltip } from "@mantine/core";
+import { ActionIcon, createStyles, Group, Navbar, ScrollArea, Skeleton, Stack, Text, Tooltip } from "@mantine/core";
 import { useToggle } from "@mantine/hooks";
 import { showNotification } from "@mantine/notifications";
 import axios from "axios";
@@ -23,7 +23,7 @@ const useStyles = createStyles(theme => ({
     link: {
         cursor: "pointer",
         userSelect: "none",
-        transition: "0.2s ease",
+        transition: "background-color 0.2s ease",
         borderRadius: theme.radius.md,
         padding: `${theme.spacing.xs - 4}px ${theme.spacing.sm}px`,
 
@@ -101,17 +101,19 @@ export const NavPropertyList: FC = () => {
                     </Stack>
                 )}
                 {isError && <Text>Error loading in your properties. Reload the site or come back in a while</Text>}
-                {data && (
-                    <Stack spacing={8}>
-                        {properties.map((property: Property) => (
-                            <Link key={property.id} href={`/property/${property.id}`}>
-                                <Group className={classes.link}>
-                                    <Text size={12}>{property.icon}</Text>
-                                    <Text size={12}>{property.label}</Text>
-                                </Group>
-                            </Link>
-                        ))}
-                    </Stack>
+                {!isLoading && !isError && data && (
+                    <ScrollArea scrollbarSize={6}>
+                        <Stack spacing={8}>
+                            {properties.map((property: Property) => (
+                                <Link key={property.id} href={`/property/${property.id}`}>
+                                    <Group className={classes.link}>
+                                        <Text size={12}>{property.icon}</Text>
+                                        <Text size={12}>{property.label}</Text>
+                                    </Group>
+                                </Link>
+                            ))}
+                        </Stack>
+                    </ScrollArea>
                 )}
             </Navbar.Section>
         </>

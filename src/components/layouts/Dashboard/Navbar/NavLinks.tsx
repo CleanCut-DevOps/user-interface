@@ -1,5 +1,6 @@
 import { createStyles, Group, Navbar, Stack, Text, ThemeIcon, UnstyledButton } from "@mantine/core";
 import { useHover } from "@mantine/hooks";
+
 import { FC } from "react";
 import { IconType } from "react-icons/lib";
 import { TbCalendarEvent, TbCurrencyDollar, TbHome2, TbSettings } from "react-icons/tb";

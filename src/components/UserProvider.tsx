@@ -1,9 +1,10 @@
 import { showNotification } from "@mantine/notifications";
+
 import axios from "axios";
 import { createContext, Dispatch, FC, PropsWithChildren, SetStateAction, useEffect, useState } from "react";
 import { useCookies } from "react-cookie";
-import { User } from "~/models";
-import { convertResponseToUser } from "../models/User";
+
+import { convertResponseToUser, User } from "~/models";
 
 type Unauthorized = { type: string; message: string };
 

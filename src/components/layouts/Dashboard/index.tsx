@@ -13,10 +13,12 @@ import {
     UnstyledButton,
     useMantineColorScheme
 } from "@mantine/core";
+
 import { FC, PropsWithChildren, useState } from "react";
 import { MdOutlineCleaningServices } from "react-icons/md";
 import { TbMoonStars, TbSun } from "react-icons/tb";
 import { useLocation } from "wouter";
+
 import { DashboardNavbar } from "./Navbar";
 
 const useStyles = createStyles(theme => ({

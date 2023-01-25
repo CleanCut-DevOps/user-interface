@@ -8,10 +8,12 @@ import {
     UnstyledButton,
     useMantineColorScheme
 } from "@mantine/core";
+
 import { FC } from "react";
 import { MdOutlineCleaningServices } from "react-icons/md";
 import { TbMoonStars, TbSun } from "react-icons/tb";
 import { useLocation } from "wouter";
+
 import { NavLinks } from "./NavLinks";
 import { NavPropertyList } from "./NavPropertyList";
 

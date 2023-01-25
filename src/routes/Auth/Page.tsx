@@ -1,11 +1,14 @@
 import { Anchor, Button, Center, createStyles, Divider, Paper, Stack, Text } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { showNotification } from "@mantine/notifications";
+
 import axios from "axios";
 import { FC, useState } from "react";
 import { useCookies } from "react-cookie";
 import { useLocation } from "wouter";
+
 import { AuthWrapper, GoogleButton } from "~/components";
+
 import { LoginFields, RegisterFields } from "./components/Fields";
 
 interface ComponentProps {

@@ -1,11 +1,13 @@
 import { ActionIcon, createStyles, Group, Navbar, ScrollArea, Skeleton, Stack, Text, Tooltip } from "@mantine/core";
 import { useToggle } from "@mantine/hooks";
 import { showNotification } from "@mantine/notifications";
+
 import axios from "axios";
 import { FC, useEffect, useState } from "react";
 import { useCookies } from "react-cookie";
 import { TbPlus } from "react-icons/tb";
 import { Link, useLocation } from "wouter";
+
 import { useProperties } from "~/hooks";
 import { convertResponseToProperty, Property } from "~/models";
 

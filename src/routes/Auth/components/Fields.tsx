@@ -1,4 +1,5 @@
 import { Box, Center, Checkbox, Group, PasswordInput, Progress, Text, TextInput } from "@mantine/core";
+
 import { FC } from "react";
 import { TbCheck, TbX } from "react-icons/tb";
 

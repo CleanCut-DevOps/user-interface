@@ -1,5 +1,6 @@
 import { FC, PropsWithChildren, useContext, useEffect } from "react";
 import { useLocation } from "wouter";
+
 import { Loading } from "./Loading";
 import { UserContext } from "./UserProvider";
 

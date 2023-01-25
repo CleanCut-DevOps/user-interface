@@ -1,10 +1,12 @@
 import { ColorScheme, ColorSchemeProvider, MantineProvider } from "@mantine/core";
 import { ModalsProvider } from "@mantine/modals";
 import { NotificationsProvider } from "@mantine/notifications";
+
 import { FC, useState } from "react";
 import { useCookies } from "react-cookie";
 import { createRoot } from "react-dom/client";
 import { Route } from "wouter";
+
 import { UserProvider } from "./components";
 import { Auth, ProperyListing } from "./routes";
 

@@ -1,6 +1,5 @@
 import axios from "axios";
 import useSWR from "swr";
-import { convertResponseToProperty } from "~/models";
 
 export const fetcher = (url: string) => axios.get(url).then(({ data }) => data);
 
@@ -10,7 +9,8 @@ export const fetchWithToken = (url: string, token?: string) =>
 export const useProperties = (accessToken?: string) => {
     const { data, error, isLoading } = useSWR(
         [`${import.meta.env.VITE_PROPERTY_API}/property`, accessToken],
-        ([url, token]) => fetchWithToken(url, token)
+        ([url, token]) => fetchWithToken(url, token),
+        { refreshInterval: 16000 }
     );
 
     return {

@@ -1,5 +1,5 @@
 import { Button, ButtonProps } from "@mantine/core";
-import { FC, ComponentPropsWithoutRef } from "react";
+import { ComponentPropsWithoutRef, FC } from "react";
 
 interface ComponentProps extends ButtonProps {
     onClick: () => void;

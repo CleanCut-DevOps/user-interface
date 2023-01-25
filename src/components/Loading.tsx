@@ -1,4 +1,4 @@
-import { Center, createStyles, Loader, Stack, Text, Title } from "@mantine/core";
+import { Center, createStyles, Loader, Stack, Text } from "@mantine/core";
 import { FC } from "react";
 
 const useStyles = createStyles(theme => ({

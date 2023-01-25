@@ -8,6 +8,7 @@ import {
     Group,
     Header,
     MediaQuery,
+    ScrollArea,
     Text,
     ThemeIcon,
     UnstyledButton,
@@ -43,7 +44,7 @@ export const DashboardLayout: FC<PropsWithChildren> = ({ children }) => {
 
     return (
         <AppShell
-            padding="md"
+            padding={0}
             classNames={classes}
             navbarOffsetBreakpoint="sm"
             header={
@@ -81,8 +82,10 @@ export const DashboardLayout: FC<PropsWithChildren> = ({ children }) => {
             }
             navbar={<DashboardNavbar opened={opened} />}
         >
-            <Container mt={"xl"} size={"xl"} style={{ height: "100%" }}>
-                {children}
+            <Container px={0} h="100%" size="xl">
+                <ScrollArea h="100%" scrollbarSize={6}>
+                    {children}
+                </ScrollArea>
             </Container>
         </AppShell>
     );

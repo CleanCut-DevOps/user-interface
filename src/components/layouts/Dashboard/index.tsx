@@ -27,6 +27,9 @@ const useStyles = createStyles(theme => ({
         height: "100vh",
         overflow: "hidden"
     },
+    icon: {
+        color: theme.colorScheme === "dark" ? theme.colors.indigo[4] : theme.colors.indigo[9]
+    },
     header: {
         display: "block",
 
@@ -56,8 +59,8 @@ export const DashboardLayout: FC<PropsWithChildren> = ({ children }) => {
 
                         <UnstyledButton onClick={() => setLocation("/")}>
                             <Group spacing="xs">
-                                <ThemeIcon size="lg" radius="md" variant="default">
-                                    <MdOutlineCleaningServices />
+                                <ThemeIcon size="md" radius="md" variant="light" color="gray">
+                                    <MdOutlineCleaningServices size={12} className={classes.icon} />
                                 </ThemeIcon>
                                 <Text size={18} weight={600} lineClamp={1}>
                                     CleanCut

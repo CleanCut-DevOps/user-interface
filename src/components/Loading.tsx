@@ -4,12 +4,13 @@ import { FC } from "react";
 
 const useStyles = createStyles(theme => ({
     wrapper: {
-        width: "100vw",
-        height: "100vh"
+        flex: 1,
+        width: "100%",
+        height: "100%"
     },
     header: {
         padding: theme.spacing.sm,
-        border: `1px solid ${theme.colorScheme === "dark" ? theme.colors.dark[6] : theme.colors.gray[2]}`
+        borderBottom: `1px solid ${theme.colorScheme === "dark" ? theme.colors.dark[6] : theme.colors.gray[2]}`
     },
     content: {
         flex: 1,
@@ -18,15 +19,17 @@ const useStyles = createStyles(theme => ({
     }
 }));
 
-export const Loading: FC = () => {
+export const Loading: FC<{ withHeader?: boolean }> = ({ withHeader = true }) => {
     const { classes } = useStyles();
     return (
         <Stack className={classes.wrapper}>
-            <div className={classes.header}>
-                <Text size="lg" weight={600}>
-                    CleanCut
-                </Text>
-            </div>
+            {withHeader && (
+                <div className={classes.header}>
+                    <Text size="lg" weight={600}>
+                        CleanCut
+                    </Text>
+                </div>
+            )}
             <Center className={classes.content}>
                 <Loader variant="bars" color="indigo" size={32} />
                 <Text>Getting things ready for you</Text>

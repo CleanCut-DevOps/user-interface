@@ -1,2 +1,2 @@
 export { Auth } from "./Auth";
-export { EditProperty, ProperyListing } from "./Property";
+export { EditProperty, ProperyListing, ViewProperty } from "./Property";

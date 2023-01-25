@@ -1,2 +1,2 @@
 export { ProperyListing } from "./Page";
-export { EditProperty } from "./[...id]";
+export { EditProperty, ViewProperty } from "./[...id]";

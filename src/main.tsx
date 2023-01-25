@@ -8,7 +8,7 @@ import { createRoot } from "react-dom/client";
 import { Route } from "wouter";
 
 import { UserProvider } from "./components";
-import { Auth, EditProperty, ProperyListing } from "./routes";
+import { Auth, EditProperty, ProperyListing, ViewProperty } from "./routes";
 
 const Main: FC = () => {
     const [cookie, setCookie] = useCookies(["mantine-color-scheme"]);
@@ -22,7 +22,19 @@ const Main: FC = () => {
 
     return (
         <ColorSchemeProvider colorScheme={colorScheme} toggleColorScheme={toggleColorScheme}>
-            <MantineProvider withGlobalStyles withNormalizeCSS theme={{ fontFamily: "Inter, sans-serif", colorScheme }}>
+            <MantineProvider
+                withGlobalStyles
+                withNormalizeCSS
+                theme={{
+                    fontFamily: "Inter, sans-serif",
+                    colorScheme,
+                    globalStyles: () => ({
+                        html: { display: "flex", minHeight: "100%", flexDirection: "column" },
+                        body: { flex: 1, display: "flex", flexDirection: "column" },
+                        "#root": { flex: 1, display: "flex", flexDirection: "column" }
+                    })
+                }}
+            >
                 <NotificationsProvider>
                     <ModalsProvider>
                         <UserProvider>
@@ -33,6 +45,7 @@ const Main: FC = () => {
                             <Route path={"/register"}>
                                 <Auth type={"register"} />
                             </Route>
+                            <Route path="/property/:id" component={ViewProperty} />
                             <Route path="/property/:id/edit" component={EditProperty} />
                         </UserProvider>
                     </ModalsProvider>

@@ -79,11 +79,11 @@ export const Auth: FC<ComponentProps> = ({ type }) => {
         axios
             .post(`${import.meta.env.VITE_ACCOUNT_API}/register`, fData)
             .then(({ data }) => {
-                const token = data.token;
-
-                setCookie("AccessToken", token, { secure: true, sameSite: "strict", maxAge: 60 * 60 * 24 * 7 });
+                setCookie("AccessToken", data.token, { secure: true, sameSite: "strict", maxAge: 60 * 60 * 24 });
 
                 showNotification({ title: data.type, message: data.message, color: "green" });
+
+                setLocation("/");
             })
             .catch(({ response: { data } }) => {
                 const { type, message, errors } = data;
@@ -119,9 +119,15 @@ export const Auth: FC<ComponentProps> = ({ type }) => {
         await axios
             .post(`${import.meta.env.VITE_ACCOUNT_API}/login`, fData)
             .then(({ data }) => {
-                setCookie("AccessToken", data.token, { secure: true, sameSite: "strict" });
+                setCookie("AccessToken", data.token, {
+                    secure: true,
+                    sameSite: "strict",
+                    maxAge: stay ? 60 * 60 * 24 * 7 : 60 * 60 * 24
+                });
 
                 showNotification({ title: data.type, message: data.message, color: "green" });
+
+                setLocation("/");
             })
             .catch(() => {
                 loginForm.setErrors({ email: "Incorrect email or password" });

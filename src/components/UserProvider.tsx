@@ -34,7 +34,7 @@ export const UserProvider: FC<PropsWithChildren> = ({ children }) => {
                     headers: { Authorization: `Bearer ${cookies.AccessToken}` }
                 })
                 .then(({ data }) => {
-                    const account = convertResponseToUser(data);
+                    const account = convertResponseToUser(data.account);
 
                     setUser(account);
 

@@ -1,4 +1,2 @@
-export { Login } from "./Login";
-export { Register } from "./Register";
-export { Dashboard } from "./Dashboard";
-export { EditProperty, Property, PropertyListing } from "./Property";
+export { Auth } from "./Auth";
+export { EditProperty, PropertyCollection, ViewProperty } from "./Property";

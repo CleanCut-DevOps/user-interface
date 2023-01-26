@@ -1,5 +1,6 @@
 import { FC, PropsWithChildren, useContext, useEffect } from "react";
 import { useLocation } from "wouter";
+
 import { Loading } from "./Loading";
 import { UserContext } from "./UserProvider";
 
@@ -7,7 +8,7 @@ interface ComponentProps extends PropsWithChildren {
     requireAuth?: boolean;
 }
 
-export const AuthWrapper: FC<ComponentProps> = ({ requireAuth, children }) => {
+export const AuthWrapper: FC<ComponentProps> = ({ requireAuth = false, children }) => {
     const [, setLocation] = useLocation();
     const { user, isLoading } = useContext(UserContext);
 

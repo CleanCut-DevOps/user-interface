@@ -1,3 +1,2 @@
-export { EditProperty } from "./[...id]/edit/Page";
-export { Property } from "./[...id]/Page";
-export { PropertyListing } from "./Page";
+export { PropertyCollection } from "./Page";
+export { EditProperty, ViewProperty } from "./[...id]";

@@ -8,7 +8,7 @@ import { createRoot } from "react-dom/client";
 import { Route } from "wouter";
 
 import { UserProvider } from "./components";
-import { Auth, EditProperty, ProperyListing, ViewProperty } from "./routes";
+import { Auth, EditProperty, PropertyCollection, ViewProperty } from "./routes";
 
 const Main: FC = () => {
     const [cookie, setCookie] = useCookies(["mantine-color-scheme"]);
@@ -39,7 +39,7 @@ const Main: FC = () => {
                 <NotificationsProvider>
                     <ModalsProvider>
                         <UserProvider>
-                            <Route path={"/"} component={ProperyListing} />
+                            <Route path={"/"} component={PropertyCollection} />
                             <Route path={"/login"}>
                                 <Auth type={"login"} />
                             </Route>

@@ -1,8 +1,11 @@
 import data from "@emoji-mart/data";
 import Picker from "@emoji-mart/react";
 import { Button, createStyles, Header, HoverCard, Paper, Text, TextInput, useMantineColorScheme } from "@mantine/core";
+import { useDebouncedValue } from "@mantine/hooks";
 
-import { ChangeEvent, FC, useContext } from "react";
+import axios from "axios";
+import { ChangeEvent, FC, useContext, useEffect, useState } from "react";
+import { useCookies } from "react-cookie";
 import { TbChevronLeft, TbChevronRight } from "react-icons/tb";
 import { useLocation } from "wouter";
 
@@ -40,9 +43,8 @@ const useStyles = createStyles(theme => ({
     },
     dropdown: {
         padding: 0,
-        borderRadius: 10,
-        marginLeft: 12,
-        marginTop: 12
+        marginTop: 12,
+        borderRadius: 4
     },
     group: {
         gap: theme.spacing.md,
@@ -61,27 +63,65 @@ const useStyles = createStyles(theme => ({
 export const EditHeader: FC = () => {
     const { classes } = useStyles();
     const [, setLocation] = useLocation();
+    const [loaded, setLoaded] = useState(false);
+    const [cookies] = useCookies(["AccessToken"]);
     const { colorScheme } = useMantineColorScheme();
-    const { property, debounced, step, dispatch } = useContext(EditPropertyContext);
+    const { property, step, dispatch } = useContext(EditPropertyContext);
+
+    // input values
+    const [label, setLabel] = useState(property?.label ?? "");
+    const [icon, setIcon] = useState(property?.icon ?? "");
+
+    // debounced values
+    const [debouncedLabel, setDebouncedLabel] = useDebouncedValue(label, 500);
+    const [debouncedIcon, setDebouncedIcon] = useDebouncedValue(icon, 500);
+
+    useEffect(() => {
+        if (!loaded) setLoaded(true);
+    }, [loaded]);
+
+    useEffect(() => {
+        if (loaded) {
+            axios.put(
+                `${import.meta.env.VITE_PROPERTY_API}/property/${property?.id}`,
+                { icon: debouncedIcon },
+                { headers: { authorization: `Bearer ${cookies.AccessToken}` } }
+            );
+        }
+    }, [debouncedIcon]);
+
+    useEffect(() => {
+        if (loaded) {
+            axios.put(
+                `${import.meta.env.VITE_PROPERTY_API}/property/${property?.id}`,
+                { label: debouncedLabel },
+                { headers: { authorization: `Bearer ${cookies.AccessToken}` } }
+            );
+        }
+    }, [debouncedLabel]);
 
     const handleLabelChange = (event: ChangeEvent<HTMLInputElement>) => {
+        setLabel(event.target.value);
+
         dispatch({ type: "details", payload: { label: event.target.value } });
     };
 
     const handleIconChange = ({ native }: any) => {
+        setIcon(native);
+
         dispatch({ type: "details", payload: { icon: native } });
     };
 
     const handleClick = (type: "next" | "previous") => () => {
         if (type == "next" && step > 1) {
-            if (property == debounced) setLocation(`/property/${property?.id}`);
+            setLocation(`/property/${property?.id}`);
         } else dispatch({ type });
     };
 
     return (
         <Header height={{ base: 128, sm: 64 }} withBorder={false}>
             <div className={classes.section}>
-                <HoverCard>
+                <HoverCard position="bottom-start">
                     <HoverCard.Target>
                         <Paper className={classes.icon}>
                             <Text>{property?.icon}</Text>
@@ -137,14 +177,8 @@ export const EditHeader: FC = () => {
                     Previous
                 </Button>
                 <div style={{ flex: 1 }} />
-                <Button
-                    color="dark"
-                    variant="filled"
-                    onClick={handleClick("next")}
-                    rightIcon={<TbChevronRight />}
-                    loading={property != debounced}
-                >
-                    {step > 1 ? (property != debounced ? "Loading.." : "Done") : "Next"}
+                <Button color="dark" variant="filled" onClick={handleClick("next")} rightIcon={<TbChevronRight />}>
+                    {step > 1 ? "Finish" : "Next"}
                 </Button>
             </div>
         </Header>

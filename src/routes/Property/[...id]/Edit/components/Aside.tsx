@@ -1,7 +1,10 @@
-import { Accordion, Aside, createStyles, ScrollArea, Stepper, Text } from "@mantine/core";
+import { Accordion, Aside, createStyles, Divider, Group, ScrollArea, Stack, Stepper, Text } from "@mantine/core";
+
 import { FC, useContext, useEffect, useState } from "react";
 import { TbBuilding, TbListDetails, TbMapPin } from "react-icons/tb";
+
 import { Property } from "~/models";
+
 import { EditPropertyContext } from "../../components/PropertyProvider";
 
 const useStyles = createStyles(theme => ({
@@ -34,7 +37,7 @@ export const EditAside: FC = () => {
     return (
         <Aside p={0} hiddenBreakpoint="md" hidden width={{ base: 1, md: 400 }} withBorder={false}>
             <ScrollArea h="100%" scrollbarSize={6}>
-                <Accordion p="md" value={value} radius={"md"} variant={"contained"} onChange={handleChange}>
+                <Accordion p="md" value={step.toString()} radius="md" variant="contained" onChange={handleChange}>
                     <Accordion.Item value={"0"}>
                         <Accordion.Control fz={"sm"} icon={<TbListDetails />}>
                             <Text fw={600}>Property Details</Text>
@@ -58,22 +61,47 @@ export const EditAside: FC = () => {
                         </Accordion.Panel>
                     </Accordion.Item>
                     <Accordion.Item value={"2"}>
-                        <Accordion.Control fz={"sm"} icon={<TbBuilding />}>
-                            <Text fw={600}>Type</Text>
+                        <Accordion.Control fz="sm" icon={<TbBuilding />}>
+                            <Text fw={500}>Type</Text>
                             <Text fw={400} fz={"xs"} color={"dimmed"}>
                                 What kind of building it is and what type of rooms are in it and how many are there
                             </Text>
                         </Accordion.Control>
                         <Accordion.Panel>
                             {property?.type ? (
-                                <Text fw={600}>{property?.type.label}</Text>
+                                <Stack spacing="sm">
+                                    <Text mb="sm" size="md" fw={600}>
+                                        {property?.type.label}
+                                    </Text>
+                                    {property?.rooms.map((room, i) => (
+                                        <Group key={i} mt={2} position="apart">
+                                            <Text size="sm">
+                                                {room.quantity} {room.type.label.toLocaleLowerCase()}
+                                                {room.quantity != 1 ? "s" : ""}
+                                            </Text>
+                                            <Text size="xs" color="dimmed" fw={400}>
+                                                ${room.type.price.toFixed(2)} / unit
+                                            </Text>
+                                        </Group>
+                                    ))}
+                                    <Divider />
+                                    <Group position="apart">
+                                        <Text size="sm">Base Price</Text>
+                                        <Text fw={500}>
+                                            $
+                                            {property.rooms
+                                                .sort((a, b) => a.type.label.localeCompare(b.type.label))
+                                                .map(room => room.quantity * room.type.price)
+                                                .reduce((partialSum, a) => partialSum + a, 0)
+                                                .toFixed(2)}
+                                        </Text>
+                                    </Group>
+                                </Stack>
                             ) : (
                                 <Text size={"xs"} color={"dimmed"}>
                                     No type selected
                                 </Text>
                             )}
-
-                            {property?.type && property?.type.description}
                         </Accordion.Panel>
                     </Accordion.Item>
                 </Accordion>

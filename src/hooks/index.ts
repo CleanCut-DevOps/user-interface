@@ -19,3 +19,16 @@ export const useProperties = (accessToken?: string) => {
         isError: error
     };
 };
+
+export const useProperty = (id: string, accessToken?: string) => {
+    const { data, error, isLoading } = useSWR(
+        [`${import.meta.env.VITE_PROPERTY_API}/property/${id}`, accessToken],
+        ([url, token]) => fetchWithToken(url, token)
+    );
+
+    return {
+        data: data,
+        isLoading,
+        isError: error
+    };
+};

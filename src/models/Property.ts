@@ -31,7 +31,7 @@ type PropertyType = {
     updated_at: Date;
 };
 
-type Room = {
+export type Room = {
     type: RoomType;
     quantity: number;
     updated_at: Date;

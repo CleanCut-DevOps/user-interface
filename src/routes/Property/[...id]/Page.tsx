@@ -1,4 +1,5 @@
 import { FC } from "react";
+
 import { Loading } from "~/components";
 
 type ComponentProps = { params: { id: string } };

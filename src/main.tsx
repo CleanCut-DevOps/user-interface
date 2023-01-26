@@ -31,7 +31,8 @@ const Main: FC = () => {
                     globalStyles: () => ({
                         html: { display: "flex", minHeight: "100%", flexDirection: "column" },
                         body: { flex: 1, display: "flex", flexDirection: "column" },
-                        "#root": { flex: 1, display: "flex", flexDirection: "column" }
+                        "#root": { flex: 1, display: "flex", flexDirection: "column" },
+                        "em-emoji-picker": { "--border-radius": "4px" }
                     })
                 }}
             >

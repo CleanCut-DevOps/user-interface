@@ -148,8 +148,6 @@ export const EditPropertyProvider: FC<ComponentProps> = ({ id, children }) => {
         if (data) {
             const property = convertResponseToProperty(data.property);
 
-            console.log(property);
-
             dispatch({ type: "load", payload: property });
         }
     }, [data]);

@@ -1,15 +1,15 @@
 import { ActionIcon, Alert, Button, createStyles, Input, Menu, Modal, Text } from "@mantine/core";
 import { useDebouncedValue, useDisclosure } from "@mantine/hooks";
 import axios from "axios";
-import { ChangeEvent, FC, useContext, useState } from "react";
+import { ChangeEvent, Dispatch, FC, SetStateAction, useState } from "react";
 import { useCookies } from "react-cookie";
 import { TbAlertCircle, TbDots, TbEdit, TbEye, TbTrash } from "react-icons/tb";
 import { useLocation } from "wouter";
-import { Property } from "../../../models";
-import { PropertyCollectionContext } from "./Provider";
+import { Property } from "~/models";
 
 type ComponentProps = {
     prop: Property;
+    setProperties: Dispatch<SetStateAction<Property[]>>;
 };
 
 const useStyles = createStyles(theme => ({
@@ -18,7 +18,7 @@ const useStyles = createStyles(theme => ({
     }
 }));
 
-export const PropMenu: FC<ComponentProps> = ({ prop }) => {
+export const PropMenu: FC<ComponentProps> = ({ prop, setProperties }) => {
     const { classes } = useStyles();
     const [, setLocation] = useLocation();
     const [cookies] = useCookies(["AccessToken"]);
@@ -26,7 +26,6 @@ export const PropMenu: FC<ComponentProps> = ({ prop }) => {
     const [deleting, setDeleting] = useState(false);
     const [confirmDebounced] = useDebouncedValue(confirm, 500);
     const [opened, { open, close }] = useDisclosure(false);
-    const { refetch } = useContext(PropertyCollectionContext);
 
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => setConfirm(e.target.value);
 
@@ -47,7 +46,8 @@ export const PropMenu: FC<ComponentProps> = ({ prop }) => {
                 setConfirm("");
                 setDeleting(false);
                 close();
-                refetch();
+
+                setProperties(prev => prev.filter(p => p.id != prop.id));
             });
     };
 

@@ -1,21 +1,11 @@
 import { showNotification } from "@mantine/notifications";
+
 import axios from "axios";
 import { createContext, Dispatch, FC, PropsWithChildren, SetStateAction, useEffect, useState } from "react";
 import { useCookies } from "react-cookie";
-import { User } from "../models";
 
-type Account = {
-    account: {
-        id: string;
-        email: string;
-        username: string;
-        contact: string;
-        avatar: string;
-        type: "user" | "cleaner" | "admin";
-        created_at: number;
-        updated_at: number;
-    };
-};
+import { convertResponseToUser, User } from "~/models";
+
 type Unauthorized = { type: string; message: string };
 
 type SchrodingersUser = User | null;
@@ -35,26 +25,18 @@ export const UserContext = createContext<UserContextData>({
 export const UserProvider: FC<PropsWithChildren> = ({ children }) => {
     const [user, setUser] = useState<SchrodingersUser>(null);
     const [isLoading, setIsLoading] = useState<boolean>(true);
-    const [cookies, , removeCookie] = useCookies(["AccessToken", "mantine-color-scheme"]);
+    const [cookies, , removeCookie] = useCookies(["AccessToken"]);
 
     useEffect(() => {
         if (cookies.AccessToken) {
             axios
-                .get(`${import.meta.env.VITE_ACCOUNT_API}/api/account`, {
+                .get(`${import.meta.env.VITE_ACCOUNT_API}/account`, {
                     headers: { Authorization: `Bearer ${cookies.AccessToken}` }
                 })
                 .then(({ data }) => {
-                    const { account }: Account = data;
-                    setUser({
-                        id: account.id,
-                        email: account.email,
-                        username: account.username,
-                        contact: account.contact,
-                        avatar: account.avatar,
-                        type: account.type,
-                        created_at: new Date(account.created_at * 1000),
-                        updated_at: new Date(account.updated_at * 1000)
-                    });
+                    const account = convertResponseToUser(data.account);
+
+                    setUser(account);
 
                     setIsLoading(false);
                 })

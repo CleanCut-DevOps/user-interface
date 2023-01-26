@@ -1,32 +1,39 @@
-import { Box, Center, createStyles, Loader, Text } from "@mantine/core";
+import { Center, createStyles, Loader, Stack, Text } from "@mantine/core";
+
 import { FC } from "react";
 
 const useStyles = createStyles(theme => ({
     wrapper: {
-        backgroundColor: theme.colorScheme === "dark" ? theme.colors.dark[8] : theme.colors.gray[0]
-    },
-    centered: {
+        flex: 1,
         width: "100%",
+        height: "100%"
+    },
+    header: {
+        padding: theme.spacing.sm,
+        borderBottom: `1px solid ${theme.colorScheme === "dark" ? theme.colors.dark[6] : theme.colors.gray[2]}`
+    },
+    content: {
+        flex: 1,
         height: "100%",
-        minWidth: "100vw",
-        minHeight: "100vh",
-        gap: theme.spacing.md,
-
-        [`@media (max-width: ${theme.breakpoints.xs})`]: { paddingLeft: theme.spacing.xl }
+        gap: theme.spacing.md
     }
 }));
 
-export const Loading: FC = () => {
+export const Loading: FC<{ withHeader?: boolean }> = ({ withHeader = true }) => {
     const { classes } = useStyles();
-
     return (
-        <Box className={classes.wrapper}>
-            <Center className={classes.centered}>
-                <Loader color={"indigo"} variant={"bars"} />
-                <Text inline fw={400} size={"sm"} color={"dimmed"}>
-                    Hold on — getting this page ready for you
-                </Text>
+        <Stack className={classes.wrapper}>
+            {withHeader && (
+                <div className={classes.header}>
+                    <Text size="lg" weight={600}>
+                        CleanCut
+                    </Text>
+                </div>
+            )}
+            <Center className={classes.content}>
+                <Loader variant="bars" color="indigo" size={32} />
+                <Text>Getting things ready for you</Text>
             </Center>
-        </Box>
+        </Stack>
     );
 };

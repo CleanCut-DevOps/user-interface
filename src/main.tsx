@@ -1,35 +1,55 @@
-import { ColorSchemeProvider, MantineProvider } from "@mantine/core";
+import { ColorScheme, ColorSchemeProvider, MantineProvider } from "@mantine/core";
+import { ModalsProvider } from "@mantine/modals";
 import { NotificationsProvider } from "@mantine/notifications";
+
 import { FC, useState } from "react";
 import { useCookies } from "react-cookie";
 import { createRoot } from "react-dom/client";
-import { QueryClient, QueryClientProvider } from "react-query";
-import { UserProvider } from "./components";
-import { Router } from "./router";
+import { Route } from "wouter";
 
-type ColorScheme = "light" | "dark";
+import { UserProvider } from "./components";
+import { Auth, EditProperty, PropertyCollection, ViewProperty } from "./routes";
 
 const Main: FC = () => {
     const [cookie, setCookie] = useCookies(["mantine-color-scheme"]);
     const [colorScheme, setColorScheme] = useState<ColorScheme>(cookie["mantine-color-scheme"]);
 
     const toggleColorScheme = (value?: ColorScheme) => {
-        let newScheme = value || (colorScheme === "dark" ? "light" : "dark");
+        let newScheme = value ?? (colorScheme === "dark" ? "light" : "dark");
         setColorScheme(newScheme);
-        setCookie("mantine-color-scheme", newScheme, {
-            maxAge: 60 * 60 * 24 * 30
-        });
+        setCookie("mantine-color-scheme", newScheme, { maxAge: 60 * 60 * 24 * 30 });
     };
 
     return (
         <ColorSchemeProvider colorScheme={colorScheme} toggleColorScheme={toggleColorScheme}>
-            <MantineProvider withGlobalStyles withNormalizeCSS theme={{ fontFamily: "Inter, sans-serif", colorScheme }}>
+            <MantineProvider
+                withGlobalStyles
+                withNormalizeCSS
+                theme={{
+                    fontFamily: "Inter, sans-serif",
+                    colorScheme,
+                    globalStyles: () => ({
+                        html: { display: "flex", minHeight: "100%", flexDirection: "column" },
+                        body: { flex: 1, display: "flex", flexDirection: "column" },
+                        "#root": { flex: 1, display: "flex", flexDirection: "column" },
+                        "em-emoji-picker": { "--border-radius": "4px" }
+                    })
+                }}
+            >
                 <NotificationsProvider>
-                    <QueryClientProvider client={new QueryClient()}>
+                    <ModalsProvider>
                         <UserProvider>
-                            <Router />
+                            <Route path={"/"} component={PropertyCollection} />
+                            <Route path={"/login"}>
+                                <Auth type={"login"} />
+                            </Route>
+                            <Route path={"/register"}>
+                                <Auth type={"register"} />
+                            </Route>
+                            <Route path="/property/:id" component={ViewProperty} />
+                            <Route path="/property/:id/edit" component={EditProperty} />
                         </UserProvider>
-                    </QueryClientProvider>
+                    </ModalsProvider>
                 </NotificationsProvider>
             </MantineProvider>
         </ColorSchemeProvider>

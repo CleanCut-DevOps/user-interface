@@ -1,4 +1,5 @@
 export { AuthWrapper } from "./AuthWrapper";
-export { DefaultLayout } from "./DefaultLayout";
+export { DashboardLayout } from "./layouts";
 export { Loading } from "./Loading";
-export { UserProvider } from "./UserProvider";
+export { GoogleButton } from "./SocialButtons/Google";
+export { UserContext, UserProvider } from "./UserProvider";

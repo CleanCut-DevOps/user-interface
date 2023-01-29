@@ -1,8 +1,11 @@
 import { Carousel } from "@mantine/carousel";
 import { ActionIcon, Button, Card, Center, createStyles, Flex, SimpleGrid, Text } from "@mantine/core";
+
 import { Dispatch, FC, SetStateAction } from "react";
 import { TbCalendarEvent, TbEye, TbPhoto } from "react-icons/tb";
+
 import { Property } from "~/models";
+
 import { PropMenu } from "./Menu";
 
 interface ComponentProps {
@@ -80,7 +83,15 @@ export const GridView: FC<ComponentProps> = ({ properties, setProperties }) => {
     const { classes: carouselClasses } = useCarouselStyles();
 
     return (
-        <SimpleGrid cols={4} px={"sm"}>
+        <SimpleGrid
+            cols={1}
+            px={{ sm: "sm" }}
+            breakpoints={[
+                { minWidth: "xs", cols: 2 },
+                { minWidth: "md", cols: 3 },
+                { minWidth: 1200, cols: 4 }
+            ]}
+        >
             {properties.map((property, i) => {
                 return (
                     <Card key={i} shadow={"sm"} p={"sm"} radius={"md"} withBorder className={classes.cardRoot}>
@@ -116,10 +127,10 @@ export const GridView: FC<ComponentProps> = ({ properties, setProperties }) => {
                         </Card.Section>
                         <Card.Section p={"sm"}>
                             <Flex gap={"sm"}>
-                                <ActionIcon variant={"light"} size={36} color={"indigo"}>
+                                <ActionIcon variant="default" size={36}>
                                     <TbEye />
                                 </ActionIcon>
-                                <Button w={"100%"} color={"indigo"} variant={"light"} leftIcon={<TbCalendarEvent />}>
+                                <Button w="100%" variant="default" leftIcon={<TbCalendarEvent />}>
                                     Book now
                                 </Button>
                             </Flex>

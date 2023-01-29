@@ -33,7 +33,7 @@ const useStyles = createStyles(theme => ({
     header: {
         display: "block",
 
-        [`@media (width >= ${theme.breakpoints.sm - 1}px)`]: {
+        [`@media (min-width: ${theme.breakpoints.sm - 1}px)`]: {
             display: "none"
         }
     }

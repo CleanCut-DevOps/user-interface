@@ -24,7 +24,7 @@ const useStyles = createStyles(theme => ({
         gap: theme.spacing.sm,
         padding: theme.spacing.sm,
 
-        [`@media (width <= ${theme.breakpoints.sm}px)`]: {
+        [`@media (max-width: ${theme.breakpoints.sm}px)`]: {
             display: "none"
         }
     },

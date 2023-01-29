@@ -1,8 +1,11 @@
+import { ActionIcon, Anchor, createStyles, Flex, MediaQuery, Stack, Text, Tooltip } from "@mantine/core";
+
+import { Dispatch, FC, SetStateAction } from "react";
+import { TbCalendarPlus, TbEye } from "react-icons/tb";
+import { useLocation } from "wouter";
+
 import { Property } from "~/models";
 
-import { Anchor, createStyles, Flex, Stack, Text } from "@mantine/core";
-import { Dispatch, FC, SetStateAction } from "react";
-import { useLocation } from "wouter";
 import { PropMenu } from "./Menu";
 
 interface ComponentProps {
@@ -15,21 +18,22 @@ const useStyles = createStyles(theme => ({
         gap: 0,
         marginInline: theme.spacing.sm,
         borderRadius: theme.radius.md,
-        border: `1px solid ${theme.colorScheme === "dark" ? theme.colors.gray[7] : theme.colors.gray[4]}`
+        border: `1px solid ${theme.colorScheme === "dark" ? theme.colors.gray[7] : theme.colors.gray[4]}`,
+
+        [`@media (max-width: ${theme.breakpoints.xs}px)`]: {
+            marginInline: 0
+        }
     },
     tableRow: {
         alignItems: "center",
         gap: theme.spacing.md,
         padding: theme.spacing.md,
         transition: "0.3s ease",
+        userSelect: "none",
         backgroundColor: theme.colorScheme === "dark" ? theme.colors.dark[8] : "white",
 
         ":hover": {
             backgroundColor: theme.colorScheme === "dark" ? theme.colors.dark[7] : theme.colors.gray[1]
-        },
-
-        ":active": {
-            backgroundColor: theme.colorScheme === "dark" ? theme.colors.dark[6] : theme.colors.gray[2]
         },
 
         ":first-of-type": {
@@ -44,13 +48,27 @@ const useStyles = createStyles(theme => ({
 
         "&:not(:last-of-type)": {
             borderBottom: `1px solid ${theme.colorScheme === "dark" ? theme.colors.gray[9] : theme.colors.gray[2]}`
+        },
+
+        [`@media (max-width: ${theme.breakpoints.sm}px)`]: {
+            gap: theme.spacing.sm,
+            padding: theme.spacing.sm
         }
     },
     labelRow: {
         alignItems: "center",
         gap: theme.spacing.md,
-        paddingInline: theme.spacing.md,
-        marginInline: theme.spacing.sm
+        paddingInlineStart: theme.spacing.md,
+        paddingInlineEnd: theme.spacing.md + 28 * 3 + theme.spacing.md * 3,
+        marginInline: theme.spacing.sm,
+
+        [`@media (max-width: ${theme.breakpoints.xs}px)`]: {
+            marginInline: 0
+        },
+
+        [`@media (max-width: ${theme.breakpoints.sm}px)`]: {
+            gap: theme.spacing.sm
+        }
     }
 }));
 
@@ -63,43 +81,63 @@ export const ListView: FC<ComponentProps> = ({ properties, setProperties }) => {
     return (
         <>
             <Flex className={classes.labelRow}>
-                <Text size={"xs"} color={"dimmed"} lineClamp={1} style={{ width: "100%", maxWidth: 200 }}>
-                    Name
-                </Text>
-                <Text size={"xs"} color={"dimmed"} lineClamp={1} style={{ width: "100%", maxWidth: 280 }}>
-                    Address
-                </Text>
-                <Text style={{ flex: 1, minWidth: 200 }} size={"xs"} color={"dimmed"} lineClamp={1}>
-                    Description
-                </Text>
-                <Text size={"xs"} color={"dimmed"} lineClamp={1} style={{ width: "100%", maxWidth: 64 }}>
-                    Actions
-                </Text>
+                <MediaQuery largerThan="xs" styles={{ flex: 0, maxWidth: 200 }}>
+                    <Text size={"xs"} color={"dimmed"} lineClamp={1} style={{ flex: 1 }}>
+                        Name
+                    </Text>
+                </MediaQuery>
+                <MediaQuery smallerThan="xs" styles={{ display: "none" }}>
+                    <MediaQuery largerThan="lg" styles={{ flex: 0, maxWidth: 200 }}>
+                        <Text size={"xs"} color={"dimmed"} lineClamp={1} style={{ flex: 1 }}>
+                            Address
+                        </Text>
+                    </MediaQuery>
+                </MediaQuery>
+                <MediaQuery smallerThan="lg" styles={{ display: "none" }}>
+                    <Text style={{ flex: 1 }} size={"xs"} color={"dimmed"} lineClamp={1}>
+                        Description
+                    </Text>
+                </MediaQuery>
             </Flex>
             <Stack className={classes.table}>
                 {properties.map((property, i) => (
                     <Flex key={i} className={classes.tableRow}>
-                        <Anchor
-                            size={"sm"}
-                            weight={600}
-                            lineClamp={1}
-                            style={{ width: "100%", maxWidth: 200, color: "inherit" }}
-                            onClick={handleClick(property.id)}
-                        >
-                            {property.label}
-                        </Anchor>
-                        <Text size={"xs"} color={"dimmed"} lineClamp={1} style={{ width: "100%", maxWidth: 280 }}>
-                            {property.address.city && property.address.line_1
-                                ? `${property.address.city}, ${property.address.line_1}`
-                                : "Address not given"}
-                        </Text>
-                        <Text style={{ flex: 1, minWidth: 200 }} size={"xs"} color={"dimmed"} lineClamp={1}>
-                            {property.description}
-                        </Text>
-
-                        <div style={{ width: "100%", maxWidth: 64, zIndex: 2 }}>
-                            <PropMenu prop={property} setProperties={setProperties} />
-                        </div>
+                        <MediaQuery largerThan="xs" styles={{ flex: 0, maxWidth: 200 }}>
+                            <Anchor
+                                size={"sm"}
+                                weight={600}
+                                lineClamp={1}
+                                style={{ flex: 1, color: "inherit" }}
+                                onClick={handleClick(property.id)}
+                            >
+                                {property.label}
+                            </Anchor>
+                        </MediaQuery>
+                        <MediaQuery smallerThan="xs" styles={{ display: "none" }}>
+                            <MediaQuery largerThan="lg" styles={{ maxWidth: 200 }}>
+                                <Text size={"xs"} color={"dimmed"} lineClamp={1} style={{ flex: 1 }}>
+                                    {property.address.city && property.address.line_1
+                                        ? `${property.address.city}, ${property.address.line_1}`
+                                        : "Address not given"}
+                                </Text>
+                            </MediaQuery>
+                        </MediaQuery>
+                        <MediaQuery smallerThan="lg" styles={{ display: "none" }}>
+                            <Text style={{ flex: 1 }} size={"xs"} color={"dimmed"} lineClamp={1}>
+                                {property.description ?? "No description"}
+                            </Text>
+                        </MediaQuery>
+                        <Tooltip label="View bookings" position="bottom">
+                            <ActionIcon variant={"default"}>
+                                <TbEye />
+                            </ActionIcon>
+                        </Tooltip>
+                        <Tooltip label="Book now!" position="bottom">
+                            <ActionIcon variant={"default"}>
+                                <TbCalendarPlus />
+                            </ActionIcon>
+                        </Tooltip>
+                        <PropMenu prop={property} setProperties={setProperties} />
                     </Flex>
                 ))}
             </Stack>

@@ -3,6 +3,7 @@ import { ActionIcon, Button, Card, Center, createStyles, Flex, SimpleGrid, Text 
 
 import { Dispatch, FC, SetStateAction } from "react";
 import { TbCalendarEvent, TbEye, TbPhoto } from "react-icons/tb";
+import { useLocation } from "wouter";
 
 import { Property } from "~/models";
 
@@ -82,6 +83,7 @@ const useStyles = createStyles(theme => ({
 
 export const GridView: FC<ComponentProps> = ({ properties, setProperties }) => {
     const { classes } = useStyles();
+    const [, setLocation] = useLocation();
     const { classes: carouselClasses } = useCarouselStyles();
 
     return (
@@ -129,7 +131,11 @@ export const GridView: FC<ComponentProps> = ({ properties, setProperties }) => {
                         </Card.Section>
                         <Card.Section p="sm">
                             <Flex gap="sm">
-                                <ActionIcon variant="default" size={36}>
+                                <ActionIcon
+                                    variant="default"
+                                    size={36}
+                                    onClick={() => setLocation(`/bookings?property=${property.id}`)}
+                                >
                                     <TbEye />
                                 </ActionIcon>
                                 <Button w="100%" variant="default" leftIcon={<TbCalendarEvent />}>

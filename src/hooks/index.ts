@@ -10,7 +10,7 @@ export const useProperties = (accessToken?: string) => {
     const { data, error, isLoading } = useSWR(
         [`${import.meta.env.VITE_PROPERTY_API}/property`, accessToken],
         ([url, token]) => fetchWithToken(url, token),
-        { refreshInterval: 16000 }
+        { refreshInterval: 2000 }
     );
 
     return {

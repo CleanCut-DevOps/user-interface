@@ -125,7 +125,10 @@ export const ListView: FC<ComponentProps> = ({ properties, setProperties }) => {
                             </Text>
                         </MediaQuery>
                         <Tooltip label="View bookings" position="bottom">
-                            <ActionIcon variant={"default"}>
+                            <ActionIcon
+                                variant={"default"}
+                                onClick={() => setLocation(`/bookings?property=${property.id}`)}
+                            >
                                 <TbEye />
                             </ActionIcon>
                         </Tooltip>

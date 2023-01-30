@@ -113,10 +113,7 @@ export const PropertyCollection: FC = () => {
         setCookie(
             "PropertyCollectionConfig",
             JSON.stringify({ ...cookie.PropertyCollectionConfig, viewType: newValue }),
-            {
-                secure: true,
-                sameSite: "strict"
-            }
+            { secure: true, sameSite: "strict" }
         );
 
         setViewType(newValue);

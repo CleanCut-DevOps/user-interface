@@ -48,7 +48,7 @@ export const PropMenu: FC<ComponentProps> = ({ prop, setProperties }) => {
 
     return (
         <>
-            <Menu shadow="sm" position={"bottom-end"} width={200}>
+            <Menu shadow="xs" position={"bottom-end"} width={200}>
                 <Menu.Target>
                     <ActionIcon variant={"default"}>
                         <TbDots style={{ transform: "rotate(90deg)" }} />

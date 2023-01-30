@@ -58,6 +58,8 @@ const useStyles = createStyles(theme => ({
     },
     cardRoot: {
         transition: "transform 400ms ease",
+        backgroundColor: theme.colorScheme === "dark" ? theme.colors.dark[7] : theme.white,
+        borderColor: theme.colorScheme === "dark" ? theme.colors.gray[8] : theme.colors.gray[3],
 
         "&:hover": { transform: "translateY(4px)" }
     },
@@ -87,21 +89,21 @@ export const GridView: FC<ComponentProps> = ({ properties, setProperties }) => {
             cols={1}
             px={{ sm: "sm" }}
             breakpoints={[
-                { minWidth: "xs", cols: 2 },
+                { minWidth: 425, cols: 2 },
                 { minWidth: "md", cols: 3 },
                 { minWidth: 1200, cols: 4 }
             ]}
         >
             {properties.map((property, i) => {
                 return (
-                    <Card key={i} shadow={"sm"} p={"sm"} radius={"md"} withBorder className={classes.cardRoot}>
-                        <Card.Section p={"sm"}>
-                            <Flex align={"center"} gap={"sm"}>
+                    <Card key={i} shadow="xs" p="sm" radius="md" withBorder className={classes.cardRoot}>
+                        <Card.Section p="sm">
+                            <Flex align="center" gap="sm">
                                 <div style={{ flex: 1 }}>
                                     <Text lineClamp={1} className={classes.cardTitle}>
                                         {property.label}
                                     </Text>
-                                    <Text lineClamp={1} color={"dimmed"} size={"xs"}>
+                                    <Text lineClamp={1} color="dimmed" size="xs">
                                         {property.address.city && property.address.line_1
                                             ? `${property.address.city}, ${property.address.line_1}`
                                             : "Address not given"}
@@ -121,12 +123,12 @@ export const GridView: FC<ComponentProps> = ({ properties, setProperties }) => {
                                 </Carousel>
                             ) : (
                                 <Center className={classes.cardNoImage}>
-                                    <TbPhoto size={"25%"} />
+                                    <TbPhoto size="25%" />
                                 </Center>
                             )}
                         </Card.Section>
-                        <Card.Section p={"sm"}>
-                            <Flex gap={"sm"}>
+                        <Card.Section p="sm">
+                            <Flex gap="sm">
                                 <ActionIcon variant="default" size={36}>
                                     <TbEye />
                                 </ActionIcon>

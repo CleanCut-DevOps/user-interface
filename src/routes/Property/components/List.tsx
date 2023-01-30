@@ -16,9 +16,10 @@ interface ComponentProps {
 const useStyles = createStyles(theme => ({
     table: {
         gap: 0,
-        marginInline: theme.spacing.sm,
+        boxShadow: theme.shadows.xs,
         borderRadius: theme.radius.md,
-        border: `1px solid ${theme.colorScheme === "dark" ? theme.colors.gray[7] : theme.colors.gray[4]}`,
+        marginInline: theme.spacing.sm,
+        border: `1px solid ${theme.colorScheme === "dark" ? theme.colors.gray[8] : theme.colors.gray[3]}`,
 
         [`@media (max-width: ${theme.breakpoints.xs}px)`]: {
             marginInline: 0
@@ -30,11 +31,7 @@ const useStyles = createStyles(theme => ({
         padding: theme.spacing.md,
         transition: "0.3s ease",
         userSelect: "none",
-        backgroundColor: theme.colorScheme === "dark" ? theme.colors.dark[8] : "white",
-
-        ":hover": {
-            backgroundColor: theme.colorScheme === "dark" ? theme.colors.dark[7] : theme.colors.gray[1]
-        },
+        backgroundColor: theme.colorScheme === "dark" ? theme.colors.dark[7] : "white",
 
         ":first-of-type": {
             borderTopLeftRadius: theme.radius.md,

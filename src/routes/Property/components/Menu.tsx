@@ -1,25 +1,21 @@
-import { ActionIcon, Alert, Button, createStyles, Input, Menu, Modal, Text } from "@mantine/core";
+import { ActionIcon, Alert, Button, Input, Menu, Modal, Text } from "@mantine/core";
 import { useDebouncedValue, useDisclosure } from "@mantine/hooks";
+
 import axios from "axios";
 import { ChangeEvent, Dispatch, FC, SetStateAction, useState } from "react";
 import { useCookies } from "react-cookie";
 import { TbAlertCircle, TbDots, TbEdit, TbEye, TbTrash } from "react-icons/tb";
 import { useLocation } from "wouter";
+
 import { Property } from "~/models";
 
 type ComponentProps = {
     prop: Property;
+    position: "bottom-end" | "left-start";
     setProperties: Dispatch<SetStateAction<Property[]>>;
 };
 
-const useStyles = createStyles(theme => ({
-    cardActionIcon: {
-        border: theme.colorScheme === "dark" ? `1px solid ${theme.colors.dark[4]}` : `1px solid ${theme.colors.gray[4]}`
-    }
-}));
-
-export const PropMenu: FC<ComponentProps> = ({ prop, setProperties }) => {
-    const { classes } = useStyles();
+export const PropMenu: FC<ComponentProps> = ({ prop, setProperties, position }) => {
     const [, setLocation] = useLocation();
     const [cookies] = useCookies(["AccessToken"]);
     const [confirm, setConfirm] = useState("");
@@ -53,9 +49,9 @@ export const PropMenu: FC<ComponentProps> = ({ prop, setProperties }) => {
 
     return (
         <>
-            <Menu shadow="sm" position={"bottom-end"} width={200}>
+            <Menu shadow="xs" position={position} width={200}>
                 <Menu.Target>
-                    <ActionIcon variant={"outline"} className={classes.cardActionIcon}>
+                    <ActionIcon variant={"default"}>
                         <TbDots style={{ transform: "rotate(90deg)" }} />
                     </ActionIcon>
                 </Menu.Target>

@@ -45,7 +45,7 @@ const useStyles = createStyles(theme => ({
     icon: {
         color: theme.colorScheme === "dark" ? theme.colors.indigo[4] : theme.colors.indigo[9]
     },
-    toggleIcon: {
+    toggleIcon: {   
         color: theme.colorScheme === "dark" ? theme.colors.yellow[4] : theme.colors.blue[6]
     }
 }));

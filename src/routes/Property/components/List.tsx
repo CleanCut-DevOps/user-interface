@@ -134,7 +134,7 @@ export const ListView: FC<ComponentProps> = ({ properties, setProperties }) => {
                                 <TbCalendarPlus />
                             </ActionIcon>
                         </Tooltip>
-                        <PropMenu prop={property} setProperties={setProperties} />
+                        <PropMenu prop={property} setProperties={setProperties} position={"left-start"} />
                     </Flex>
                 ))}
             </Stack>

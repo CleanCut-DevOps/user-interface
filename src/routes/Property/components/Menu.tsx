@@ -11,10 +11,11 @@ import { Property } from "~/models";
 
 type ComponentProps = {
     prop: Property;
+    position: "bottom-end" | "left-start";
     setProperties: Dispatch<SetStateAction<Property[]>>;
 };
 
-export const PropMenu: FC<ComponentProps> = ({ prop, setProperties }) => {
+export const PropMenu: FC<ComponentProps> = ({ prop, setProperties, position }) => {
     const [, setLocation] = useLocation();
     const [cookies] = useCookies(["AccessToken"]);
     const [confirm, setConfirm] = useState("");
@@ -48,7 +49,7 @@ export const PropMenu: FC<ComponentProps> = ({ prop, setProperties }) => {
 
     return (
         <>
-            <Menu shadow="xs" position={"bottom-end"} width={200}>
+            <Menu shadow="xs" position={position} width={200}>
                 <Menu.Target>
                     <ActionIcon variant={"default"}>
                         <TbDots style={{ transform: "rotate(90deg)" }} />

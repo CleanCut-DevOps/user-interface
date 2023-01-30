@@ -109,7 +109,7 @@ export const GridView: FC<ComponentProps> = ({ properties, setProperties }) => {
                                             : "Address not given"}
                                     </Text>
                                 </div>
-                                <PropMenu prop={property} setProperties={setProperties} />
+                                <PropMenu prop={property} setProperties={setProperties} position={"bottom-end"} />
                             </Flex>
                         </Card.Section>
                         <Card.Section style={{ aspectRatio: "16/9" }}>

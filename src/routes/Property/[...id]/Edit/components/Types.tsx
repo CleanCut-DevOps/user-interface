@@ -370,13 +370,13 @@ const RoomQuantityEditor: FC<{ room: RoomType }> = ({ room }) => {
     };
 
     return (
-        <Paper p="sm" radius="sm" withBorder className={roomClasses.wrapper}>
+        <Paper py={4} px="sm" radius="sm" withBorder className={roomClasses.wrapper}>
             <Flex className={roomClasses.group}>
                 <Text size="sm" fw={500}>
                     {room.label}
                 </Text>
                 <Text size="sm" color="dimmed">
-                    {room.price.toFixed(2)}/unit
+                    ${room.price.toFixed(2)} / unit
                 </Text>
             </Flex>
             <Center>

@@ -1,5 +1,5 @@
 import { ActionIcon, createStyles, Group, Navbar, ScrollArea, Skeleton, Stack, Text, Tooltip } from "@mantine/core";
-import { useToggle } from "@mantine/hooks";
+import { useDisclosure } from "@mantine/hooks";
 import { showNotification } from "@mantine/notifications";
 
 import axios from "axios";
@@ -40,27 +40,25 @@ const useStyles = createStyles(theme => ({
 export const NavPropertyList: FC = () => {
     const [cookie] = useCookies(["AccessToken"]);
     const { classes } = useStyles();
-    const [value, toggle] = useToggle();
+    const [createLoading, { close, open, toggle }] = useDisclosure(false);
     const [, setLocation] = useLocation();
     const [properties, setProperties] = useState<Property[]>([]);
-    const { isError, isLoading, data } = useProperties(cookie.AccessToken);
+    const { data, isError, isLoading } = useProperties(cookie.AccessToken);
 
     useEffect(() => {
         if (data) {
-            const properties = data.properties.map((property: any) => {
-                return convertResponseToProperty(property);
-            });
+            const newProperties = data.properties.map((property: any) => convertResponseToProperty(property));
 
-            setProperties(properties);
+            setProperties(newProperties);
         }
     }, [data]);
 
     const handleClick = async () => {
-        toggle();
+        open();
 
         await axios
             .post(
-                `${import.meta.env.VITE_PROPERTY_API}/property`,
+                `${import.meta.env.VITE_PROPERTY_API}/`,
                 {},
                 { headers: { Authorization: `Bearer ${cookie.AccessToken}` } }
             )
@@ -68,7 +66,7 @@ export const NavPropertyList: FC = () => {
                 setLocation(`/property/${data.property.id}/edit`);
             })
             .catch(() => {
-                toggle();
+                close();
 
                 showNotification({
                     title: "🚩 Unsuccessful Request",
@@ -86,7 +84,7 @@ export const NavPropertyList: FC = () => {
                         Your properties
                     </Text>
                     <Tooltip fz={12} withArrow position="right" label="Create property">
-                        <ActionIcon size={18} loading={value} variant={"default"} onClick={handleClick}>
+                        <ActionIcon size={18} loading={createLoading} variant={"default"} onClick={handleClick}>
                             <TbPlus size={12} />
                         </ActionIcon>
                     </Tooltip>

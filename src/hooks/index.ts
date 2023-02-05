@@ -8,7 +8,7 @@ export const fetchWithToken = (url: string, token?: string) =>
 
 export const useProperties = (accessToken?: string) => {
     const { data, error, isLoading } = useSWR(
-        [`${import.meta.env.VITE_PROPERTY_API}/property`, accessToken],
+        [`${import.meta.env.VITE_PROPERTY_API}`, accessToken],
         ([url, token]) => fetchWithToken(url, token),
         { refreshInterval: 16000 }
     );
@@ -22,7 +22,20 @@ export const useProperties = (accessToken?: string) => {
 
 export const useProperty = (id: string, accessToken?: string) => {
     const { data, error, isLoading } = useSWR(
-        [`${import.meta.env.VITE_PROPERTY_API}/property/${id}`, accessToken],
+        [`${import.meta.env.VITE_PROPERTY_API}/${id}`, accessToken],
+        ([url, token]) => fetchWithToken(url, token)
+    );
+
+    return {
+        data: data,
+        isLoading,
+        isError: error
+    };
+};
+
+export const useUserData = (accessToken?: string) => {
+    const { data, error, isLoading } = useSWR(
+        [`${import.meta.env.VITE_ACCOUNT_API}/user`, accessToken],
         ([url, token]) => fetchWithToken(url, token)
     );
 

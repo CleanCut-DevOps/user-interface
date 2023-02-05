@@ -1,10 +1,13 @@
 import { Button, Center, Container, createStyles, Image, SimpleGrid, Text } from "@mantine/core";
 import { showNotification } from "@mantine/notifications";
+
 import axios from "axios";
 import { FC, useEffect, useState } from "react";
 import { useCookies } from "react-cookie";
 import { useLocation } from "wouter";
+
 import { useUserData } from "~/hooks";
+
 import image from "./components/image.svg";
 
 const useStyles = createStyles(theme => ({

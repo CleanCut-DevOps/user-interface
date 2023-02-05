@@ -1,15 +1,4 @@
-import {
-    Accordion,
-    Box,
-    Center,
-    Checkbox,
-    Group,
-    PasswordInput,
-    Popover,
-    Progress,
-    Text,
-    TextInput
-} from "@mantine/core";
+import { Accordion, Box, Center, Checkbox, Group, PasswordInput, Progress, Text, TextInput } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 
 import { FC, useState } from "react";

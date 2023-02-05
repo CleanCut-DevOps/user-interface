@@ -78,7 +78,7 @@ export const Address: FC = () => {
     useEffect(() => {
         if (loaded) {
             axios.put(
-                `${import.meta.env.VITE_PROPERTY_API}/property/${property?.id}/address`,
+                `${import.meta.env.VITE_PROPERTY_API}/${property?.id}`,
                 { line_1: debouncedLine_1 },
                 { headers: { authorization: `Bearer ${cookies.AccessToken}` } }
             );
@@ -88,7 +88,7 @@ export const Address: FC = () => {
     useEffect(() => {
         if (loaded) {
             axios.put(
-                `${import.meta.env.VITE_PROPERTY_API}/property/${property?.id}/address`,
+                `${import.meta.env.VITE_PROPERTY_API}/${property?.id}`,
                 { line_2: debouncedLine_2 },
                 { headers: { authorization: `Bearer ${cookies.AccessToken}` } }
             );
@@ -98,7 +98,7 @@ export const Address: FC = () => {
     useEffect(() => {
         if (loaded) {
             axios.put(
-                `${import.meta.env.VITE_PROPERTY_API}/property/${property?.id}/address`,
+                `${import.meta.env.VITE_PROPERTY_API}/${property?.id}`,
                 { city: debouncedCity },
                 { headers: { authorization: `Bearer ${cookies.AccessToken}` } }
             );
@@ -108,7 +108,7 @@ export const Address: FC = () => {
     useEffect(() => {
         if (loaded) {
             axios.put(
-                `${import.meta.env.VITE_PROPERTY_API}/property/${property?.id}/address`,
+                `${import.meta.env.VITE_PROPERTY_API}/${property?.id}`,
                 { state: debouncedState },
                 { headers: { authorization: `Bearer ${cookies.AccessToken}` } }
             );
@@ -118,7 +118,7 @@ export const Address: FC = () => {
     useEffect(() => {
         if (loaded) {
             axios.put(
-                `${import.meta.env.VITE_PROPERTY_API}/property/${property?.id}/address`,
+                `${import.meta.env.VITE_PROPERTY_API}/${property?.id}`,
                 { zip: debouncedZip },
                 { headers: { authorization: `Bearer ${cookies.AccessToken}` } }
             );

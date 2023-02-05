@@ -212,7 +212,7 @@ export const Details: FC = () => {
     useEffect(() => {
         if (loaded) {
             axios.put(
-                `${import.meta.env.VITE_PROPERTY_API}/property/${property?.id}`,
+                `${import.meta.env.VITE_PROPERTY_API}/${property?.id}`,
                 { icon: debouncedIcon },
                 { headers: { authorization: `Bearer ${cookies.AccessToken}` } }
             );
@@ -222,7 +222,7 @@ export const Details: FC = () => {
     useEffect(() => {
         if (loaded) {
             axios.put(
-                `${import.meta.env.VITE_PROPERTY_API}/property/${property?.id}`,
+                `${import.meta.env.VITE_PROPERTY_API}/${property?.id}`,
                 { label: debouncedLabel },
                 { headers: { authorization: `Bearer ${cookies.AccessToken}` } }
             );
@@ -232,7 +232,7 @@ export const Details: FC = () => {
     useEffect(() => {
         if (loaded) {
             axios.put(
-                `${import.meta.env.VITE_PROPERTY_API}/property/${property?.id}`,
+                `${import.meta.env.VITE_PROPERTY_API}/${property?.id}`,
                 { description: debouncedDescription },
                 { headers: { authorization: `Bearer ${cookies.AccessToken}` } }
             );
@@ -246,14 +246,13 @@ export const Details: FC = () => {
             const fData = new FormData();
 
             fData.append("file", file);
-            fData.append("id", property?.id ?? "");
 
             return axios
-                .post(`${import.meta.env.VITE_PROPERTY_API}/image/add`, fData, {
+                .post(`${import.meta.env.VITE_PROPERTY_API}/${property?.id}/image`, fData, {
                     headers: { Authorization: `Bearer ${cookies.AccessToken}` }
                 })
-                .then(({ data: { secureURL } }) => {
-                    dispatch({ type: "addImage", payload: secureURL });
+                .then(({ data: { images } }) => {
+                    dispatch({ type: "setImage", payload: images });
                 })
                 .catch(({ response: { data } }) => {
                     showNotification({

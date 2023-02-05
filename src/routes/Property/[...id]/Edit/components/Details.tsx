@@ -284,14 +284,14 @@ export const Details: FC = () => {
 
             axios
                 .post(
-                    `${import.meta.env.VITE_PROPERTY_API}/image/remove`,
-                    { id: property?.id, url: targetURL },
+                    `${import.meta.env.VITE_PROPERTY_API}/${property?.id}/image`,
+                    { url: targetURL },
                     { headers: { Authorization: `Bearer ${cookies.AccessToken}` } }
                 )
-                .then(() => {
+                .then(({ data: { images } }) => {
                     setDeleting(false);
 
-                    dispatch({ type: "removeImage", payload: targetURL });
+                    dispatch({ type: "setImage", payload: images });
                 })
                 .catch(({ response: { data } }) => {
                     setDeleting(false);

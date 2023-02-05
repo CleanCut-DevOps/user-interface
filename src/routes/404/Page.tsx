@@ -1,6 +1,8 @@
 import { Button, Center, Container, createStyles, Image, SimpleGrid, Text, Title } from "@mantine/core";
+
 import { FC } from "react";
 import { useLocation } from "wouter";
+
 import image from "./components/image.svg";
 
 const useStyles = createStyles(theme => ({

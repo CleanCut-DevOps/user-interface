@@ -4,6 +4,7 @@ import { useCookies } from "react-cookie";
 import { useLocation } from "wouter";
 
 import { convertResponseToUser, User } from "~/models";
+
 import { useUserData } from "../hooks";
 
 type SchrodingersUser = User | null;

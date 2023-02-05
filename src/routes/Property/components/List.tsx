@@ -4,6 +4,7 @@ import { Dispatch, FC, SetStateAction } from "react";
 import { TbCalendarPlus, TbEye } from "react-icons/tb";
 import { useLocation } from "wouter";
 
+import { openBookingModal } from "~/components";
 import { Property } from "~/models";
 
 import { PropMenu } from "./Menu";
@@ -98,47 +99,49 @@ export const ListView: FC<ComponentProps> = ({ properties, setProperties }) => {
             </Flex>
             <Stack className={classes.table}>
                 {properties.map((property, i) => (
-                    <Flex key={i} className={classes.tableRow}>
-                        <MediaQuery largerThan="xs" styles={{ flex: 0, maxWidth: 200 }}>
-                            <Anchor
-                                size={"sm"}
-                                weight={600}
-                                lineClamp={1}
-                                style={{ flex: 1, color: "inherit" }}
-                                onClick={handleClick(property.id)}
-                            >
-                                {property.label}
-                            </Anchor>
-                        </MediaQuery>
-                        <MediaQuery smallerThan="xs" styles={{ display: "none" }}>
-                            <MediaQuery largerThan="lg" styles={{ maxWidth: 200 }}>
-                                <Text size={"xs"} color={"dimmed"} lineClamp={1} style={{ flex: 1 }}>
-                                    {property.address.city && property.address.line_1
-                                        ? `${property.address.city}, ${property.address.line_1}`
-                                        : "Address not given"}
+                    <>
+                        <Flex key={i} className={classes.tableRow}>
+                            <MediaQuery largerThan="xs" styles={{ flex: 0, maxWidth: 200 }}>
+                                <Anchor
+                                    size={"sm"}
+                                    weight={600}
+                                    lineClamp={1}
+                                    style={{ flex: 1, color: "inherit" }}
+                                    onClick={handleClick(property.id)}
+                                >
+                                    {property.label}
+                                </Anchor>
+                            </MediaQuery>
+                            <MediaQuery smallerThan="xs" styles={{ display: "none" }}>
+                                <MediaQuery largerThan="lg" styles={{ maxWidth: 200 }}>
+                                    <Text size={"xs"} color={"dimmed"} lineClamp={1} style={{ flex: 1 }}>
+                                        {property.address.city && property.address.line_1
+                                            ? `${property.address.city}, ${property.address.line_1}`
+                                            : "Address not given"}
+                                    </Text>
+                                </MediaQuery>
+                            </MediaQuery>
+                            <MediaQuery smallerThan="lg" styles={{ display: "none" }}>
+                                <Text style={{ flex: 1 }} size={"xs"} color={"dimmed"} lineClamp={1}>
+                                    {property.description ?? "No description"}
                                 </Text>
                             </MediaQuery>
-                        </MediaQuery>
-                        <MediaQuery smallerThan="lg" styles={{ display: "none" }}>
-                            <Text style={{ flex: 1 }} size={"xs"} color={"dimmed"} lineClamp={1}>
-                                {property.description ?? "No description"}
-                            </Text>
-                        </MediaQuery>
-                        <Tooltip label="View bookings" position="bottom">
-                            <ActionIcon
-                                variant={"default"}
-                                onClick={() => setLocation(`/bookings?property=${property.id}`)}
-                            >
-                                <TbEye />
-                            </ActionIcon>
-                        </Tooltip>
-                        <Tooltip label="Book now!" position="bottom">
-                            <ActionIcon variant={"default"}>
-                                <TbCalendarPlus />
-                            </ActionIcon>
-                        </Tooltip>
-                        <PropMenu prop={property} setProperties={setProperties} position={"left-start"} />
-                    </Flex>
+                            <Tooltip label="View bookings" position="bottom">
+                                <ActionIcon
+                                    variant={"default"}
+                                    onClick={() => setLocation(`/property/${property.id}#bookings`)}
+                                >
+                                    <TbEye />
+                                </ActionIcon>
+                            </Tooltip>
+                            <Tooltip label="Book now!" position="bottom">
+                                <ActionIcon variant={"default"} onClick={() => openBookingModal(property)}>
+                                    <TbCalendarPlus />
+                                </ActionIcon>
+                            </Tooltip>
+                            <PropMenu prop={property} setProperties={setProperties} position={"left-start"} />
+                        </Flex>
+                    </>
                 ))}
             </Stack>
         </>

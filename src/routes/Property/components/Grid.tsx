@@ -5,6 +5,7 @@ import { Dispatch, FC, SetStateAction } from "react";
 import { TbCalendarEvent, TbEye, TbPhoto } from "react-icons/tb";
 import { useLocation } from "wouter";
 
+import { openBookingModal } from "~/components";
 import { Property } from "~/models";
 
 import { PropMenu } from "./Menu";
@@ -132,13 +133,18 @@ export const GridView: FC<ComponentProps> = ({ properties, setProperties }) => {
                         <Card.Section p="sm">
                             <Flex gap="sm">
                                 <ActionIcon
-                                    variant="default"
                                     size={36}
-                                    onClick={() => setLocation(`/bookings?property=${property.id}`)}
+                                    variant="default"
+                                    onClick={() => setLocation(`/property/${property.id}#bookings`)}
                                 >
                                     <TbEye />
                                 </ActionIcon>
-                                <Button w="100%" variant="default" leftIcon={<TbCalendarEvent />}>
+                                <Button
+                                    w="100%"
+                                    variant="default"
+                                    leftIcon={<TbCalendarEvent />}
+                                    onClick={() => openBookingModal(property)}
+                                >
                                     Book now
                                 </Button>
                             </Flex>

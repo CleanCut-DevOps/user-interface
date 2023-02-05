@@ -45,19 +45,19 @@ type RoomType = {
 };
 
 export const convertResponseToProperty = (response: any): Property => ({
-    id: response.id as string,
-    user_id: response.user_id as string,
-    icon: response.icon as string,
-    label: response.label as string,
-    description: response.description as string | null,
-    images: response.images as string[],
+    id: response.id,
+    user_id: response.user_id,
+    icon: response.icon,
+    label: response.label,
+    description: response.description,
+    images: response.images,
     address: {
-        line_1: response.address.line_1 as string | null,
-        line_2: response.address.line_2 as string | null,
-        city: response.address.city as string | null,
-        state: response.address.state as string | null,
-        zip: response.address.zip as string | null,
-        updated_at: new Date(response.address.updated_at * 1000)
+        line_1: response.address.line_1,
+        line_2: response.address.line_2,
+        city: response.address.city,
+        state: response.address.state,
+        zip: response.address.zip,
+        updated_at: new Date(response.address.updated_at)
     },
     type: response.type
         ? {
@@ -66,8 +66,8 @@ export const convertResponseToProperty = (response: any): Property => ({
               available: response.type.available,
               description: response.type.description,
               detailed_description: response.type.detailed_description,
-              created_at: new Date(response.type.created_at * 1000),
-              updated_at: new Date(response.type.updated_at * 1000)
+              created_at: new Date(response.type.created_at),
+              updated_at: new Date(response.type.updated_at)
           }
         : null,
     rooms: response.rooms.map(
@@ -79,9 +79,9 @@ export const convertResponseToProperty = (response: any): Property => ({
                 available: r.type.available
             },
             quantity: r.quantity,
-            updated_at: new Date(r.updated_at * 1000)
+            updated_at: new Date(r.updated_at)
         })
     ),
-    created_at: new Date(response.created_at * 1000),
-    updated_at: new Date(response.updated_at * 1000)
+    created_at: new Date(response.created_at),
+    updated_at: new Date(response.updated_at)
 });

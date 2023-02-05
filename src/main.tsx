@@ -5,10 +5,10 @@ import { NotificationsProvider } from "@mantine/notifications";
 import { FC, useState } from "react";
 import { useCookies } from "react-cookie";
 import { createRoot } from "react-dom/client";
-import { Route } from "wouter";
+import { Route, Switch } from "wouter";
 
 import { UserProvider } from "./components";
-import { Auth, EditProperty, PropertyCollection, ViewProperty } from "./routes";
+import { Auth, EditProperty, NotFound, PropertyCollection, VerifyEmail, ViewProperty } from "./routes";
 
 const Main: FC = () => {
     const [cookie, setCookie] = useCookies(["mantine-color-scheme"]);
@@ -26,6 +26,7 @@ const Main: FC = () => {
                 withGlobalStyles
                 withNormalizeCSS
                 theme={{
+                    primaryColor: "indigo",
                     fontFamily: "Inter, sans-serif",
                     colorScheme,
                     globalStyles: () => ({
@@ -39,15 +40,19 @@ const Main: FC = () => {
                 <NotificationsProvider>
                     <ModalsProvider>
                         <UserProvider>
-                            <Route path={"/"} component={PropertyCollection} />
-                            <Route path={"/login"}>
-                                <Auth type={"login"} />
-                            </Route>
-                            <Route path={"/register"}>
-                                <Auth type={"register"} />
-                            </Route>
-                            <Route path="/property/:id" component={ViewProperty} />
-                            <Route path="/property/:id/edit" component={EditProperty} />
+                            <Switch>
+                                <Route path={"/"} component={PropertyCollection} />
+                                <Route path={"/login"}>
+                                    <Auth type={"login"} />
+                                </Route>
+                                <Route path={"/register"}>
+                                    <Auth type={"register"} />
+                                </Route>
+                                <Route path={"/verify-email"} component={VerifyEmail} />
+                                <Route path="/property/:id/edit" component={EditProperty} />
+                                <Route path="/property/:id" component={ViewProperty} />
+                                <Route component={NotFound} />
+                            </Switch>
                         </UserProvider>
                     </ModalsProvider>
                 </NotificationsProvider>

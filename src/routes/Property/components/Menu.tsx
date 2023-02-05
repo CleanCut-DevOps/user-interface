@@ -35,13 +35,13 @@ export const PropMenu: FC<ComponentProps> = ({ prop, setProperties, position }) 
         setDeleting(true);
 
         axios
-            .delete(`${import.meta.env.VITE_PROPERTY_API}/property/${prop.id}`, {
+            .delete(`${import.meta.env.VITE_PROPERTY_API}/${prop.id}`, {
                 headers: { Authorization: `Bearer ${cookies.AccessToken}` }
             })
             .then(() => {
+                close();
                 setConfirm("");
                 setDeleting(false);
-                close();
 
                 setProperties(prev => prev.filter(p => p.id != prop.id));
             });

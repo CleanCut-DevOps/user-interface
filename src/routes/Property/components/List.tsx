@@ -30,7 +30,6 @@ const useStyles = createStyles(theme => ({
         gap: theme.spacing.md,
         padding: theme.spacing.md,
         transition: "0.3s ease",
-        userSelect: "none",
         backgroundColor: theme.colorScheme === "dark" ? theme.colors.dark[7] : "white",
 
         ":first-of-type": {
@@ -64,6 +63,7 @@ const useStyles = createStyles(theme => ({
         },
 
         [`@media (max-width: ${theme.breakpoints.sm}px)`]: {
+            paddingInlineEnd: theme.spacing.md + 28 * 3 + theme.spacing.md * 3 - 16,
             gap: theme.spacing.sm
         }
     }
@@ -113,8 +113,8 @@ export const ListView: FC<ComponentProps> = ({ properties, setProperties }) => {
                         <MediaQuery smallerThan="xs" styles={{ display: "none" }}>
                             <MediaQuery largerThan="lg" styles={{ maxWidth: 200 }}>
                                 <Text size={"xs"} color={"dimmed"} lineClamp={1} style={{ flex: 1 }}>
-                                    {property.address.city && property.address.line_1
-                                        ? `${property.address.city}, ${property.address.line_1}`
+                                    {property.address.line_1 && property.address.city
+                                        ? `${property.address.line_1}, ${property.address.city}`
                                         : "Address not given"}
                                 </Text>
                             </MediaQuery>

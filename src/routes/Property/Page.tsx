@@ -6,31 +6,26 @@ import {
     Divider,
     Flex,
     Menu,
-    SegmentedControl,
     Stack,
     Text,
     ThemeIcon,
-    Title
+    Title,
+    Tooltip
 } from "@mantine/core";
 import { showNotification } from "@mantine/notifications";
+
 import axios from "axios";
 import { Dispatch, FC, SetStateAction, useEffect, useState } from "react";
 import { useCookies } from "react-cookie";
-import { TbCheck, TbFilter, TbWreckingBall } from "react-icons/tb";
+import { TbCheck, TbFilter, TbLayoutGrid, TbListDetails, TbWreckingBall } from "react-icons/tb";
 import { useLocation } from "wouter";
 
 import { AuthWrapper, DashboardLayout, Loading } from "~/components";
 import { useProperties } from "~/hooks";
 import { convertResponseToProperty, Property } from "~/models";
+
 import { GridView } from "./components/Grid";
 import { ListView } from "./components/List";
-
-type Control = { label: string; value: "grid" | "list" };
-
-const controls: Control[] = [
-    { label: "Grid", value: "grid" },
-    { label: "List", value: "list" }
-];
 
 const sortOptions = [
     { label: "Alphabetical", value: "alphabetical" },
@@ -52,7 +47,9 @@ const useStyles = createStyles(theme => ({
         transition: "0.3s ease"
     },
     filterIcon: {
-        transition: "0.2s ease"
+        border: theme.colorScheme === "dark" ? "none" : undefined,
+        backgroundColor: theme.colorScheme === "dark" ? theme.colors.dark[5] : "white",
+        boxShadow: theme.colorScheme === "dark" ? "none" : theme.shadows.xs
     }
 }));
 
@@ -65,7 +62,7 @@ export const PropertyCollection: FC = () => {
     // states
     const [direction, setDirection] = useState<boolean>(cookie.PropertyCollectionConfig?.direction ?? true);
     const [properties, setProperties] = useState<Property[]>([]);
-    const [viewType, setViewType] = useState<"list" | "grid">(cookie.PropertyCollectionConfig?.viewType ?? "grid");
+    const [viewType, setViewType] = useState<"List" | "Grid">(cookie.PropertyCollectionConfig?.viewType ?? "Grid");
     const [sort, setSort] = useState<"alphabetical" | "created" | "updated">(
         cookie.PropertyCollectionConfig?.sort ?? "alphabetical"
     );
@@ -111,19 +108,24 @@ export const PropertyCollection: FC = () => {
         setDirection(value);
     };
 
-    const handleViewTypeChange = (value: "list" | "grid") => {
-        setCookie("PropertyCollectionConfig", JSON.stringify({ ...cookie.PropertyCollectionConfig, viewType: value }), {
-            secure: true,
-            sameSite: "strict"
-        });
+    const handleViewTypeChange = () => {
+        const newValue = viewType == "Grid" ? "List" : "Grid";
+        setCookie(
+            "PropertyCollectionConfig",
+            JSON.stringify({ ...cookie.PropertyCollectionConfig, viewType: newValue }),
+            {
+                secure: true,
+                sameSite: "strict"
+            }
+        );
 
-        setViewType(value);
+        setViewType(newValue);
     };
 
-    const handleNewProp = () => {
-        axios
+    const handleNewProp = async () => {
+        await axios
             .post(
-                `${import.meta.env.VITE_PROPERTY_API}/property`,
+                `${import.meta.env.VITE_PROPERTY_API}`,
                 {},
                 { headers: { Authorization: `Bearer ${cookie.AccessToken}` } }
             )
@@ -142,16 +144,18 @@ export const PropertyCollection: FC = () => {
     return (
         <AuthWrapper requireAuth>
             <DashboardLayout>
-                <Stack p="xl">
+                <Stack p={{ base: "sm", sm: "xl" }}>
                     <Flex align="center" gap="sm">
                         <Title order={3}>Properties</Title>
                         <div style={{ flex: 1 }} />
-                        <Menu offset={8} position={"bottom-end"} closeOnItemClick={false}>
-                            <Menu.Target>
-                                <ActionIcon variant="default" className={classes.filterIcon} size={"lg"}>
-                                    <TbFilter />
-                                </ActionIcon>
-                            </Menu.Target>
+                        <Menu offset={4} position={"bottom-end"} closeOnItemClick={false}>
+                            <Tooltip offset={4} position="bottom-end" label="Sort & Fiter">
+                                <Menu.Target>
+                                    <ActionIcon variant="default" className={classes.filterIcon} size="lg">
+                                        <TbFilter />
+                                    </ActionIcon>
+                                </Menu.Target>
+                            </Tooltip>
                             <Menu.Dropdown>
                                 <Menu.Label>Sort by</Menu.Label>
                                 {sortOptions.map(({ label, value }, i) => (
@@ -178,7 +182,16 @@ export const PropertyCollection: FC = () => {
                                 ))}
                             </Menu.Dropdown>
                         </Menu>
-                        <SegmentedControl value={viewType} onChange={handleViewTypeChange} data={controls} />
+                        <Tooltip label={`Switch to ${viewType == "Grid" ? "List" : "Grid"} view`} position="bottom-end">
+                            <ActionIcon
+                                size="lg"
+                                variant="default"
+                                onClick={handleViewTypeChange}
+                                className={classes.filterIcon}
+                            >
+                                {viewType == "Grid" ? <TbLayoutGrid /> : <TbListDetails />}
+                            </ActionIcon>
+                        </Tooltip>
                     </Flex>
                     <Divider />
                     {isLoading ? (
@@ -191,21 +204,21 @@ export const PropertyCollection: FC = () => {
                                 <ThemeIcon size="xl" radius="md" variant="light" color="gray">
                                     <TbWreckingBall size={22} />
                                 </ThemeIcon>
-                                <Text fw={600} inline>
+                                <Text fw={600} inline ta="center">
                                     Oops, something went wrong...
                                 </Text>
-                                <Text size="sm" color="dimmed" inline>
+                                <Text size="sm" color="dimmed" ta="center" inline>
                                     Refresh the site to continue
                                 </Text>
                             </Center>
                         </div>
-                    ) : data?.properties.length < 1 ? (
+                    ) : properties.length < 1 ? (
                         <div className={classes.placeholderSection}>
                             <Center h="100%" style={{ flexDirection: "column", gap: 8 }}>
                                 <ThemeIcon size="xl" radius="md" variant="light" color="gray">
                                     <TbWreckingBall size={22} />
                                 </ThemeIcon>
-                                <Text fw={600} inline>
+                                <Text fw={600} inline ta="center">
                                     Looks like you don't have any properties yet...
                                 </Text>
                                 <Button size="xs" variant="light" color="indigo" onClick={handleNewProp}>
@@ -224,15 +237,13 @@ export const PropertyCollection: FC = () => {
 
 const CollectionViewport: FC<{
     properties: Property[];
-    viewType: "list" | "grid";
+    viewType: "List" | "Grid";
     setProperties: Dispatch<SetStateAction<Property[]>>;
 }> = ({ properties, viewType, setProperties }) => {
-    const { classes } = useStyles();
-
     switch (viewType) {
-        case "list":
+        case "List":
             return <ListView properties={properties} setProperties={setProperties} />;
-        case "grid":
+        case "Grid":
             return <GridView properties={properties} setProperties={setProperties} />;
         default:
             return <></>;

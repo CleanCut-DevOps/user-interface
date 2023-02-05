@@ -18,14 +18,22 @@ import { NavLinks } from "./NavLinks";
 import { NavPropertyList } from "./NavPropertyList";
 
 const useStyles = createStyles(theme => ({
+    root: {
+        display: "none",
+
+        [`@media (min-width: ${theme.breakpoints.sm}px)`]: {
+            display: "flex"
+        }
+    },
+    open: { display: "flex" },
     section: {
-        display: "flex",
+        display: "none",
         alignItems: "center",
         gap: theme.spacing.sm,
         padding: theme.spacing.sm,
 
-        [`@media (width <= ${theme.breakpoints.sm}px)`]: {
-            display: "none"
+        [`@media (min-width: ${theme.breakpoints.sm}px)`]: {
+            display: "flex"
         }
     },
     row: {
@@ -37,8 +45,7 @@ const useStyles = createStyles(theme => ({
     icon: {
         color: theme.colorScheme === "dark" ? theme.colors.indigo[4] : theme.colors.indigo[9]
     },
-    toggleIcon: {
-        backgroundColor: theme.colorScheme === "dark" ? theme.colors.dark[6] : theme.colors.gray[0],
+    toggleIcon: {   
         color: theme.colorScheme === "dark" ? theme.colors.yellow[4] : theme.colors.blue[6]
     }
 }));
@@ -49,7 +56,12 @@ export const DashboardNavbar: FC<{ opened: boolean }> = ({ opened }) => {
     const { colorScheme, toggleColorScheme } = useMantineColorScheme();
 
     return (
-        <Navbar hiddenBreakpoint="sm" hidden={!opened} width={{ base: "100%", sm: 280 }}>
+        <Navbar
+            hiddenBreakpoint="sm"
+            hidden={!opened}
+            width={{ sm: 280 }}
+            className={`${classes.root} ${opened && classes.open}`}
+        >
             <Navbar.Section className={classes.section}>
                 <Group w="100%" align="center" position="apart">
                     <UnstyledButton className={classes.row} onClick={() => setLocation("/")}>

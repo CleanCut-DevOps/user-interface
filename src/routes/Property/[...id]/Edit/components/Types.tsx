@@ -175,8 +175,8 @@ export const Type: FC<ComponentProps> = ({ pType }) => {
     const handleTypeChange = (type: PropertyType) => () => {
         if (cookies.AccessToken) {
             axios.put(
-                `${import.meta.env.VITE_PROPERTY_API}/property/${property?.id}/type`,
-                { id: type.id },
+                `${import.meta.env.VITE_PROPERTY_API}/${property?.id}`,
+                { type_id: type.id },
                 { headers: { Authorization: `Bearer ${cookies.AccessToken}` } }
             );
 
@@ -338,8 +338,8 @@ const RoomQuantityEditor: FC<{ room: RoomType }> = ({ room }) => {
     useEffect(() => {
         if (loaded) {
             axios.put(
-                `${import.meta.env.VITE_PROPERTY_API}/property/${property?.id}/rooms`,
-                { id: room.id, quantity: debouncedValue },
+                `${import.meta.env.VITE_PROPERTY_API}/${property?.id}`,
+                { rooms: [{ id: room.id, quantity: debouncedValue }] },
                 { headers: { Authorization: `Bearer ${cookies.AccessToken}` } }
             );
         } else setLoaded(true);

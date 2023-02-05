@@ -25,7 +25,8 @@ import { DashboardNavbar } from "./Navbar";
 const useStyles = createStyles(theme => ({
     main: {
         height: "100vh",
-        overflow: "hidden"
+        overflow: "hidden",
+        backgroundColor: theme.colorScheme === "dark" ? theme.colors.dark[8] : theme.colors.gray[0]
     },
     icon: {
         color: theme.colorScheme === "dark" ? theme.colors.indigo[4] : theme.colors.indigo[9]
@@ -33,7 +34,7 @@ const useStyles = createStyles(theme => ({
     header: {
         display: "block",
 
-        [`@media (width >= ${theme.breakpoints.sm - 1}px)`]: {
+        [`@media (min-width: ${theme.breakpoints.sm}px)`]: {
             display: "none"
         }
     }
@@ -52,7 +53,7 @@ export const DashboardLayout: FC<PropsWithChildren> = ({ children }) => {
             navbarOffsetBreakpoint="sm"
             header={
                 <Header height={{ base: 50, sm: 0 }} p="8px" className={classes.header}>
-                    <Flex align="center" justify="space-between">
+                    <Flex align="center" h="100%" justify="space-between">
                         <MediaQuery largerThan="sm" styles={{ display: "none" }}>
                             <Burger opened={opened} onClick={() => setOpened(o => !o)} size="sm" />
                         </MediaQuery>
@@ -70,11 +71,10 @@ export const DashboardLayout: FC<PropsWithChildren> = ({ children }) => {
 
                         <ActionIcon
                             onClick={() => toggleColorScheme()}
-                            size="lg"
-                            radius="md"
+                            size="md"
+                            radius="sm"
+                            variant="default"
                             sx={theme => ({
-                                backgroundColor:
-                                    theme.colorScheme === "dark" ? theme.colors.dark[6] : theme.colors.gray[0],
                                 color: theme.colorScheme === "dark" ? theme.colors.yellow[4] : theme.colors.blue[6]
                             })}
                         >

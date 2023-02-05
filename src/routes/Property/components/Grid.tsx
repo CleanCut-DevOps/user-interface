@@ -1,8 +1,11 @@
 import { Carousel } from "@mantine/carousel";
 import { ActionIcon, Button, Card, Center, createStyles, Flex, SimpleGrid, Text } from "@mantine/core";
+
 import { Dispatch, FC, SetStateAction } from "react";
 import { TbCalendarEvent, TbEye, TbPhoto } from "react-icons/tb";
+
 import { Property } from "~/models";
+
 import { PropMenu } from "./Menu";
 
 interface ComponentProps {
@@ -55,6 +58,8 @@ const useStyles = createStyles(theme => ({
     },
     cardRoot: {
         transition: "transform 400ms ease",
+        backgroundColor: theme.colorScheme === "dark" ? theme.colors.dark[7] : theme.white,
+        borderColor: theme.colorScheme === "dark" ? theme.colors.gray[8] : theme.colors.gray[3],
 
         "&:hover": { transform: "translateY(4px)" }
     },
@@ -80,23 +85,31 @@ export const GridView: FC<ComponentProps> = ({ properties, setProperties }) => {
     const { classes: carouselClasses } = useCarouselStyles();
 
     return (
-        <SimpleGrid cols={4} px={"sm"}>
+        <SimpleGrid
+            cols={1}
+            px={{ sm: "sm" }}
+            breakpoints={[
+                { minWidth: 425, cols: 2 },
+                { minWidth: "md", cols: 3 },
+                { minWidth: 1200, cols: 4 }
+            ]}
+        >
             {properties.map((property, i) => {
                 return (
-                    <Card key={i} shadow={"sm"} p={"sm"} radius={"md"} withBorder className={classes.cardRoot}>
-                        <Card.Section p={"sm"}>
-                            <Flex align={"center"} gap={"sm"}>
+                    <Card key={i} shadow="xs" p="sm" radius="md" withBorder className={classes.cardRoot}>
+                        <Card.Section p="sm">
+                            <Flex align="center" gap="sm">
                                 <div style={{ flex: 1 }}>
                                     <Text lineClamp={1} className={classes.cardTitle}>
                                         {property.label}
                                     </Text>
-                                    <Text lineClamp={1} color={"dimmed"} size={"xs"}>
+                                    <Text lineClamp={1} color="dimmed" size="xs">
                                         {property.address.city && property.address.line_1
                                             ? `${property.address.city}, ${property.address.line_1}`
                                             : "Address not given"}
                                     </Text>
                                 </div>
-                                <PropMenu prop={property} setProperties={setProperties} />
+                                <PropMenu prop={property} setProperties={setProperties} position={"bottom-end"} />
                             </Flex>
                         </Card.Section>
                         <Card.Section style={{ aspectRatio: "16/9" }}>
@@ -110,16 +123,16 @@ export const GridView: FC<ComponentProps> = ({ properties, setProperties }) => {
                                 </Carousel>
                             ) : (
                                 <Center className={classes.cardNoImage}>
-                                    <TbPhoto size={"25%"} />
+                                    <TbPhoto size="25%" />
                                 </Center>
                             )}
                         </Card.Section>
-                        <Card.Section p={"sm"}>
-                            <Flex gap={"sm"}>
-                                <ActionIcon variant={"light"} size={36} color={"indigo"}>
+                        <Card.Section p="sm">
+                            <Flex gap="sm">
+                                <ActionIcon variant="default" size={36}>
                                     <TbEye />
                                 </ActionIcon>
-                                <Button w={"100%"} color={"indigo"} variant={"light"} leftIcon={<TbCalendarEvent />}>
+                                <Button w="100%" variant="default" leftIcon={<TbCalendarEvent />}>
                                     Book now
                                 </Button>
                             </Flex>

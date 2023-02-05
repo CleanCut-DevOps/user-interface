@@ -28,7 +28,7 @@ const useStyles = createStyles(theme => ({
         borderBottom:
             theme.colorScheme === "dark" ? `1px solid ${theme.colors.dark[5]}` : `1px solid ${theme.colors.gray[2]}`,
 
-        [`@media (width >= ${theme.breakpoints.sm - 1}px)`]: { ":last-of-type": { display: "none" } }
+        [`@media (min-width: ${theme.breakpoints.sm - 1}px)`]: { ":last-of-type": { display: "none" } }
     },
     icon: {
         minWidth: 36,
@@ -54,7 +54,7 @@ const useStyles = createStyles(theme => ({
     actions: {
         display: "flex",
 
-        [`@media (width <= ${theme.breakpoints.sm - 1}px)`]: {
+        [`@media (max-width: ${theme.breakpoints.sm - 1}px)`]: {
             display: "none"
         }
     }
@@ -83,7 +83,7 @@ export const EditHeader: FC = () => {
     useEffect(() => {
         if (loaded) {
             axios.put(
-                `${import.meta.env.VITE_PROPERTY_API}/property/${property?.id}`,
+                `${import.meta.env.VITE_PROPERTY_API}/${property?.id}`,
                 { icon: debouncedIcon },
                 { headers: { authorization: `Bearer ${cookies.AccessToken}` } }
             );
@@ -93,7 +93,7 @@ export const EditHeader: FC = () => {
     useEffect(() => {
         if (loaded) {
             axios.put(
-                `${import.meta.env.VITE_PROPERTY_API}/property/${property?.id}`,
+                `${import.meta.env.VITE_PROPERTY_API}/${property?.id}`,
                 { label: debouncedLabel },
                 { headers: { authorization: `Bearer ${cookies.AccessToken}` } }
             );

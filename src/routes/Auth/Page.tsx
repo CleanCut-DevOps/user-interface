@@ -5,7 +5,7 @@ import { showNotification } from "@mantine/notifications";
 import axios from "axios";
 import { FC, useState } from "react";
 import { useCookies } from "react-cookie";
-import { useLocation } from "wouter";
+import { Link, useLocation } from "wouter";
 
 import { AuthWrapper, GoogleButton } from "~/components";
 
@@ -17,20 +17,18 @@ interface ComponentProps {
 
 const useStyles = createStyles(theme => ({
     wrapper: {
-        padding: theme.spacing.sm,
-
-        [`@media (min-width: ${theme.breakpoints.xs}px)`]: {
-            marginTop: theme.spacing.xl * 2
-        }
+        flex: 1
     },
     paper: {
         width: "100%",
         maxWidth: 380,
         padding: theme.spacing.lg,
-        borderRadius: theme.radius.sm,
+        borderRadius: theme.radius.md,
+        boxShadow: theme.shadows.xs,
+        backgroundColor: theme.colorScheme === "dark" ? theme.colors.dark[8] : "white",
 
-        [`@media (min-width: ${theme.breakpoints.xs}px)`]: {
-            borderRadius: theme.radius.md
+        [`@media (max-width: ${theme.breakpoints.xs}px)`]: {
+            border: 0
         }
     }
 }));
@@ -43,16 +41,16 @@ export const Auth: FC<ComponentProps> = ({ type }) => {
 
     const regForm = useForm({
         initialValues: {
+            name: "",
             email: "",
-            password: "",
-            full_name: "",
-            phone_number: ""
+            phone: "",
+            password: ""
         },
 
         validate: {
             email: val => (/^\S+@\S+$/.test(val) ? null : "Invalid email"),
-            full_name: val => (val.length < 3 ? "Name should include at least 3 characters" : null),
-            phone_number: val => (val.length < 8 ? "Phone number should include at least 8 characters" : null),
+            name: val => (val.length < 3 ? "Name should include at least 3 characters" : null),
+            phone: val => (val.length < 8 ? "Phone number should include at least 8 characters" : null),
             password: val =>
                 val.length < 8
                     ? "Password should include at least 8 characters"
@@ -66,24 +64,24 @@ export const Auth: FC<ComponentProps> = ({ type }) => {
         }
     });
 
-    const handleRegSubmit = regForm.onSubmit(({ email, full_name, phone_number, password }) => {
+    const handleRegSubmit = regForm.onSubmit(async ({ name, email, phone, password }) => {
         setLoading(true);
 
         let fData = {
+            name,
             email,
-            password,
-            full_name,
-            phone_number
+            phone,
+            password
         };
 
-        axios
-            .post(`${import.meta.env.VITE_ACCOUNT_API}/register`, fData)
+        await axios
+            .post(`${import.meta.env.VITE_ACCOUNT_API}/user/register`, fData)
             .then(({ data }) => {
                 setCookie("AccessToken", data.token, { secure: true, sameSite: "strict", maxAge: 60 * 60 * 24 });
 
                 showNotification({ title: data.type, message: data.message, color: "green" });
 
-                setLocation("/");
+                setLocation("/verify-email");
             })
             .catch(({ response: { data } }) => {
                 const { type, message, errors } = data;
@@ -101,8 +99,8 @@ export const Auth: FC<ComponentProps> = ({ type }) => {
     const loginForm = useForm({
         initialValues: {
             email: "",
-            stay: false,
-            password: ""
+            password: "",
+            remember: false
         },
 
         validate: {
@@ -111,28 +109,37 @@ export const Auth: FC<ComponentProps> = ({ type }) => {
         }
     });
 
-    const handleLoginSubmit = loginForm.onSubmit(async ({ email, password, stay }) => {
+    const handleLoginSubmit = loginForm.onSubmit(async ({ email, password, remember }) => {
         setLoading(true);
 
-        let fData = { email, password, stay };
+        let fData = { email, password, remember };
 
         await axios
-            .post(`${import.meta.env.VITE_ACCOUNT_API}/login`, fData)
+            .post(`${import.meta.env.VITE_ACCOUNT_API}/user/login`, fData)
             .then(({ data }) => {
                 setCookie("AccessToken", data.token, {
                     secure: true,
                     sameSite: "strict",
-                    maxAge: stay ? 60 * 60 * 24 * 7 : 60 * 60 * 24
+                    maxAge: remember ? 60 * 60 * 24 * 7 : 60 * 60 * 24
                 });
 
                 showNotification({ title: data.type, message: data.message, color: "green" });
 
                 setLocation("/");
             })
-            .catch(() => {
-                loginForm.setErrors({ email: "Incorrect email or password" });
+            .catch(({ response: { status } }) => {
+                if (status == 422) setLocation("/verify-email");
+                else {
+                    loginForm.setErrors({ email: "Incorrect email or password" });
 
-                setLoading(false);
+                    showNotification({
+                        title: "🚩 Couldn't log in",
+                        message: "Incorrect email or password",
+                        color: "red"
+                    });
+
+                    setLoading(false);
+                }
             });
     });
 
@@ -154,8 +161,15 @@ export const Auth: FC<ComponentProps> = ({ type }) => {
                         {type == "register" && "Sign up"}
                     </Text>
                     <Text mt={4} size="xs" color="dimmed">
-                        By continuing, you agree to our <Anchor>User Agreement</Anchor> and{" "}
-                        <Anchor>Privacy Policy</Anchor>.
+                        By continuing, you agree to our{" "}
+                        <Anchor component={Link} href="/policies#agreement">
+                            User Agreement
+                        </Anchor>{" "}
+                        and{" "}
+                        <Anchor component={Link} href="/policies#privacy">
+                            Privacy Policy
+                        </Anchor>
+                        .
                     </Text>
 
                     <GoogleButton my="lg" w="100%" radius="sm" onClick={handleGoogle}>
@@ -169,14 +183,14 @@ export const Auth: FC<ComponentProps> = ({ type }) => {
                             {type == "login" ? (
                                 <LoginFields
                                     credP={loginForm.getInputProps("email")}
-                                    stayP={loginForm.getInputProps("stay")}
+                                    rememberP={loginForm.getInputProps("remember")}
                                     passwordP={loginForm.getInputProps("password")}
                                 />
                             ) : (
                                 <RegisterFields
-                                    nameP={regForm.getInputProps("full_name")}
+                                    nameP={regForm.getInputProps("name")}
                                     emailP={regForm.getInputProps("email")}
-                                    numberP={regForm.getInputProps("phone_number")}
+                                    numberP={regForm.getInputProps("phone")}
                                     passwordP={regForm.getInputProps("password")}
                                 />
                             )}

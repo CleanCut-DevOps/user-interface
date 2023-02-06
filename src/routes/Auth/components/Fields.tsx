@@ -1,8 +1,7 @@
 import { Accordion, Box, Center, Checkbox, Group, PasswordInput, Progress, Text, TextInput } from "@mantine/core";
-import { useDisclosure } from "@mantine/hooks";
 
 import { FC, useState } from "react";
-import { TbCheck, TbX } from "react-icons/tb";
+import { TbCheck, TbLock, TbMail, TbPhone, TbUser, TbX } from "react-icons/tb";
 
 interface RegFieldProps {
     nameP: { value: any; onChange: any; checked?: any; error?: any; onFocus?: any };
@@ -19,7 +18,6 @@ interface LogFieldProps {
 
 export const RegisterFields: FC<RegFieldProps> = ({ emailP, nameP, numberP, passwordP }) => {
     const [value, setValue] = useState("");
-    const [opened, { open, close }] = useDisclosure(false);
 
     const requirements = [
         { re: /[0-9]/, label: "Includes number" },
@@ -70,9 +68,9 @@ export const RegisterFields: FC<RegFieldProps> = ({ emailP, nameP, numberP, pass
 
     return (
         <>
-            <TextInput withAsterisk label="Full name" placeholder="John Doe" {...nameP} />
-            <TextInput withAsterisk label="Contact number" placeholder="+65 88884444" {...numberP} />
-            <TextInput withAsterisk label="Email" placeholder="your@email.com" {...emailP} />
+            <TextInput withAsterisk icon={<TbUser />} label="Full name" {...nameP} />
+            <TextInput withAsterisk icon={<TbPhone />} label="Contact number" {...numberP} />
+            <TextInput withAsterisk icon={<TbMail />} label="Email" {...emailP} />
             <Accordion
                 variant="default"
                 value={value}
@@ -83,17 +81,17 @@ export const RegisterFields: FC<RegFieldProps> = ({ emailP, nameP, numberP, pass
             >
                 <Accordion.Item value="password">
                     <PasswordInput
+                        icon={<TbLock />}
                         withAsterisk
                         label="Password"
                         value={passwordP.value}
+                        onBlur={() => setValue("")}
+                        onChange={passwordP.onChange}
+                        error={passwordP.error != null}
                         onFocus={() => {
                             setValue("password");
                             passwordP.onFocus();
                         }}
-                        onBlur={() => setValue("")}
-                        onChange={passwordP.onChange}
-                        error={passwordP.error != null}
-                        placeholder="Our little secret"
                     />
                     <Accordion.Panel>
                         <Group mt="xs" mb={8} spacing="xs" grow>
@@ -111,8 +109,8 @@ export const RegisterFields: FC<RegFieldProps> = ({ emailP, nameP, numberP, pass
 export const LoginFields: FC<LogFieldProps> = ({ credP, rememberP, passwordP }) => {
     return (
         <>
-            <TextInput withAsterisk label="Email" placeholder="your@email.com" {...credP} />
-            <PasswordInput withAsterisk label="Password" placeholder="Our little secret" {...passwordP} />
+            <TextInput icon={<TbMail />} withAsterisk label="Email" {...credP} />
+            <PasswordInput withAsterisk label="Password" icon={<TbLock />} {...passwordP} />
             <Checkbox size={"sm"} label={"Remember me"} {...rememberP} />
         </>
     );

@@ -111,7 +111,7 @@ export const NavPropertyList: FC = () => {
             </Navbar.Section>
             <Navbar.Section className={`${classes.section} ${classes.grow}`}>
                 {isLoading && (
-                    <Stack spacing={18} mt={10}>
+                    <Stack p="sm" spacing={18} mt={10}>
                         {[...Array(Math.round(Math.random() * 5))].map((_, i) => (
                             <Skeleton key={i} visible radius={"md"}>
                                 <Text size={12}>Loading</Text>

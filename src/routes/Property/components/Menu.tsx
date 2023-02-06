@@ -24,7 +24,7 @@ export const PropMenu: FC<ComponentProps> = ({ prop, setProperties, position }) 
 
     const handleUpdate = () => setLocation(`/property/${prop.id}/edit`);
 
-    const handleDelete3 = () => {
+    const handleDelete = () => {
         openModal({
             title: "Are you absolutely sure?",
             children: <DeleteModal prop={prop} setProperties={setProperties} />
@@ -47,7 +47,7 @@ export const PropMenu: FC<ComponentProps> = ({ prop, setProperties, position }) 
                     <Menu.Item icon={<TbEdit />} onClick={handleUpdate}>
                         Update
                     </Menu.Item>
-                    <Menu.Item color="red" icon={<TbTrash />} onClick={handleDelete3}>
+                    <Menu.Item color="red" icon={<TbTrash />} onClick={handleDelete}>
                         Delete property
                     </Menu.Item>
                 </Menu.Dropdown>
@@ -73,25 +73,27 @@ const DeleteModal: FC<{ prop: Property; setProperties: Dispatch<SetStateAction<P
         setDeleting(true);
 
         axios
-            .delete(`${import.meta.env.VITE_PROPERTY_API}/property/${prop.id}`, {
+            .delete(`${import.meta.env.VITE_PROPERTY_API}/${prop.id}`, {
                 headers: { Authorization: `Bearer ${cookies.AccessToken}` }
             })
             .then(() => {
                 setConfirm("");
                 setDeleting(false);
-                closeAllModals();
 
                 setProperties(prev => prev.filter(p => p.id != prop.id));
+
+                closeAllModals();
             })
             .catch(() => {
                 setDeleting(false);
-                closeAllModals();
 
                 showNotification({
                     title: "Error",
                     message: "An error occurred while deleting the property.",
                     color: "red"
                 });
+
+                closeAllModals();
             });
     };
 

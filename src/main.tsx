@@ -8,7 +8,15 @@ import { createRoot } from "react-dom/client";
 import { Route, Switch } from "wouter";
 
 import { UserProvider } from "./components";
-import { Auth, BookingCollection, EditProperty, NotFound, PropertyCollection, VerifyEmail, ViewProperty } from "./routes";
+import {
+    Auth,
+    BookingCollection,
+    EditProperty,
+    NotFound,
+    PropertyCollection,
+    VerifyEmail,
+    ViewProperty
+} from "./routes";
 
 const Main: FC = () => {
     const [cookie, setCookie] = useCookies(["mantine-color-scheme"]);

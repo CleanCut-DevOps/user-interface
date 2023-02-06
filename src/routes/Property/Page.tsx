@@ -119,10 +119,10 @@ export const PropertyCollection: FC = () => {
         setViewType(newValue);
     };
 
-    const handleNewProp = () => {
-        axios
+    const handleNewProp = async () => {
+        await axios
             .post(
-                `${import.meta.env.VITE_PROPERTY_API}/property`,
+                `${import.meta.env.VITE_PROPERTY_API}`,
                 {},
                 { headers: { Authorization: `Bearer ${cookie.AccessToken}` } }
             )
@@ -209,7 +209,7 @@ export const PropertyCollection: FC = () => {
                                 </Text>
                             </Center>
                         </div>
-                    ) : data?.properties.length < 1 ? (
+                    ) : properties.length < 1 ? (
                         <div className={classes.placeholderSection}>
                             <Center h="100%" style={{ flexDirection: "column", gap: 8 }}>
                                 <ThemeIcon size="xl" radius="md" variant="light" color="gray">

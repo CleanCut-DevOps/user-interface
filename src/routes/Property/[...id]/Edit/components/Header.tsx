@@ -83,7 +83,7 @@ export const EditHeader: FC = () => {
     useEffect(() => {
         if (loaded) {
             axios.put(
-                `${import.meta.env.VITE_PROPERTY_API}/property/${property?.id}`,
+                `${import.meta.env.VITE_PROPERTY_API}/${property?.id}`,
                 { icon: debouncedIcon },
                 { headers: { authorization: `Bearer ${cookies.AccessToken}` } }
             );
@@ -93,7 +93,7 @@ export const EditHeader: FC = () => {
     useEffect(() => {
         if (loaded) {
             axios.put(
-                `${import.meta.env.VITE_PROPERTY_API}/property/${property?.id}`,
+                `${import.meta.env.VITE_PROPERTY_API}/${property?.id}`,
                 { label: debouncedLabel },
                 { headers: { authorization: `Bearer ${cookies.AccessToken}` } }
             );

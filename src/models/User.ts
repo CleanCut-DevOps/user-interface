@@ -1,33 +1,30 @@
 export type User = {
     id: string;
     email: string;
-    phone_number: string;
-    full_name: string;
-    avatar: string | null;
-    type: "user" | "cleaner" | "admin";
+    phone: string;
+    name: string;
+    preferred_contact: "email" | "phone";
     created_at: Date;
     updated_at: Date;
 };
 
-export const convertResponseToUser = (account: any): User | null => {
+export const convertResponseToUser = (user: any): User | null => {
     if (
-        typeof account.id == "string" &&
-        typeof account.email == "string" &&
-        typeof account.phone_number == "string" &&
-        typeof account.full_name == "string" &&
-        typeof account.type == "string" &&
-        typeof account.created_at == "number" &&
-        typeof account.updated_at == "number"
+        typeof user.id == "string" &&
+        typeof user.email == "string" &&
+        typeof user.phone == "string" &&
+        typeof user.name == "string" &&
+        typeof user.created_at == "string" &&
+        typeof user.updated_at == "string"
     ) {
         return {
-            id: account.id as string,
-            email: account.email as string,
-            full_name: account.full_name as string,
-            phone_number: account.phone_number as string,
-            avatar: (account.avatar ?? null) as string | null,
-            type: account.type as "user" | "cleaner" | "admin",
-            created_at: new Date(account.created_at),
-            updated_at: new Date(account.updated_at)
+            id: user.id as string,
+            email: user.email as string,
+            name: user.name as string,
+            phone: user.phone as string,
+            preferred_contact: user.preferred_contact as "email" | "phone",
+            created_at: new Date(user.created_at),
+            updated_at: new Date(user.updated_at)
         };
     }
 

@@ -37,10 +37,7 @@ export const EditProperty: FC<ComponentProps> = ({ params: { id } }) => {
 export const GetEditableContent: FC = () => {
     const [, setLocation] = useLocation();
     const { step } = useContext(EditPropertyContext);
-    const { data, isLoading, error } = useSWR(
-        `${import.meta.env.VITE_PROPERTY_API}/type/property?withRooms=true`,
-        fetcher
-    );
+    const { data, isLoading, error } = useSWR(`${import.meta.env.VITE_PROPERTY_API}/types?display=withRooms`, fetcher);
 
     useEffect(() => {
         if (error) setLocation("/");

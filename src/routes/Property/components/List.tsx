@@ -31,7 +31,6 @@ const useStyles = createStyles(theme => ({
         gap: theme.spacing.md,
         padding: theme.spacing.md,
         transition: "0.3s ease",
-        userSelect: "none",
         backgroundColor: theme.colorScheme === "dark" ? theme.colors.dark[7] : "white",
 
         ":first-of-type": {
@@ -65,6 +64,7 @@ const useStyles = createStyles(theme => ({
         },
 
         [`@media (max-width: ${theme.breakpoints.sm}px)`]: {
+            paddingInlineEnd: theme.spacing.md + 28 * 3 + theme.spacing.md * 3 - 16,
             gap: theme.spacing.sm
         }
     }

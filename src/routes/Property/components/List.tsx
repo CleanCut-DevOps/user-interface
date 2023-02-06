@@ -2,7 +2,7 @@ import { ActionIcon, Anchor, createStyles, Flex, MediaQuery, Stack, Text, Toolti
 
 import { Dispatch, FC, SetStateAction } from "react";
 import { TbCalendarPlus, TbEye } from "react-icons/tb";
-import { useLocation } from "wouter";
+import { Link, useLocation } from "wouter";
 
 import { openBookingModal } from "~/components";
 import { Property } from "~/models";
@@ -74,8 +74,6 @@ export const ListView: FC<ComponentProps> = ({ properties, setProperties }) => {
     const { classes } = useStyles();
     const [, setLocation] = useLocation();
 
-    const handleClick = (id: string) => () => setLocation(`/property/${id}`);
-
     return (
         <Stack spacing={4}>
             <Flex className={classes.labelRow}>
@@ -106,7 +104,8 @@ export const ListView: FC<ComponentProps> = ({ properties, setProperties }) => {
                                 weight={600}
                                 lineClamp={1}
                                 style={{ flex: 1, color: "inherit" }}
-                                onClick={handleClick(property.id)}
+                                component={Link}
+                                href={`/property/${property.id}`}
                             >
                                 {property.label}
                             </Anchor>

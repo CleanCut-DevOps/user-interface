@@ -10,6 +10,8 @@ export type Property = {
     rooms: Room[];
     created_at: Date;
     updated_at: Date;
+    verified_at: Date | null;
+    favourite_at: Date | null;
 };
 
 type Address = {
@@ -83,5 +85,7 @@ export const convertResponseToProperty = (response: any): Property => ({
         })
     ),
     created_at: new Date(response.created_at),
-    updated_at: new Date(response.updated_at)
+    updated_at: new Date(response.updated_at),
+    verified_at: response.verified_at ? new Date(response.verified_at) : null,
+    favourite_at: response.favourite_at ? new Date(response.favourite_at) : null
 });

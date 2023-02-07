@@ -77,7 +77,7 @@ export const NavPropertyList: FC = () => {
 
         await axios
             .post(
-                `${import.meta.env.VITE_PROPERTY_API}`,
+                `${import.meta.env.VITE_PROPERTY_API}/property`,
                 {},
                 { headers: { Authorization: `Bearer ${cookie.AccessToken}` } }
             )

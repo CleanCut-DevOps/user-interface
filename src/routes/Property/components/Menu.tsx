@@ -11,13 +11,18 @@ import { useLocation } from "wouter";
 
 import { Property } from "~/models";
 
+export type FloatingPlacement = "end" | "start";
+export type FloatingSide = "top" | "right" | "bottom" | "left";
+export type FloatingPosition = FloatingSide | `${FloatingSide}-${FloatingPlacement}`;
+
 type ComponentProps = {
     prop: Property;
-    position: "bottom-end" | "left-start";
+    size?: "xs" | "sm" | "md" | "lg" | "xl";
+    position?: FloatingPosition;
     setProperties: Dispatch<SetStateAction<Property[]>>;
 };
 
-export const PropMenu: FC<ComponentProps> = ({ prop, setProperties, position }) => {
+export const PropMenu: FC<ComponentProps> = ({ prop, setProperties, position, size = "lg" }) => {
     const [, setLocation] = useLocation();
 
     const handleView = () => setLocation(`/property/${prop.id}`);
@@ -35,14 +40,14 @@ export const PropMenu: FC<ComponentProps> = ({ prop, setProperties, position }) 
         <>
             <Menu shadow="xs" position={position} width={200}>
                 <Menu.Target>
-                    <ActionIcon variant={"default"}>
+                    <ActionIcon variant={"default"} size={size}>
                         <TbDots style={{ transform: "rotate(90deg)" }} />
                     </ActionIcon>
                 </Menu.Target>
                 <Menu.Dropdown>
-                    <Menu.Label>Details</Menu.Label>
+                    <Menu.Label>Options</Menu.Label>
                     <Menu.Item icon={<TbEye />} onClick={handleView}>
-                        View
+                        View details
                     </Menu.Item>
                     <Menu.Item icon={<TbEdit />} onClick={handleUpdate}>
                         Update

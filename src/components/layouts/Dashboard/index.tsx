@@ -85,11 +85,11 @@ export const DashboardLayout: FC<PropsWithChildren> = ({ children }) => {
             }
             navbar={<DashboardNavbar opened={opened} />}
         >
-            <Container px={0} h="100%" size="xl">
-                <ScrollArea h="100%" scrollbarSize={6}>
+            <ScrollArea h="100%" scrollbarSize={6}>
+                <Container px={0} h="100%" size="xl">
                     {children}
-                </ScrollArea>
-            </Container>
+                </Container>
+            </ScrollArea>
         </AppShell>
     );
 };

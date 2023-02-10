@@ -58,7 +58,19 @@ export const BookingProvider: FC<ComponentProps> = ({ children }) => {
 
     useEffect(() => {
         if (propertyData && propertyData.properties) {
-            const newProperties = [...propertyData.properties].map((p: any) => convertResponseToProperty(p));
+            const newProperties = [...propertyData.properties]
+                .map((p: any) => convertResponseToProperty(p))
+                .filter(
+                    p =>
+                        p.icon != null &&
+                        p.label != null &&
+                        p.address.line_1 != null &&
+                        p.address.city != null &&
+                        p.address.zip != null &&
+                        p.type != null &&
+                        p.user_id != null &&
+                        p.rooms.length > 0
+                );
 
             setProperties(newProperties);
 
@@ -79,6 +91,14 @@ export const BookingProvider: FC<ComponentProps> = ({ children }) => {
                     )
                 ) {
                     setSelectedProperty(requested);
+
+                    const newSteps = [...steps];
+
+                    newSteps[0].completed = true;
+
+                    setSteps(newSteps);
+                    setStep(1);
+
                     setId(null);
                 } else {
                     setId(null);
@@ -102,6 +122,16 @@ export const BookingProvider: FC<ComponentProps> = ({ children }) => {
             setServices(newServices);
         }
     }, [servicesData]);
+
+    useEffect(() => {
+        if (selectedProperty) {
+            const newSteps = [...steps];
+
+            newSteps[0].completed = true;
+
+            setSteps(newSteps);
+        }
+    }, [selectedProperty]);
 
     return (
         <BookingContext.Provider

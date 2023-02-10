@@ -1,8 +1,8 @@
-import { Button, createStyles, Divider, Flex, Menu, SimpleGrid, Stack, Text, Title } from "@mantine/core";
+import { Button, createStyles, Divider, Flex, Group, Menu, SimpleGrid, Stack, Text, Title } from "@mantine/core";
 
 import { FC, useContext, useState } from "react";
 import { useCookies } from "react-cookie";
-import { TbArrowsSort, TbCalendarTime, TbLetterCase } from "react-icons/tb";
+import { TbArrowsSort, TbCalendarTime, TbHome2, TbLetterCase } from "react-icons/tb";
 import { useLocation } from "wouter";
 
 import { AuthWrapper, DashboardLayout, UserContext } from "~/components";
@@ -51,13 +51,15 @@ export const PropertyCollection: FC = () => {
     return (
         <AuthWrapper requireAuth>
             <DashboardLayout>
-                <Stack p={{ base: "sm", sm: "xl" }} spacing="xl">
-                    <div>
+                <Stack pt="xl" spacing="xl" p={{ base: "sm", sm: "xl" }}>
+                    <Stack spacing={8}>
                         <Title order={2} ff="Inter" inline>
                             Welcome back {user?.name} 👋
                         </Title>
-                        <Text color="dimmed">Here's an overview of your properties</Text>
-                    </div>
+                        <Group spacing={10}>
+                            <TbHome2 /> <b>·</b> <Text>Properties</Text>
+                        </Group>
+                    </Stack>
                     <SimpleGrid cols={2} breakpoints={[{ maxWidth: "xs", cols: 1 }]}>
                         <PropertyStats />
                         <BookingStats />

@@ -92,17 +92,19 @@ export const GridView: FC<ComponentProps> = ({ sort }) => {
 
     useEffect(() => {
         if (data) {
-            const newProperties = [...data.properties.map((p: any) => convertResponseToProperty(p))].sort((a, b) => {
-                if (sort == "alphabetical") {
-                    return a.label.localeCompare(b.label);
-                } else if (sort == "created") {
-                    return b.created_at.getTime() - a.created_at.getTime();
-                } else if (sort == "updated") {
-                    return b.updated_at.getTime() - a.updated_at.getTime();
-                }
+            const newProperties = [...data.properties]
+                .map((p: any) => convertResponseToProperty(p))
+                .sort((a, b) => {
+                    if (sort == "alphabetical") {
+                        return a.label.localeCompare(b.label);
+                    } else if (sort == "created") {
+                        return b.created_at.getTime() - a.created_at.getTime();
+                    } else if (sort == "updated") {
+                        return b.updated_at.getTime() - a.updated_at.getTime();
+                    }
 
-                return 0;
-            });
+                    return 0;
+                });
 
             setProperties(newProperties);
         }

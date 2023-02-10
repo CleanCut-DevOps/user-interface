@@ -1,11 +1,11 @@
-import { Button, createStyles, Divider, Flex, Menu, SimpleGrid, Stack, Text } from "@mantine/core";
+import { Button, createStyles, Divider, Flex, Menu, SimpleGrid, Stack, Text, Title } from "@mantine/core";
 
-import { FC, useState } from "react";
+import { FC, useContext, useState } from "react";
 import { useCookies } from "react-cookie";
 import { TbArrowsSort, TbCalendarTime, TbLetterCase } from "react-icons/tb";
 import { useLocation } from "wouter";
 
-import { AuthWrapper, DashboardLayout } from "~/components";
+import { AuthWrapper, DashboardLayout, UserContext } from "~/components";
 
 import { BookingStats } from "./components/BookingStats";
 import { GridView } from "./components/Grid";
@@ -32,6 +32,7 @@ const useStyles = createStyles(theme => ({
 export const PropertyCollection: FC = () => {
     const { classes } = useStyles();
     const [, setLocation] = useLocation();
+    const { user } = useContext(UserContext);
     const [cookies, setCookies] = useCookies(["AccessToken", "PropertyCollectionConfig"]);
 
     const [sort, setSort] = useState<"alphabetical" | "created" | "updated">(
@@ -50,20 +51,33 @@ export const PropertyCollection: FC = () => {
     return (
         <AuthWrapper requireAuth>
             <DashboardLayout>
-                <Stack p={{ base: "sm", sm: "xl" }}>
+                <Stack p={{ base: "sm", sm: "xl" }} spacing="xl">
+                    <div>
+                        <Title order={2} ff="Inter" inline>
+                            Welcome back {user?.name} 👋
+                        </Title>
+                        <Text color="dimmed">Here's an overview of your properties</Text>
+                    </div>
                     <SimpleGrid cols={2} breakpoints={[{ maxWidth: "xs", cols: 1 }]}>
                         <PropertyStats />
                         <BookingStats />
                     </SimpleGrid>
-                    <Stack>
+                    <Stack spacing="sm">
                         <Flex align="center" gap="sm">
-                            <Text weight={500} size="xl">
+                            <Title order={4} ff="Inter" inline>
                                 Your Properties
-                            </Text>
+                            </Title>
                             <div style={{ flex: 1 }} />
                             <Menu width={200} offset={8} position={"bottom-end"} closeOnItemClick={false}>
                                 <Menu.Target>
-                                    <Button variant="default" size="sm" leftIcon={<TbArrowsSort />}>
+                                    <Button
+                                        variant="default"
+                                        size="sm"
+                                        compact
+                                        pr="lg"
+                                        pl="md"
+                                        leftIcon={<TbArrowsSort />}
+                                    >
                                         Sort
                                     </Button>
                                 </Menu.Target>

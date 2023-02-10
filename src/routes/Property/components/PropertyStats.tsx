@@ -43,9 +43,20 @@ export const PropertyStats: FC = () => {
 
     useEffect(() => {
         if (data) {
+            let active = 0;
+
             const newProp: Property[] = data.properties.map((p: any) => {
                 return convertResponseToProperty(p);
             });
+
+            newProp.forEach(p => {
+                axios
+                    .get(`${import.meta.env.VITE_BOOKING_API}/bookings/${p.id}`, {
+                        headers: { Authorization: `Bearer ${cookie.AccessToken}` }
+                    })
+                    .then(({ data: { bookings } }) => (active += bookings && bookings.length > 0 ? 1 : 0));
+            });
+
             const incomplete = newProp.filter(
                 p =>
                     p.icon == null ||
@@ -59,23 +70,15 @@ export const PropertyStats: FC = () => {
             ).length;
 
             setStats({
-                active: 0,
+                active,
                 incomplete,
                 total: newProp.length,
                 unverified: newProp.filter((property: Property) => property.verified_at == null).length
             });
-
-            newProp.forEach(p => {
-                axios.get(`${import.meta.env.VITE_BOOKING_API}/property/${p.id}`).then(({ data: { bookings } }) => {
-                    let newStats = { ...stats };
-
-                    newStats.active += bookings && bookings.length > 0 ? 1 : 0;
-
-                    setStats(newStats);
-                });
-            });
         }
     }, [data]);
+
+    console.log(stats);
 
     return (
         <Paper withBorder p="md" radius="md">

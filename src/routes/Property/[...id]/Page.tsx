@@ -1,8 +1,21 @@
-import { Anchor, Button, createStyles, Flex, Group, Paper, SimpleGrid, Stack, Tabs, Text, Title } from "@mantine/core";
+import {
+    Alert,
+    Anchor,
+    Button,
+    createStyles,
+    Flex,
+    Group,
+    Paper,
+    SimpleGrid,
+    Stack,
+    Tabs,
+    Text,
+    Title
+} from "@mantine/core";
 
 import { FC, useEffect, useState } from "react";
 import { useCookies } from "react-cookie";
-import { TbCalendarEvent, TbCheck, TbCircleX, TbHome2, TbListDetails } from "react-icons/tb";
+import { TbAlertCircle, TbCalendarEvent, TbCheck, TbCircleX, TbEdit, TbHome2, TbListDetails } from "react-icons/tb";
 import { useLocation } from "wouter";
 
 import { AuthWrapper, DashboardLayout, Loading } from "~/components";
@@ -62,7 +75,12 @@ export const ViewProperty: FC<ComponentProps> = ({ params: { id } }) => {
         <AuthWrapper requireAuth>
             <DashboardLayout>
                 <Stack pt="xl" spacing="xl" p={{ base: "sm", sm: "xl" }}>
-                    <Flex justify={"space-between"} align="end">
+                    <Flex
+                        direction={{ base: "column", md: "row" }}
+                        justify={"space-between"}
+                        align={{ md: "end" }}
+                        gap={{ base: 12 }}
+                    >
                         <Stack spacing={8}>
                             <Title order={2} ff="Inter" inline>
                                 {property?.icon} {property?.label}
@@ -72,14 +90,69 @@ export const ViewProperty: FC<ComponentProps> = ({ params: { id } }) => {
                                 <Text>View Details</Text>
                             </Group>
                         </Stack>
-                        <Button
-                            variant="outline"
-                            leftIcon={<TbCalendarEvent />}
-                            onClick={() => setLocation(`/bookings/new?id=${id}`)}
-                        >
-                            Book now!
-                        </Button>
+                        <Group>
+                            <Button
+                                variant="outline"
+                                leftIcon={<TbEdit />}
+                                onClick={() => setLocation(`/property/${id}/edit`)}
+                            >
+                                Edit property
+                            </Button>
+                            <Button
+                                variant="outline"
+                                leftIcon={<TbCalendarEvent />}
+                                disabled={
+                                    property?.icon == null ||
+                                    property?.label == null ||
+                                    property?.address.line_1 == null ||
+                                    property?.address.city == null ||
+                                    property?.address.zip == null ||
+                                    property?.type == null ||
+                                    property?.user_id == null ||
+                                    property?.rooms.length < 0
+                                }
+                                onClick={() => setLocation(`/bookings/new?id=${id}`)}
+                            >
+                                Book now!
+                            </Button>
+                        </Group>
                     </Flex>
+                    {property?.icon == null ||
+                    property?.label == null ||
+                    property?.address.line_1 == null ||
+                    property?.address.city == null ||
+                    property?.address.zip == null ||
+                    property?.type == null ||
+                    property?.user_id == null ||
+                    property?.rooms.length < 0 ? (
+                        <Alert
+                            variant="outline"
+                            radius="md"
+                            icon={<TbAlertCircle />}
+                            title="Property details incomplete"
+                            color="red"
+                        >
+                            <Text size="md" color="dimmed">
+                                This property has not been fully set up. Please ensure all necessary details are filled
+                                in before attempting to book a cleaning session.
+                            </Text>
+                        </Alert>
+                    ) : (
+                        property.verified_at == null && (
+                            <Alert
+                                variant="outline"
+                                radius="md"
+                                icon={<TbAlertCircle />}
+                                title="Property to be reviewed"
+                                color="yellow"
+                            >
+                                <Text size="md" color="dimmed">
+                                    This property has yet to be reviewed by a cleaner. Once it has been reviewed, the
+                                    property type, rooms and address will not be editable
+                                </Text>
+                            </Alert>
+                        )
+                    )}
                     <SimpleGrid cols={3} breakpoints={[{ maxWidth: "md", cols: 1 }]}>
                         <Paper withBorder p="md" radius="md">
                             <Flex justify={"space-between"}>

@@ -3,7 +3,6 @@ import { Button, createStyles, Divider, Flex, Group, Menu, SimpleGrid, Stack, Te
 import { FC, useContext, useState } from "react";
 import { useCookies } from "react-cookie";
 import { TbArrowsSort, TbCalendarTime, TbHome2, TbLetterCase } from "react-icons/tb";
-import { useLocation } from "wouter";
 
 import { AuthWrapper, DashboardLayout, UserContext } from "~/components";
 
@@ -30,8 +29,6 @@ const useStyles = createStyles(theme => ({
 }));
 
 export const PropertyCollection: FC = () => {
-    const { classes } = useStyles();
-    const [, setLocation] = useLocation();
     const { user } = useContext(UserContext);
     const [cookies, setCookies] = useCookies(["AccessToken", "PropertyCollectionConfig"]);
 

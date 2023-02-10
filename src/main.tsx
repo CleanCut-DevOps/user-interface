@@ -17,6 +17,7 @@ import {
     VerifyEmail,
     ViewProperty
 } from "./routes";
+import { NewBooking } from "./routes/Booking/New";
 
 const Main: FC = () => {
     const [cookie, setCookie] = useCookies(["mantine-color-scheme"]);
@@ -51,6 +52,7 @@ const Main: FC = () => {
                             <Switch>
                                 <Route path={"/"} component={PropertyCollection} />
                                 <Route path={"/bookings"} component={BookingCollection} />
+                                <Route path={"/bookings/new"} component={NewBooking} />
                                 <Route path="/property/:id/edit" component={EditProperty} />
                                 <Route path="/property/:id" component={ViewProperty} />
                                 <Route path={"/login"}>

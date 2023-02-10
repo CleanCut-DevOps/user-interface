@@ -1,4 +1,4 @@
-import { Product, ServiceType } from ".";
+import { Product, ServiceType } from "./";
 
 export type Booking = {
     id: string;

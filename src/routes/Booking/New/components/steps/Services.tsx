@@ -45,14 +45,6 @@ export const SelectServicesStep: FC = () => {
         setServiceCategories(newItems);
     }, []);
 
-    useEffect(() => {
-        let newSteps = [...steps];
-
-        newSteps[1].completed = true;
-
-        setSteps(newSteps);
-    }, []);
-
     return (
         <ScrollArea h="100%" scrollbarSize={6}>
             <Container size="sm" p={{ base: "xs", sm: "lg" }}>

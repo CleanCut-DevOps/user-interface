@@ -78,8 +78,6 @@ export const PropertyStats: FC = () => {
         }
     }, [data]);
 
-    console.log(stats);
-
     return (
         <Paper withBorder p="md" radius="md">
             <Group position="apart">

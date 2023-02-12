@@ -89,7 +89,7 @@ export const SelectServicesStep: FC = () => {
                           ))}
                 </Stack>
 
-                <Flex justify="end" display={{ base: "none", sm: "flex" }}>
+                <Flex justify="end" display={{ base: "none !important", sm: "flex !important" }}>
                     <Group>
                         <Button variant="outline" leftIcon={<TbChevronLeft />} onClick={() => setStep(1)}>
                             Previous

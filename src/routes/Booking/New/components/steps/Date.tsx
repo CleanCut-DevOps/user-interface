@@ -197,7 +197,7 @@ export const SelectDateStep: FC = () => {
                     </Accordion>
                 </Stack>
 
-                <Flex justify="end">
+                <Flex justify="end" display={{ base: "none !important", sm: "flex !important" }}>
                     <Group>
                         <Button variant="outline" leftIcon={<TbChevronLeft />} onClick={() => setStep(0)}>
                             Previous

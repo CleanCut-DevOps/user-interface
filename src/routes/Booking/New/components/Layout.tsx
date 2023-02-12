@@ -54,7 +54,7 @@ const LayoutHeader: FC = () => {
                         icon={s.icon}
                         description={s.label}
                         completedIcon={s.completed ? <TbCheck /> : <TbX />}
-                        color={step == i ? undefined : !steps[i].completed ? "red" : undefined}
+                        color={step == i ? undefined : !s.completed ? "red" : undefined}
                     />
                 ))}
             </Stepper>

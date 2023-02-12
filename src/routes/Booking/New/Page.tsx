@@ -33,9 +33,9 @@ const DisplayStep: FC = () => {
         case 0:
             return <SelectPropertyStep />;
         case 1:
-            return <SelectServicesStep />;
-        case 2:
             return <SelectDateStep />;
+        case 2:
+            return <SelectServicesStep />;
         case 3:
             return <AdditionalInformationStep />;
         case 4:

@@ -10,14 +10,22 @@ interface ComponentProps extends PropsWithChildren {}
 type BookingContextType = {
     step: number;
     steps: { label: string; completed: boolean; icon: JSX.Element | ReactNode }[];
-    services: Omit<ServiceType, "created_at" | "updated_at">[];
     properties: Property[];
+    endTime: Date | null;
+    startTime: Date | null;
+    services: Omit<ServiceType, "created_at" | "updated_at">[];
+    info: string;
+    contact: string;
     selectedProperty: Property | null;
     selectedServices: { id: string; quantity: number }[];
     setStep: Dispatch<SetStateAction<number>>;
     setSteps: Dispatch<SetStateAction<{ label: string; completed: boolean; icon: JSX.Element | ReactNode }[]>>;
     setSelectedProperty: Dispatch<SetStateAction<Property | null>>;
+    setEndTime: Dispatch<SetStateAction<Date | null>>;
+    setStartTime: Dispatch<SetStateAction<Date | null>>;
     setSelectedServices: Dispatch<SetStateAction<{ id: string; quantity: number }[]>>;
+    setInfo: Dispatch<SetStateAction<string>>;
+    setContact: Dispatch<SetStateAction<string>>;
 };
 
 export const BookingContext = createContext<BookingContextType>({
@@ -25,12 +33,20 @@ export const BookingContext = createContext<BookingContextType>({
     steps: [],
     services: [],
     properties: [],
+    info: "",
+    contact: "",
+    endTime: null,
+    startTime: null,
     selectedProperty: null,
     selectedServices: [],
     setStep: () => {},
     setSteps: () => {},
     setSelectedProperty: () => {},
-    setSelectedServices: () => {}
+    setStartTime: () => {},
+    setEndTime: () => {},
+    setSelectedServices: () => {},
+    setInfo: () => {},
+    setContact: () => {}
 });
 
 export const BookingProvider: FC<ComponentProps> = ({ children }) => {
@@ -44,9 +60,9 @@ export const BookingProvider: FC<ComponentProps> = ({ children }) => {
     const [step, setStep] = useState(0);
     const [steps, setSteps] = useState<{ label: string; completed: boolean; icon: ReactNode }[]>([
         { label: "Select Property", completed: false, icon: <TbHome2 /> },
-        { label: "Select Services", completed: false, icon: <TbHotelService /> },
         { label: "Select Date", completed: false, icon: <TbCalendarTime /> },
-        { label: "Additional details", completed: false, icon: <TbEdit /> },
+        { label: "Select Services", completed: true, icon: <TbHotelService /> },
+        { label: "Additional details", completed: true, icon: <TbEdit /> },
         { label: "Confirm", completed: false, icon: <TbCalendarPlus /> }
     ]);
 
@@ -55,6 +71,12 @@ export const BookingProvider: FC<ComponentProps> = ({ children }) => {
 
     const [services, setServices] = useState<Omit<ServiceType, "created_at" | "updated_at">[]>([]);
     const [selectedServices, setSelectedServices] = useState<{ id: string; quantity: number }[]>([]);
+
+    const [startTime, setStartTime] = useState<Date | null>(null);
+    const [endTime, setEndTime] = useState<Date | null>(null);
+
+    const [contact, setContact] = useState("");
+    const [info, setInfo] = useState("");
 
     useEffect(() => {
         if (propertyData && propertyData.properties) {
@@ -124,7 +146,7 @@ export const BookingProvider: FC<ComponentProps> = ({ children }) => {
     }, [servicesData]);
 
     useEffect(() => {
-        if (selectedProperty) {
+        if (selectedProperty != null) {
             const newSteps = [...steps];
 
             newSteps[0].completed = true;
@@ -141,11 +163,19 @@ export const BookingProvider: FC<ComponentProps> = ({ children }) => {
                 services,
                 properties,
                 selectedProperty,
+                startTime,
+                endTime,
                 selectedServices,
+                info,
+                contact,
                 setStep,
                 setSteps,
                 setSelectedProperty,
-                setSelectedServices
+                setStartTime,
+                setEndTime,
+                setSelectedServices,
+                setInfo,
+                setContact
             }}
         >
             {children}

@@ -44,15 +44,15 @@ export const SelectPropertyStep: FC = () => {
     return (
         <Center p={{ base: "xs", sm: "lg" }} h={"100%"}>
             <Paper withBorder className={classes.wrapper}>
-                <Stack spacing={0} align="center">
-                    <Title order={3} ff="Inter">
-                        Select Property
+                <Stack spacing={2} align="center">
+                    <Title order={3} ff="Inter" ta="center">
+                        Book online
                     </Title>
                     <Text color="dimmed" ta="center">
                         Let's get started by selecting which property you want to book.
                     </Text>
                 </Stack>
-                <Flex gap="md">
+                <Flex gap="md" direction={{ base: "column", xs: "row" }}>
                     <Autocomplete
                         w={{ base: 250, xs: 300, md: 350 }}
                         placeholder="Pick one"
@@ -77,7 +77,7 @@ export const SelectPropertyStep: FC = () => {
                         transitionTimingFunction="ease"
                     />
                     <Button
-                        variant="light"
+                        variant="outline"
                         disabled={selectedProperty == null}
                         onClick={() => setStep(1)}
                         rightIcon={<TbChevronRight />}

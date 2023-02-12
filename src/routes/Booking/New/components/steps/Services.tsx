@@ -55,8 +55,8 @@ export const SelectServicesStep: FC = () => {
 
     return (
         <ScrollArea h="100%" scrollbarSize={6}>
-            <Container p={{ base: "xs", sm: "lg" }}>
-                <Title ff="Inter">Select additional services</Title>
+            <Container size="sm" p={{ base: "xs", sm: "lg" }}>
+                <Title ff="Inter">Do you need anything else?</Title>
                 <Text color="dimmed">
                     You can add additional services to your booking. These services will be added to your final bill.
                 </Text>
@@ -89,12 +89,12 @@ export const SelectServicesStep: FC = () => {
                           ))}
                 </Stack>
 
-                <Flex justify="end">
+                <Flex justify="end" display={{ base: "none", sm: "flex" }}>
                     <Group>
-                        <Button variant="light" leftIcon={<TbChevronLeft />} onClick={() => setStep(0)}>
+                        <Button variant="outline" leftIcon={<TbChevronLeft />} onClick={() => setStep(1)}>
                             Previous
                         </Button>
-                        <Button variant="light" rightIcon={<TbChevronRight />} onClick={() => setStep(2)}>
+                        <Button variant="outline" rightIcon={<TbChevronRight />} onClick={() => setStep(3)}>
                             Next
                         </Button>
                     </Group>
@@ -177,7 +177,7 @@ const ServiceItem: FC<{ service: Omit<ServiceType, "created_at" | "updated_at"> 
                     >
                         {service.label}
                     </Text>{" "}
-                    <Text span size="xs" color="dimmed">
+                    <Text span size="xs" color="dimmed" style={{ wordBreak: "keep-all", lineBreak: "strict" }}>
                         (${service.price.toFixed(2)} / unit)
                     </Text>
                 </Text>

@@ -21,7 +21,7 @@ export const BookingLayout: FC<ComponentProps> = ({ children }) => {
 };
 
 const LayoutHeader: FC = () => {
-    const { step, steps, setStep } = useContext(BookingContext);
+    const { step, steps, selectedProperty, startTime, endTime, setStep } = useContext(BookingContext);
 
     const handleStepChange = (nextStep: number) => {
         if (nextStep >= 0 && nextStep < steps.length) setStep(nextStep);
@@ -43,19 +43,18 @@ const LayoutHeader: FC = () => {
                 size="xs"
                 active={step}
                 breakpoint="sm"
-                allowNextStepsSelect={false}
                 onStepClick={handleStepChange}
                 display={{ base: "none", md: "block" }}
             >
                 {steps.map((s, i) => (
                     <Stepper.Step
+                        styles={{}}
                         key={i}
                         label={`Step ${i + 1}`}
                         icon={s.icon}
                         description={s.label}
                         completedIcon={s.completed ? <TbCheck /> : <TbX />}
-                        color={step == i ? undefined : !s.completed ? "red" : undefined}
-                        allowStepSelect={i > 0 ? steps[i - 1].completed : true}
+                        color={step == i ? undefined : !steps[i].completed ? "red" : undefined}
                     />
                 ))}
             </Stepper>

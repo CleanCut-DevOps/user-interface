@@ -64,7 +64,7 @@ export const BookingProvider: FC<ComponentProps> = ({ children }) => {
         { label: "Select Property", completed: false, icon: <TbHome2 /> },
         { label: "Select Date", completed: false, icon: <TbCalendarTime /> },
         { label: "Select Services", completed: true, icon: <TbHotelService /> },
-        { label: "Additional details", completed: true, icon: <TbEdit /> },
+        { label: "Additional details", completed: false, icon: <TbEdit /> },
         { label: "Confirm", completed: false, icon: <TbCalendarPlus /> }
     ]);
 
@@ -161,6 +161,16 @@ export const BookingProvider: FC<ComponentProps> = ({ children }) => {
             setSteps(newSteps);
         }
     }, [selectedProperty]);
+
+    useEffect(() => {
+        if (info.length > 0) {
+            const newSteps = [...steps];
+
+            newSteps[3].completed = true;
+
+            setSteps(newSteps);
+        }
+    }, [info]);
 
     return (
         <BookingContext.Provider

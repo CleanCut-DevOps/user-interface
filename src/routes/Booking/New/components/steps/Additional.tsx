@@ -31,24 +31,23 @@ export const AdditionalInformationStep: FC = () => {
                             size={"sm"}
                             value={contact}
                             variant={"default"}
+                            placeholder="Phone number / email"
                             onChange={e => setContact(e.target.value)}
                         />
-                        <Text size="sm" color="dimmed">
+                        <Text my={4} size="sm" color="dimmed" inline>
                             We'll contact your preferred contact as well as this secondary contact if necessary
                         </Text>
                     </Row>
-                    <Row label={"Additional information"}>
+                    <Row req label={"Additional information"}>
                         <Textarea
                             value={info}
                             variant={"default"}
                             onChange={e => setInfo(e.target.value)}
                             autosize
+                            placeholder="Notes / How to access property / Set-up Instructions / Parking Info"
                             minRows={6}
                             maxRows={12}
                         />
-                        <Text size="sm" color="dimmed">
-                            We'll contact you on your preferred contact as well as this secondary contact if necessary
-                        </Text>
                     </Row>
                 </Grid>
 
@@ -68,10 +67,11 @@ export const AdditionalInformationStep: FC = () => {
 };
 
 interface RowProps extends PropsWithChildren {
+    req?: boolean;
     label: string;
 }
 
-const Row: FC<RowProps> = ({ label, children }) => {
+const Row: FC<RowProps> = ({ req, label, children }) => {
     return (
         <>
             <Grid.Col
@@ -79,7 +79,7 @@ const Row: FC<RowProps> = ({ label, children }) => {
                 sx={theme => ({ [`@media (max-width: ${theme.breakpoints.xs}px)`]: { display: "none" } })}
             >
                 <Title ff="Inter" order={6}>
-                    {label}
+                    {label} {req && <span style={{ color: "red" }}>*</span>}
                 </Title>
             </Grid.Col>
             <Grid.Col span={8}>
@@ -92,7 +92,7 @@ const Row: FC<RowProps> = ({ label, children }) => {
                             [`@media (max-width: ${theme.breakpoints.xs}px)`]: { display: "block" }
                         })}
                     >
-                        {label}
+                        {label} {req && <span style={{ color: "red" }}>*</span>}
                     </Title>
                     {children}
                 </Stack>

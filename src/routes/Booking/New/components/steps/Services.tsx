@@ -24,7 +24,7 @@ type ServiceCategory = { title: string; services: Omit<ServiceType, "created_at"
 
 export const SelectServicesStep: FC = () => {
     const [serviceCategories, setServiceCategories] = useState<ServiceCategory[]>([]);
-    const { steps, services, setStep, setSteps } = useContext(BookingContext);
+    const { services, setStep } = useContext(BookingContext);
 
     useEffect(() => {
         let newItems: ServiceCategory[] = [];
@@ -125,22 +125,34 @@ const useItemStyles = createStyles((theme, { selected }: { selected: boolean }) 
 const ServiceItem: FC<{ service: Omit<ServiceType, "created_at" | "updated_at"> }> = ({ service }) => {
     const theme = useMantineTheme();
     const { selectedServices, setSelectedServices } = useContext(BookingContext);
-    const [value, setValue] = useState(selectedServices.find(s => s.id == service.id)?.quantity ?? 0);
+    const [value, setValue] = useState(selectedServices.find(s => s.service.id == service.id)?.quantity ?? 0);
     const { classes } = useItemStyles({ selected: value > 0 });
 
     useEffect(() => {
-        let newSelectedServices = [...selectedServices];
+        if (value > 0) {
+            let newSelectedServices = [...selectedServices];
 
-        const index = newSelectedServices.findIndex(s => s.id == service.id);
+            const index = newSelectedServices.findIndex(s => s.service.id == service.id);
 
-        if (index !== -1) {
-            if (value > 0) newSelectedServices[index].quantity = value;
-            else newSelectedServices.splice(index, 1);
+            if (index !== -1) {
+                if (value > 0) newSelectedServices[index].quantity = value;
+                else newSelectedServices.splice(index, 1);
+            } else {
+                newSelectedServices.push({ service, quantity: value });
+            }
+
+            setSelectedServices(newSelectedServices);
         } else {
-            newSelectedServices.push({ id: service.id, quantity: value });
-        }
+            let newSelectedServices = [...selectedServices];
 
-        setSelectedServices(newSelectedServices);
+            const index = newSelectedServices.findIndex(s => s.service.id == service.id);
+
+            if (index !== -1) {
+                newSelectedServices.splice(index, 1);
+            }
+
+            setSelectedServices(newSelectedServices);
+        }
     }, [value]);
 
     const handleClick = (action: "add" | "remove") => () => {

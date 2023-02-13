@@ -1,4 +1,4 @@
-import { AppShell, Button, Flex, Group, Header, Stack, Stepper, Text, ThemeIcon } from "@mantine/core";
+import { AppShell, Button, Container, Flex, Group, Header, Stack, Stepper, Text, ThemeIcon } from "@mantine/core";
 
 import { FC, PropsWithChildren, useContext } from "react";
 import { TbCheck, TbChevronLeft, TbChevronRight, TbX } from "react-icons/tb";
@@ -9,19 +9,14 @@ interface ComponentProps extends PropsWithChildren {}
 
 export const BookingLayout: FC<ComponentProps> = ({ children }) => {
     return (
-        <AppShell
-            padding={0}
-            asideOffsetBreakpoint="md"
-            header={<LayoutHeader />}
-            styles={{ main: { height: "100vh", overflow: "hidden" } }}
-        >
+        <AppShell padding={0} header={<LayoutHeader />} styles={{ main: { height: "100vh", overflow: "hidden" } }}>
             {children}
         </AppShell>
     );
 };
 
 const LayoutHeader: FC = () => {
-    const { step, steps, selectedProperty, startTime, endTime, setStep } = useContext(BookingContext);
+    const { step, steps, setStep } = useContext(BookingContext);
 
     const handleStepChange = (nextStep: number) => {
         if (nextStep >= 0 && nextStep < steps.length) setStep(nextStep);
@@ -37,27 +32,34 @@ const LayoutHeader: FC = () => {
 
     return (
         <Header height={{ base: 128, xs: 64 }} withBorder={false}>
-            <Stepper
-                py={15}
-                px={64}
-                size="xs"
-                active={step}
-                breakpoint="sm"
-                onStepClick={handleStepChange}
-                display={{ base: "none", md: "block" }}
-            >
-                {steps.map((s, i) => (
-                    <Stepper.Step
-                        styles={{}}
-                        key={i}
-                        label={`Step ${i + 1}`}
-                        icon={s.icon}
-                        description={s.label}
-                        completedIcon={s.completed ? <TbCheck /> : <TbX />}
-                        color={step == i ? undefined : !s.completed ? "red" : undefined}
-                    />
-                ))}
-            </Stepper>
+            <Container size="lg">
+                <Stepper
+                    py={15}
+                    px={64}
+                    size="xs"
+                    active={step}
+                    breakpoint="sm"
+                    onStepClick={handleStepChange}
+                    styles={theme => ({
+                        separatorActive: {
+                            backgroundColor: steps[0].completed && steps[1].completed ? undefined : theme.colors.red[7]
+                        }
+                    })}
+                    display={{ base: "none", md: "block" }}
+                >
+                    {steps.map((s, i) => (
+                        <Stepper.Step
+                            styles={{}}
+                            key={i}
+                            label={`Step ${i + 1}`}
+                            icon={s.icon}
+                            description={s.label}
+                            completedIcon={s.completed ? <TbCheck /> : <TbX />}
+                            color={step == i ? undefined : !s.completed ? "red" : undefined}
+                        />
+                    ))}
+                </Stepper>
+            </Container>
             <Flex
                 px="xl"
                 h="100%"

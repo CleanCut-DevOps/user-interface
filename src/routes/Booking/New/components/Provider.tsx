@@ -17,13 +17,15 @@ type BookingContextType = {
     info: string;
     contact: string;
     selectedProperty: Property | null;
-    selectedServices: { id: string; quantity: number }[];
+    selectedServices: { service: Omit<ServiceType, "created_at" | "updated_at">; quantity: number }[];
     setStep: Dispatch<SetStateAction<number>>;
     setSteps: Dispatch<SetStateAction<{ label: string; completed: boolean; icon: JSX.Element | ReactNode }[]>>;
     setSelectedProperty: Dispatch<SetStateAction<Property | null>>;
     setEndTime: Dispatch<SetStateAction<Date | null>>;
     setStartTime: Dispatch<SetStateAction<Date | null>>;
-    setSelectedServices: Dispatch<SetStateAction<{ id: string; quantity: number }[]>>;
+    setSelectedServices: Dispatch<
+        SetStateAction<{ service: Omit<ServiceType, "created_at" | "updated_at">; quantity: number }[]>
+    >;
     setInfo: Dispatch<SetStateAction<string>>;
     setContact: Dispatch<SetStateAction<string>>;
 };
@@ -70,7 +72,12 @@ export const BookingProvider: FC<ComponentProps> = ({ children }) => {
     const [selectedProperty, setSelectedProperty] = useState<Property | null>(null);
 
     const [services, setServices] = useState<Omit<ServiceType, "created_at" | "updated_at">[]>([]);
-    const [selectedServices, setSelectedServices] = useState<{ id: string; quantity: number }[]>([]);
+    const [selectedServices, setSelectedServices] = useState<
+        {
+            service: Omit<ServiceType, "created_at" | "updated_at">;
+            quantity: number;
+        }[]
+    >([]);
 
     const [startTime, setStartTime] = useState<Date | null>(null);
     const [endTime, setEndTime] = useState<Date | null>(null);

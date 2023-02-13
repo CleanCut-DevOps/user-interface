@@ -8,9 +8,9 @@ export const fetchWithToken = (url: string, token?: string) =>
 
 export const useProperties = (accessToken?: string) => {
     const { data, error, isLoading } = useSWR(
-        [`${import.meta.env.VITE_PROPERTY_API}`, accessToken],
+        [`${import.meta.env.VITE_PROPERTY_API}/property`, accessToken],
         ([url, token]) => fetchWithToken(url, token),
-        { refreshInterval: 16000 }
+        { refreshInterval: 2000 }
     );
 
     return {
@@ -24,6 +24,47 @@ export const useProperty = (id: string, accessToken?: string) => {
     const { data, error, isLoading } = useSWR(
         [`${import.meta.env.VITE_PROPERTY_API}/${id}`, accessToken],
         ([url, token]) => fetchWithToken(url, token)
+    );
+
+    return {
+        data: data,
+        isLoading,
+        isError: error
+    };
+};
+
+export const useBookings = (accessToken?: string) => {
+    const { data, error, isLoading } = useSWR(
+        [`${import.meta.env.VITE_BOOKING_API}/bookings`, accessToken],
+        ([url, token]) => fetchWithToken(url, token),
+        { refreshInterval: 2000 }
+    );
+
+    return {
+        data: data,
+        isLoading,
+        isError: error
+    };
+};
+
+export const useBooking = (id: string, accessToken?: string) => {
+    const { data, error, isLoading } = useSWR(
+        [`${import.meta.env.VITE_BOOKING_API}/bookings/${id}`, accessToken],
+        ([url, token]) => fetchWithToken(url, token)
+    );
+
+    return {
+        data: data,
+        isLoading,
+        isError: error
+    };
+};
+
+export const useBookingServices = (accessToken?: string) => {
+    const { data, error, isLoading } = useSWR(
+        [`${import.meta.env.VITE_BOOKING_API}/types`, accessToken],
+        ([url, token]) => fetchWithToken(url, token),
+        { refreshInterval: 2000 }
     );
 
     return {

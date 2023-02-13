@@ -1,4 +1,15 @@
-import { ActionIcon, createStyles, Group, Navbar, ScrollArea, Skeleton, Stack, Text, Tooltip } from "@mantine/core";
+import {
+    ActionIcon,
+    createStyles,
+    Group,
+    Navbar,
+    ScrollArea,
+    Skeleton,
+    Stack,
+    Text,
+    Tooltip,
+    UnstyledButton
+} from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { showNotification } from "@mantine/notifications";
 
@@ -15,7 +26,9 @@ const useStyles = createStyles(theme => ({
     section: {
         display: "flex",
         flexDirection: "column",
-        padding: theme.spacing.sm
+        padding: theme.spacing.sm,
+
+        ":last-of-type": { padding: 0 }
     },
     grow: {
         height: "100%",
@@ -29,8 +42,14 @@ const useStyles = createStyles(theme => ({
         borderRadius: theme.radius.md,
         padding: `${theme.spacing.xs - 4}px ${theme.spacing.sm}px`,
 
-        "&:hover": { backgroundColor: theme.colorScheme === "dark" ? theme.colors.dark[8] : theme.colors.gray[0] },
-        "&:active": { backgroundColor: theme.colorScheme === "dark" ? theme.colors.dark[9] : theme.colors.gray[1] }
+        ":hover": { backgroundColor: theme.colorScheme === "dark" ? theme.colors.dark[8] : theme.colors.gray[0] },
+        ":active": { backgroundColor: theme.colorScheme === "dark" ? theme.colors.dark[9] : theme.colors.gray[1] },
+
+        ":focus:not(:focus-visible)": { outline: "none" },
+
+        ":focus": {
+            outline: `2px solid ${theme.colors[theme.primaryColor][theme.colorScheme === "dark" ? 7 : 5]}`
+        }
     },
     header: {
         padding: `0 ${theme.spacing.sm}px}`
@@ -58,7 +77,7 @@ export const NavPropertyList: FC = () => {
 
         await axios
             .post(
-                `${import.meta.env.VITE_PROPERTY_API}/`,
+                `${import.meta.env.VITE_PROPERTY_API}/property`,
                 {},
                 { headers: { Authorization: `Bearer ${cookie.AccessToken}` } }
             )
@@ -92,7 +111,7 @@ export const NavPropertyList: FC = () => {
             </Navbar.Section>
             <Navbar.Section className={`${classes.section} ${classes.grow}`}>
                 {isLoading && (
-                    <Stack spacing={18} mt={10}>
+                    <Stack p="sm" spacing={18} mt={10}>
                         {[...Array(Math.round(Math.random() * 5))].map((_, i) => (
                             <Skeleton key={i} visible radius={"md"}>
                                 <Text size={12}>Loading</Text>
@@ -103,13 +122,15 @@ export const NavPropertyList: FC = () => {
                 {isError && <Text>Error loading in your properties. Reload the site or come back in a while</Text>}
                 {!isLoading && !isError && data && (
                     <ScrollArea scrollbarSize={6}>
-                        <Stack spacing={8}>
+                        <Stack p="sm" spacing={8}>
                             {properties.map((property: Property) => (
                                 <Link key={property.id} href={`/property/${property.id}`}>
-                                    <Group className={classes.link}>
-                                        <Text size={12}>{property.icon}</Text>
-                                        <Text size={12}>{property.label}</Text>
-                                    </Group>
+                                    <UnstyledButton className={classes.link}>
+                                        <Group>
+                                            <Text size={12}>{property.icon}</Text>
+                                            <Text size={12}>{property.label}</Text>
+                                        </Group>
+                                    </UnstyledButton>
                                 </Link>
                             ))}
                         </Stack>

@@ -1,5 +1,7 @@
-import { ActionIcon, Alert, Button, Input, Menu, Modal, Text } from "@mantine/core";
-import { useDebouncedValue, useDisclosure } from "@mantine/hooks";
+import { ActionIcon, Alert, Button, Menu, Text, TextInput } from "@mantine/core";
+import { useDebouncedValue } from "@mantine/hooks";
+import { closeAllModals, openModal } from "@mantine/modals";
+import { showNotification } from "@mantine/notifications";
 
 import axios from "axios";
 import { ChangeEvent, Dispatch, FC, SetStateAction, useState } from "react";
@@ -9,27 +11,68 @@ import { useLocation } from "wouter";
 
 import { Property } from "~/models";
 
+export type FloatingPlacement = "end" | "start";
+export type FloatingSide = "top" | "right" | "bottom" | "left";
+export type FloatingPosition = FloatingSide | `${FloatingSide}-${FloatingPlacement}`;
+
 type ComponentProps = {
     prop: Property;
-    position: "bottom-end" | "left-start";
+    size?: "xs" | "sm" | "md" | "lg" | "xl";
+    position?: FloatingPosition;
     setProperties: Dispatch<SetStateAction<Property[]>>;
 };
 
-export const PropMenu: FC<ComponentProps> = ({ prop, setProperties, position }) => {
+export const PropMenu: FC<ComponentProps> = ({ prop, setProperties, position, size = "lg" }) => {
     const [, setLocation] = useLocation();
-    const [cookies] = useCookies(["AccessToken"]);
-    const [confirm, setConfirm] = useState("");
-    const [deleting, setDeleting] = useState(false);
-    const [confirmDebounced] = useDebouncedValue(confirm, 500);
-    const [opened, { open, close }] = useDisclosure(false);
-
-    const handleChange = (e: ChangeEvent<HTMLInputElement>) => setConfirm(e.target.value);
 
     const handleView = () => setLocation(`/property/${prop.id}`);
 
     const handleUpdate = () => setLocation(`/property/${prop.id}/edit`);
 
-    const handleDelete = (e: any) => {
+    const handleDelete = () => {
+        openModal({
+            title: "Are you absolutely sure?",
+            children: <DeleteModal prop={prop} setProperties={setProperties} />
+        });
+    };
+
+    return (
+        <>
+            <Menu shadow="xs" position={position} width={200}>
+                <Menu.Target>
+                    <ActionIcon variant={"default"} size={size}>
+                        <TbDots style={{ transform: "rotate(90deg)" }} />
+                    </ActionIcon>
+                </Menu.Target>
+                <Menu.Dropdown>
+                    <Menu.Label>Options</Menu.Label>
+                    <Menu.Item icon={<TbEye />} onClick={handleView}>
+                        View details
+                    </Menu.Item>
+                    <Menu.Item icon={<TbEdit />} onClick={handleUpdate}>
+                        Update
+                    </Menu.Item>
+                    <Menu.Item color="red" icon={<TbTrash />} onClick={handleDelete}>
+                        Delete property
+                    </Menu.Item>
+                </Menu.Dropdown>
+            </Menu>
+        </>
+    );
+};
+
+const DeleteModal: FC<{ prop: Property; setProperties: Dispatch<SetStateAction<Property[]>> }> = ({
+    prop,
+    setProperties
+}) => {
+    const [confirm, setConfirm] = useState("");
+    const [cookies] = useCookies(["AccessToken"]);
+    const [deleting, setDeleting] = useState(false);
+    const [confirmDebounced] = useDebouncedValue(confirm, 500);
+
+    const handleChange = (e: ChangeEvent<HTMLInputElement>) => setConfirm(e.target.value);
+
+    const deleteProperty = (e: any) => {
         e.preventDefault();
 
         setDeleting(true);
@@ -39,67 +82,51 @@ export const PropMenu: FC<ComponentProps> = ({ prop, setProperties, position }) 
                 headers: { Authorization: `Bearer ${cookies.AccessToken}` }
             })
             .then(() => {
-                close();
                 setConfirm("");
                 setDeleting(false);
 
                 setProperties(prev => prev.filter(p => p.id != prop.id));
+
+                closeAllModals();
+            })
+            .catch(() => {
+                setDeleting(false);
+
+                showNotification({
+                    title: "Error",
+                    message: "An error occurred while deleting the property.",
+                    color: "red"
+                });
+
+                closeAllModals();
             });
     };
 
     return (
         <>
-            <Menu shadow="xs" position={position} width={200}>
-                <Menu.Target>
-                    <ActionIcon variant={"default"}>
-                        <TbDots style={{ transform: "rotate(90deg)" }} />
-                    </ActionIcon>
-                </Menu.Target>
-                <Menu.Dropdown>
-                    <Menu.Label>Details</Menu.Label>
-                    <Menu.Item icon={<TbEye />} onClick={handleView}>
-                        View
-                    </Menu.Item>
-                    <Menu.Item icon={<TbEdit />} onClick={handleUpdate}>
-                        Update
-                    </Menu.Item>
-                    <Menu.Item color="red" icon={<TbTrash />} onClick={open}>
-                        Delete property
-                    </Menu.Item>
-                </Menu.Dropdown>
-            </Menu>
-            <Modal
-                centered
-                opened={opened}
-                onClose={close}
-                title="Are you absolutely sure?
-"
-            >
-                <Alert mt={"sm"} mb={32} icon={<TbAlertCircle />} title="Deleting property" color={"red"}>
-                    <Text color={"dimmed"}>
-                        This action <strong>cannot</strong> be undone. This will permanently delete the{" "}
-                        <strong>{prop.label}</strong> property and everything related such as details, images and
-                        bookings.
-                    </Text>
-                </Alert>
-                <Text size={"sm"}>
-                    Please type <strong>{prop.label}</strong> to confirm.
+            <Alert mt={"sm"} mb={32} icon={<TbAlertCircle />} title="Deleting property" color={"red"}>
+                <Text color={"dimmed"}>
+                    This action <strong>cannot</strong> be undone. This will permanently delete the{" "}
+                    <strong>{prop.label}</strong> property and everything related such as details, images and bookings.
                 </Text>
-                <form onSubmit={handleDelete}>
-                    <Input my={"xs"} value={confirm} onChange={handleChange} />
-                    <Button
-                        mt={4}
-                        w={"100%"}
-                        color={"red"}
-                        loading={deleting}
-                        onClick={handleDelete}
-                        sx={{ transition: "0.3s ease" }}
-                        disabled={confirmDebounced != prop.label || confirm != prop.label}
-                    >
-                        I understand the consequences, delete this property
-                    </Button>
-                </form>
-            </Modal>
+            </Alert>
+            <Text size={"sm"}>
+                Please type <strong>{prop.label}</strong> to confirm.
+            </Text>
+            <form onSubmit={deleteProperty}>
+                <TextInput my={"xs"} value={confirm} onChange={handleChange} />
+                <Button
+                    mt={4}
+                    w={"100%"}
+                    color={"red"}
+                    loading={deleting}
+                    type={"submit"}
+                    sx={{ transition: "0.3s ease" }}
+                    disabled={confirmDebounced != prop.label || confirm != prop.label}
+                >
+                    I understand the consequences, delete this property
+                </Button>
+            </form>
         </>
     );
 };

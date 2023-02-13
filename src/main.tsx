@@ -8,7 +8,16 @@ import { createRoot } from "react-dom/client";
 import { Route, Switch } from "wouter";
 
 import { UserProvider } from "./components";
-import { Auth, EditProperty, NotFound, PropertyCollection, VerifyEmail, ViewProperty } from "./routes";
+import {
+    Auth,
+    BookingCollection,
+    EditProperty,
+    NotFound,
+    PropertyCollection,
+    VerifyEmail,
+    ViewProperty
+} from "./routes";
+import { NewBooking } from "./routes/Booking/New";
 
 const Main: FC = () => {
     const [cookie, setCookie] = useCookies(["mantine-color-scheme"]);
@@ -42,6 +51,10 @@ const Main: FC = () => {
                         <UserProvider>
                             <Switch>
                                 <Route path={"/"} component={PropertyCollection} />
+                                <Route path={"/bookings"} component={BookingCollection} />
+                                <Route path={"/bookings/new"} component={NewBooking} />
+                                <Route path="/property/:id/edit" component={EditProperty} />
+                                <Route path="/property/:id" component={ViewProperty} />
                                 <Route path={"/login"}>
                                     <Auth type={"login"} />
                                 </Route>
@@ -49,8 +62,6 @@ const Main: FC = () => {
                                     <Auth type={"register"} />
                                 </Route>
                                 <Route path={"/verify-email"} component={VerifyEmail} />
-                                <Route path="/property/:id/edit" component={EditProperty} />
-                                <Route path="/property/:id" component={ViewProperty} />
                                 <Route component={NotFound} />
                             </Switch>
                         </UserProvider>

@@ -283,11 +283,10 @@ export const Details: FC = () => {
             setDeleting(true);
 
             axios
-                .post(
-                    `${import.meta.env.VITE_PROPERTY_API}/${property?.id}/image`,
-                    { url: targetURL },
-                    { headers: { Authorization: `Bearer ${cookies.AccessToken}` } }
-                )
+                .delete(`${import.meta.env.VITE_PROPERTY_API}/${property?.id}/image`, {
+                    headers: { Authorization: `Bearer ${cookies.AccessToken}` },
+                    data: { url: targetURL }
+                })
                 .then(({ data: { images } }) => {
                     setDeleting(false);
 

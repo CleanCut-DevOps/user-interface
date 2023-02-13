@@ -1,3 +1,6 @@
+import { PropertyType } from "./types/Property";
+import { RoomType } from "./types/Room";
+
 export type Property = {
     id: string;
     user_id: string | null;
@@ -6,10 +9,12 @@ export type Property = {
     description: string | null;
     images: string[];
     address: Address;
-    type: PropertyType | null;
+    type: Omit<PropertyType, "rooms"> | null;
     rooms: Room[];
     created_at: Date;
     updated_at: Date;
+    verified_at: Date | null;
+    favourite_at: Date | null;
 };
 
 type Address = {
@@ -21,67 +26,50 @@ type Address = {
     updated_at: Date;
 };
 
-type PropertyType = {
-    id: string;
-    label: string;
-    description: string;
-    detailed_description: string;
-    available: boolean;
-    created_at: Date;
-    updated_at: Date;
-};
-
 export type Room = {
-    type: RoomType;
+    type: Pick<RoomType, "id" | "label" | "price">;
     quantity: number;
     updated_at: Date;
 };
 
-type RoomType = {
-    id: string;
-    label: string;
-    price: number;
-    available: boolean;
-};
-
-export const convertResponseToProperty = (response: any): Property => ({
-    id: response.id,
-    user_id: response.user_id,
-    icon: response.icon,
-    label: response.label,
-    description: response.description,
-    images: response.images,
+export const convertResponseToProperty = (property: any): Property => ({
+    id: property.id,
+    user_id: property.user_id,
+    icon: property.icon,
+    label: property.label,
+    description: property.description,
+    images: property.images,
     address: {
-        line_1: response.address.line_1,
-        line_2: response.address.line_2,
-        city: response.address.city,
-        state: response.address.state,
-        zip: response.address.zip,
-        updated_at: new Date(response.address.updated_at)
+        line_1: property.address.line_1,
+        line_2: property.address.line_2,
+        city: property.address.city,
+        state: property.address.state,
+        zip: property.address.zip,
+        updated_at: new Date(property.address.updated_at)
     },
-    type: response.type
+    type: property.type
         ? {
-              id: response.type.id,
-              label: response.type.label,
-              available: response.type.available,
-              description: response.type.description,
-              detailed_description: response.type.detailed_description,
-              created_at: new Date(response.type.created_at),
-              updated_at: new Date(response.type.updated_at)
+              id: property.type.id,
+              label: property.type.label,
+              available: property.type.available,
+              description: property.type.description,
+              created_at: new Date(property.type.created_at),
+              updated_at: new Date(property.type.updated_at)
           }
         : null,
-    rooms: response.rooms.map(
+    rooms: property.rooms.map(
         (r: any): Room => ({
             type: {
                 id: r.type.id,
                 label: r.type.label,
-                price: r.type.price,
-                available: r.type.available
+                price: r.type.price
             },
             quantity: r.quantity,
             updated_at: new Date(r.updated_at)
         })
     ),
-    created_at: new Date(response.created_at),
-    updated_at: new Date(response.updated_at)
+    created_at: new Date(property.created_at),
+    updated_at: new Date(property.updated_at),
+    verified_at: property.verified_at ? new Date(property.verified_at) : null,
+    favourite_at: property.favourite_at ? new Date(property.favourite_at) : null
 });

@@ -1,6 +1,6 @@
 export type RoomType = {
     id: string;
-    type_id: string;
+    property_type_id: string;
     label: string;
     price: number;
     available: boolean;

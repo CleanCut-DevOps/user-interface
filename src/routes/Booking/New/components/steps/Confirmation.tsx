@@ -1,7 +1,7 @@
-import { Accordion, Button, Container, Divider, FocusTrap, Group, ScrollArea, Stack, Text, Title } from "@mantine/core";
+import { Accordion, Container, Divider, Group, ScrollArea, Stack, Text, Title } from "@mantine/core";
+
 import { FC, useContext, useMemo } from "react";
-import { SiVisa } from "react-icons/si";
-import { TbPlus } from "react-icons/tb";
+
 import { Payment } from "../Payment";
 import { BookingContext } from "../Provider";
 

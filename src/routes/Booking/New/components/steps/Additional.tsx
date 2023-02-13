@@ -11,8 +11,10 @@ import {
     TextInput,
     Title
 } from "@mantine/core";
+
 import { FC, PropsWithChildren, useContext } from "react";
 import { TbChevronLeft, TbChevronRight } from "react-icons/tb";
+
 import { BookingContext } from "../Provider";
 
 export const AdditionalInformationStep: FC = () => {

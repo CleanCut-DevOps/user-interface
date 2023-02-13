@@ -11,8 +11,10 @@ import {
     Text,
     Title
 } from "@mantine/core";
+
 import { FC, forwardRef, useContext, useState } from "react";
 import { TbChevronRight } from "react-icons/tb";
+
 import { BookingContext } from "../Provider";
 
 const useStyles = createStyles(theme => ({

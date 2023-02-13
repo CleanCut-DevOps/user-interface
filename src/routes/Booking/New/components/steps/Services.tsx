@@ -15,9 +15,12 @@ import {
     Title,
     useMantineTheme
 } from "@mantine/core";
+
 import { FC, Fragment, useContext, useEffect, useState } from "react";
 import { TbChevronLeft, TbChevronRight, TbMinus, TbPlus } from "react-icons/tb";
+
 import { ServiceType } from "~/models";
+
 import { BookingContext } from "../Provider";
 
 type ServiceCategory = { title: string; services: Omit<ServiceType, "created_at" | "updated_at">[] };

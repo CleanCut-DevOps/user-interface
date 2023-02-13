@@ -12,8 +12,10 @@ import {
     Title
 } from "@mantine/core";
 import { Calendar, TimeInput } from "@mantine/dates";
+
 import { FC, useContext, useEffect } from "react";
 import { TbChevronLeft, TbChevronRight } from "react-icons/tb";
+
 import { BookingContext } from "../Provider";
 
 export const SelectDateStep: FC = () => {

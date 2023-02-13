@@ -1,11 +1,13 @@
 import { Accordion, Button, Stack, Title } from "@mantine/core";
 import { showNotification } from "@mantine/notifications";
+
 import axios from "axios";
 import { FC, useContext } from "react";
 import { useCookies } from "react-cookie";
 import { SiVisa } from "react-icons/si";
 import { TbPlus } from "react-icons/tb";
 import { useLocation } from "wouter";
+
 import { BookingContext } from "./Provider";
 
 export const Payment: FC = () => {

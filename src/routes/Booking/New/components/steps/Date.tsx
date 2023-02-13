@@ -20,20 +20,25 @@ export const SelectDateStep: FC = () => {
     const { steps, startTime, endTime, setStartTime, setEndTime, setStep, setSteps } = useContext(BookingContext);
 
     useEffect(() => {
-        const newStartTime = new Date();
-        const newEndTime = new Date();
+        if (startTime == null || endTime == null) {
+            const newStartTime = new Date();
+            const newEndTime = new Date();
 
-        newStartTime.setHours(7, 0, 0, 0);
-        newEndTime.setHours(19, 0, 0, 0);
+            newStartTime.setDate(newStartTime.getDate() + 3);
+            newEndTime.setDate(newEndTime.getDate() + 3);
 
-        setStartTime(newStartTime);
-        setEndTime(newEndTime);
+            newStartTime.setHours(7, 0, 0, 0);
+            newEndTime.setHours(19, 0, 0, 0);
 
-        const newSteps = [...steps];
+            setStartTime(newStartTime);
+            setEndTime(newEndTime);
 
-        newSteps[1].completed = true;
+            const newSteps = [...steps];
 
-        setSteps(newSteps);
+            newSteps[1].completed = true;
+
+            setSteps(newSteps);
+        }
     }, []);
 
     const handleBasicChange = (start: number, end: number) => () => {
@@ -49,8 +54,8 @@ export const SelectDateStep: FC = () => {
     };
 
     const handleDateChange = (d: Date | null) => {
-        const newStartTime = d ?? new Date();
-        const newEndTime = d ?? new Date();
+        const newStartTime = d == null ? new Date() : new Date(d);
+        const newEndTime = d == null ? new Date() : new Date(d);
 
         newStartTime.setHours(startTime!.getHours(), 0, 0, 0);
         newEndTime.setHours(endTime!.getHours(), 0, 0, 0);
@@ -86,6 +91,14 @@ export const SelectDateStep: FC = () => {
                                     fullWidth
                                     value={startTime}
                                     onChange={handleDateChange}
+                                    dayStyle={(d, t) => ({
+                                        backgroundColor:
+                                            d.getTime() > new Date().getTime() - 1 * 24 * 60 * 60 * 1000 &&
+                                            d.getTime() < new Date().getTime() + 2 * 24 * 60 * 60 * 1000 &&
+                                            t.selected
+                                                ? "#FD7E14"
+                                                : undefined
+                                    })}
                                     excludeDate={date => {
                                         const curDate = new Date();
                                         curDate.setHours(0, 0, 0, 0);
@@ -164,13 +177,23 @@ export const SelectDateStep: FC = () => {
                                                 format="12"
                                                 value={startTime}
                                                 label="Start time"
-                                                onChange={d => setStartTime(d)}
+                                                onChange={d => {
+                                                    const newStartTime = startTime ? new Date(startTime) : new Date();
+                                                    newStartTime.setHours(d.getHours(), d.getMinutes(), 0, 0);
+
+                                                    setStartTime(newStartTime);
+                                                }}
                                             />
                                             <TimeInput
                                                 format="12"
                                                 value={endTime}
                                                 label="End time"
-                                                onChange={d => setEndTime(d)}
+                                                onChange={d => {
+                                                    const newEndTime = endTime ? new Date(endTime) : new Date();
+                                                    newEndTime.setHours(d.getHours(), d.getMinutes(), 0, 0);
+
+                                                    setEndTime(newEndTime);
+                                                }}
                                                 error={
                                                     startTime != null && endTime != null
                                                         ? endTime.getTime() - startTime.getTime() < 0
